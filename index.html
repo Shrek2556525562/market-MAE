@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Carte interactive des entreprises pharmaceutiques françaises, à partir des codes d'activité NAF et de l'API publique de l'Annuaire des Entreprises."
+    >
+    <meta name="theme-color" content="#f4f7f5">
+    <title>Pharma France — Carte des entreprises</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
+      integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Pharma France, accueil">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 3.5v25M3.5 16h25" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="12.5" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </span>
+        <span class="brand-name">pharma<span>france</span></span>
+      </a>
+      <div class="topbar-note">
+        <span class="live-dot" aria-hidden="true"></span>
+        Données publiques · France
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar" aria-label="Explorateur des entreprises">
+        <div class="sidebar-heading">
+          <p class="eyebrow">Panorama sectoriel</p>
+          <h1>Les entreprises<br>pharmaceutiques<br>en France</h1>
+          <p class="intro">Explorez les entreprises recensées sous les codes de fabrication pharmaceutique.</p>
+        </div>
+
+        <section class="stats-card" aria-live="polite">
+          <div>
+            <p class="stat-label">Entreprises recensées</p>
+            <strong id="total-count" class="stat-number">—</strong>
+          </div>
+          <span class="stat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 20V8.5L12 4l8 4.5V20M8 20v-6h8v6M8 10h.01M12 10h.01M16 10h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <p id="loaded-count" class="stats-caption">Connexion aux données publiques…</p>
+        </section>
+
+        <label class="search-box" for="company-search">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="10.8" cy="10.8" r="6.3" stroke="currentColor" stroke-width="1.7"/>
+            <path d="m15.5 15.5 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+          <input id="company-search" type="search" placeholder="Rechercher une entreprise…" autocomplete="off">
+          <kbd>/</kbd>
+        </label>
+
+        <section class="filter-section" aria-labelledby="filter-title">
+          <h2 id="filter-title">Activité principale</h2>
+          <label class="filter-option">
+            <input type="checkbox" value="21.10Z" checked>
+            <span class="filter-swatch swatch-api" aria-hidden="true"></span>
+            <span class="filter-copy">
+              <strong>Produits pharmaceutiques de base</strong>
+              <small>NAF 21.10Z</small>
+            </span>
+            <span id="count-2110" class="filter-count">—</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" value="21.20Z" checked>
+            <span class="filter-swatch swatch-medicines" aria-hidden="true"></span>
+            <span class="filter-copy">
+              <strong>Préparations pharmaceutiques</strong>
+              <small>NAF 21.20Z</small>
+            </span>
+            <span id="count-2120" class="filter-count">—</span>
+          </label>
+        </section>
+
+        <section class="company-section" aria-labelledby="company-title">
+          <div class="section-title-row">
+            <h2 id="company-title">Entreprises</h2>
+            <span id="visible-count" class="result-count">0</span>
+          </div>
+          <div id="company-list" class="company-list" aria-live="polite">
+            <div class="list-state">Chargement des entreprises…</div>
+          </div>
+        </section>
+
+        <div class="sidebar-footer">
+          <button id="load-more" class="load-more" type="button" hidden>
+            Afficher plus d’entreprises
+            <span aria-hidden="true">↓</span>
+          </button>
+          <p id="source-status" class="source-status">
+            Source : <a href="https://recherche-entreprises.api.gouv.fr/" target="_blank" rel="noreferrer">API Recherche d’entreprises</a>
+          </p>
+        </div>
+      </aside>
+
+      <section class="map-panel" aria-label="Carte des entreprises pharmaceutiques">
+        <div id="map" role="application" aria-label="Carte interactive de France avec sièges sociaux et sites industriels"></div>
+        <div class="map-heading">
+          <span class="map-heading-label">France métropolitaine</span>
+          <span class="map-heading-divider" aria-hidden="true"></span>
+          <span id="map-result-count">0 point affiché</span>
+        </div>
+        <div class="map-controls">
+          <label class="site-toggle">
+            <input id="show-sites" type="checkbox" checked>
+            <span class="site-toggle-track" aria-hidden="true"></span>
+            <span class="site-toggle-copy">Sites industriels</span>
+            <span id="site-count" class="site-toggle-count">0</span>
+          </label>
+          <button id="zoom-france" class="map-control map-control-wide" type="button" aria-label="Recentrer sur la France">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5M4 4l6 6m10-6-6 6m6 10-6-6m-10 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Vue d’ensemble
+          </button>
+        </div>
+        <div class="map-note">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <span>Les cercles indiquent les <strong>sièges sociaux</strong> ; les carrés, les établissements actifs en NAF <strong>21.10Z ou 21.20Z</strong>.</span>
+        </div>
+        <div id="map-error" class="map-error" role="alert" hidden></div>
+      </section>
+    </main>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+      integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>
