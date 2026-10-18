@@ -10,6 +10,10 @@ Publiez `index.html`, `app.js` et `styles.css` sur un hébergement statique, pui
 ouvrez la page avec une connexion Internet. Le fond de carte utilise les tuiles
 IGN / Géoplateforme ; Leaflet et les polices sont chargés depuis des CDN.
 
+Le workflow `.github/workflows/pages.yml` publie automatiquement le site sur
+GitHub Pages après chaque mise à jour de `main` et peut aussi être lancé
+manuellement depuis l’onglet **Actions**.
+
 La liste répertorie toutes les entreprises actives classées en NAF 21.10Z ou
 21.20Z ; les sièges sociaux sont cartographiés lorsque leurs coordonnées sont
 disponibles. Le filtre **Sites industriels** ajoute les établissements actifs
