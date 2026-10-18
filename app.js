@@ -1,7 +1,5 @@
-const API_ROOT = "https://recherche-entreprises.api.gouv.fr/search";
-const PAGE_SIZE = 25;
+const DATA_URL = "data/pharmaceutical-companies-fr.json";
 const SITE_CODES = new Set(["21.10Z", "21.20Z"]);
-const SITE_REQUEST_GAP_MS = 180;
 const FRANCE_BOUNDS = [
   [41.25, -5.2],
   [51.2, 9.7],
@@ -23,12 +21,10 @@ const activityTypes = [
 ];
 
 const companies = new Map();
-const pageByActivity = new Map(activityTypes.map(({ code }) => [code, 0]));
 const totalsByActivity = new Map();
 const markersBySiren = new Map();
 const sitesBySiret = new Map();
 const siteMarkersBySiret = new Map();
-const siteRequests = new Set();
 
 const totalCount = document.querySelector("#total-count");
 const loadedCount = document.querySelector("#loaded-count");
@@ -36,15 +32,11 @@ const companyList = document.querySelector("#company-list");
 const companySearch = document.querySelector("#company-search");
 const visibleCount = document.querySelector("#visible-count");
 const mapResultCount = document.querySelector("#map-result-count");
-const loadMoreButton = document.querySelector("#load-more");
 const mapError = document.querySelector("#map-error");
 const siteCount = document.querySelector("#site-count");
 const showSitesInput = document.querySelector("#show-sites");
 const filterInputs = [...document.querySelectorAll(".filter-option input")];
-let nextSiteRequestAt = 0;
-let siteFetchInProgress = 0;
-let siteFetchQueued = 0;
-let siteFetchErrors = 0;
+let snapshotDate = "";
 
 function initializeMap() {
 const map = L.map("map", {
@@ -198,10 +190,12 @@ function mergeCompany(record, code) {
   if (!record.siren || !record.nom_complet) return;
   const coordinates = getCoordinates(record);
 
-  if (!coordinates) return;
-
   const existing = companies.get(record.siren);
   if (existing) {
+    if (!existing.coordinates && coordinates) {
+      existing.coordinates = coordinates;
+      createMarker(existing);
+    }
     if (!existing.activityCodes.includes(code)) {
       existing.activityCodes.push(code);
       existing.activityCodes.sort();
@@ -217,147 +211,7 @@ function mergeCompany(record, code) {
     coordinates,
   };
   companies.set(company.siren, company);
-  createMarker(company);
-}
-
-function buildCompanyUrl(code, page) {
-  const params = new URLSearchParams({
-    activite_principale: code,
-    etat_administratif: "A",
-    include: "siege",
-    minimal: "true",
-    page: String(page),
-    per_page: String(PAGE_SIZE),
-  });
-  return `${API_ROOT}?${params.toString()}`;
-}
-
-function buildSitesUrl(company) {
-  const params = new URLSearchParams({
-    etat_administratif: "A",
-    include: "matching_etablissements",
-    limite_matching_etablissements: "100",
-    minimal: "true",
-    page: "1",
-    per_page: "10",
-    q: company.nom_complet,
-  });
-  return `${API_ROOT}?${params.toString()}`;
-}
-
-async function fetchCompanySites(company) {
-  const delay = Math.max(0, nextSiteRequestAt - Date.now());
-  nextSiteRequestAt = Date.now() + delay + SITE_REQUEST_GAP_MS;
-  if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
-
-  const response = await fetch(buildSitesUrl(company), {
-    headers: { Accept: "application/json" },
-  });
-  if (!response.ok) {
-    throw new Error(`L’API a répondu avec le statut ${response.status}.`);
-  }
-
-  const payload = await response.json();
-  const record = payload.results?.find((result) => result.siren === company.siren);
-  if (!record) return;
-
-  for (const establishment of record.matching_etablissements ?? []) {
-    if (
-      establishment.etat_administratif !== "A" ||
-      !SITE_CODES.has(establishment.activite_principale) ||
-      !establishment.siret
-    ) {
-      continue;
-    }
-
-    const [latitude, longitude] = [
-      Number(establishment.latitude),
-      Number(establishment.longitude),
-    ];
-    if (
-      !Number.isFinite(latitude) ||
-      !Number.isFinite(longitude) ||
-      Math.abs(latitude) > 90 ||
-      Math.abs(longitude) > 180
-    ) {
-      continue;
-    }
-
-    if (sitesBySiret.has(establishment.siret)) continue;
-    const site = {
-      companyName: company.nom_complet,
-      companySiren: company.siren,
-      coordinates: [latitude, longitude],
-      etablissement: establishment,
-      siret: establishment.siret,
-    };
-    sitesBySiret.set(site.siret, site);
-    createSiteMarker(site);
-  }
-}
-
-async function loadSitesForCompanies(records) {
-  const pending = records.filter(
-    (company) => !siteRequests.has(company.siren),
-  );
-  pending.forEach((company) => siteRequests.add(company.siren));
-  siteFetchQueued += pending.length;
-  updateSiteStatus();
-
-  const workerCount = Math.min(3, pending.length);
-  let cursor = 0;
-  const workers = Array.from({ length: workerCount }, async () => {
-    while (cursor < pending.length) {
-      const company = pending[cursor];
-      cursor += 1;
-      siteFetchQueued -= 1;
-      siteFetchInProgress += 1;
-      updateSiteStatus();
-
-      try {
-        await fetchCompanySites(company);
-      } catch (error) {
-        siteRequests.delete(company.siren);
-        siteFetchErrors += 1;
-        console.error(`Échec du chargement des établissements de ${company.nom_complet}.`, error);
-        mapError.textContent = `${siteFetchErrors} recherche(s) de sites industriels ont échoué. Désactivez puis réactivez le filtre pour réessayer.`;
-        mapError.hidden = false;
-      } finally {
-        siteFetchInProgress -= 1;
-        updateSiteStatus();
-        updateView();
-      }
-    }
-  });
-
-  await Promise.all(workers);
-}
-
-function updateSiteStatus() {
-  siteCount.textContent = sitesBySiret.size.toLocaleString("fr-FR");
-  const remaining = siteFetchQueued + siteFetchInProgress;
-  if (remaining) {
-    loadedCount.textContent = `${sitesBySiret.size.toLocaleString("fr-FR")} sites industriels · ${remaining} entreprises à vérifier`;
-  } else if (companies.size) {
-    loadedCount.textContent = `${companies.size.toLocaleString("fr-FR")} entreprises chargées · ${sitesBySiret.size.toLocaleString("fr-FR")} sites industriels`;
-  }
-}
-
-async function fetchActivityPage(activity, page) {
-  const response = await fetch(buildCompanyUrl(activity.code, page), {
-    headers: { Accept: "application/json" },
-  });
-
-  if (!response.ok) {
-    throw new Error(`L’API a répondu avec le statut ${response.status}.`);
-  }
-
-  const payload = await response.json();
-  if (!Array.isArray(payload.results)) {
-    throw new Error("La réponse de l’API ne contient pas de liste d’entreprises.");
-  }
-
-  return payload;
+  if (company.coordinates) createMarker(company);
 }
 
 function getVisibleCompanies() {
@@ -388,9 +242,10 @@ function createCompanyRow(company) {
   const button = document.createElement("button");
   button.className = "company-row";
   button.type = "button";
+  button.disabled = !company.coordinates;
   button.setAttribute(
     "aria-label",
-    `${company.nom_complet}, siège à ${company.siege.libelle_commune ?? "adresse inconnue"}`,
+    `${company.nom_complet}, siège à ${company.siege.libelle_commune ?? "adresse inconnue"}${company.coordinates ? "" : ", coordonnées indisponibles"}`,
   );
 
   const avatar = document.createElement("span");
@@ -409,6 +264,7 @@ function createCompanyRow(company) {
   location.textContent = [
     company.siege.libelle_commune,
     company.activityCodes.join(" · "),
+    company.coordinates ? "" : "Coordonnées indisponibles",
   ]
     .filter(Boolean)
     .join(" · ");
@@ -421,12 +277,14 @@ function createCompanyRow(company) {
   arrow.textContent = "›";
   button.append(arrow);
 
-  button.addEventListener("click", () => {
-    map.flyTo(company.coordinates, Math.max(map.getZoom(), 10), {
-      duration: 0.55,
+  if (company.coordinates) {
+    button.addEventListener("click", () => {
+      map.flyTo(company.coordinates, Math.max(map.getZoom(), 10), {
+        duration: 0.55,
+      });
+      markersBySiren.get(company.siren)?.openPopup();
     });
-    markersBySiren.get(company.siren)?.openPopup();
-  });
+  }
 
   return button;
 }
@@ -477,7 +335,9 @@ function updateView() {
         visibleSirens.has(site.companySiren),
       ).length
     : 0;
-  const shownPoints = visibleCompanies.length + shownSites;
+  const shownPoints =
+    visibleCompanies.filter((company) => company.coordinates).length +
+    shownSites;
   mapResultCount.textContent = `${shownPoints.toLocaleString("fr-FR")} ${
     shownPoints > 1 ? "points affichés" : "point affiché"
   }`;
@@ -499,98 +359,12 @@ function updateView() {
       : "—";
   }
 
-  const loaded = [...companies.values()].filter((company) =>
-    company.activityCodes.some((code) => enabledCodes.has(code)),
-  ).length;
-  if (!siteFetchQueued && !siteFetchInProgress) {
-    loadedCount.textContent = `${loaded.toLocaleString("fr-FR")} entreprises chargées · ${sitesBySiret.size.toLocaleString("fr-FR")} sites industriels`;
-  }
-  loadMoreButton.hidden = !hasMorePages();
-}
-
-function hasMorePages() {
-  return activityTypes.some(({ code }) => {
-    if (!getEnabledCodes().has(code)) return false;
-    const totalPages = totalsByActivity.get(`${code}:pages`) ?? 1;
-    return (pageByActivity.get(code) ?? 0) < totalPages;
-  });
-}
-
-async function loadNextPage() {
-  const pendingActivities = activityTypes.filter(
-    ({ code }) =>
-      getEnabledCodes().has(code) &&
-      (pageByActivity.get(code) ?? 0) <
-        (totalsByActivity.get(`${code}:pages`) ?? 1),
-  );
-
-  if (pendingActivities.length === 0) {
-    updateView();
-    return;
-  }
-
-  loadMoreButton.disabled = true;
-  loadMoreButton.textContent = "Chargement…";
-  mapError.hidden = true;
-
-  const results = await Promise.allSettled(
-    pendingActivities.map((activity) =>
-      fetchActivityPage(activity, (pageByActivity.get(activity.code) ?? 0) + 1),
-    ),
-  );
-
-  const errors = [];
-  const newCompanies = [];
-  results.forEach((result, index) => {
-    const activity = pendingActivities[index];
-    if (result.status === "rejected") {
-      errors.push(`${activity.code} : ${result.reason.message}`);
-      return;
-    }
-
-    const page = result.value;
-    pageByActivity.set(activity.code, page.page);
-    totalsByActivity.set(activity.code, page.total_results);
-    totalsByActivity.set(`${activity.code}:pages`, page.total_pages);
-    page.results.forEach((record) => {
-      mergeCompany(record, activity.code);
-      const company = companies.get(record.siren);
-      if (company) newCompanies.push(company);
-    });
-  });
-
-  if (errors.length) {
-    mapError.textContent = `${errors.join(" ")} Réessayez dans un instant.`;
-    mapError.hidden = false;
-  } else {
-    mapError.hidden = true;
-  }
-
-  updateView();
-  if (showSitesInput.checked) {
-    await loadSitesForCompanies([...new Map(newCompanies.map((company) => [
-      company.siren,
-      company,
-    ])).values()]);
-  }
-  loadMoreButton.disabled = false;
-  loadMoreButton.innerHTML = "Afficher plus d’entreprises <span aria-hidden=\"true\">↓</span>";
+  loadedCount.textContent = `${companies.size.toLocaleString("fr-FR")} entreprises · ${sitesBySiret.size.toLocaleString("fr-FR")} sites industriels · instantané ${snapshotDate}`;
 }
 
 companySearch.addEventListener("input", updateView);
 filterInputs.forEach((input) => input.addEventListener("change", updateView));
-loadMoreButton.addEventListener("click", loadNextPage);
-showSitesInput.addEventListener("change", () => {
-  updateView();
-  if (showSitesInput.checked) {
-    siteFetchErrors = 0;
-    mapError.hidden = true;
-    loadSitesForCompanies([...companies.values()]).catch((error) => {
-      mapError.textContent = `Impossible de charger les sites industriels : ${error.message}`;
-      mapError.hidden = false;
-    });
-  }
-});
+showSitesInput.addEventListener("change", updateView);
 document.querySelector("#zoom-france").addEventListener("click", () => {
   map.fitBounds(FRANCE_BOUNDS);
 });
@@ -609,12 +383,50 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-loadNextPage().catch((error) => {
-  mapError.textContent =
-    `Impossible de charger les données des entreprises : ${error.message}`;
+async function loadStaticData() {
+  const response = await fetch(DATA_URL);
+  if (!response.ok) {
+    throw new Error(`Le fichier de données a répondu avec le statut ${response.status}.`);
+  }
+
+  const snapshot = await response.json();
+  if (!Array.isArray(snapshot.companies) || !Array.isArray(snapshot.sites)) {
+    throw new Error("Le fichier de données ne contient pas les entreprises et établissements attendus.");
+  }
+
+  snapshotDate = snapshot.generatedAt
+    ? new Date(snapshot.generatedAt).toLocaleDateString("fr-FR")
+    : "date inconnue";
+
+  for (const activity of activityTypes) {
+    const codeCompanies = snapshot.companies.filter((company) =>
+      company.activityCodes.includes(activity.code),
+    );
+    totalsByActivity.set(
+      activity.code,
+      snapshot.activityTotals?.[activity.code] ?? codeCompanies.length,
+    );
+  }
+
+  for (const company of snapshot.companies) {
+    for (const code of company.activityCodes) {
+      if (SITE_CODES.has(code)) mergeCompany(company, code);
+    }
+  }
+
+  for (const site of snapshot.sites) {
+    if (!SITE_CODES.has(site.etablissement?.activite_principale)) continue;
+    sitesBySiret.set(site.siret, site);
+    createSiteMarker(site);
+  }
+
+  updateView();
+}
+
+loadStaticData().catch((error) => {
+  console.error("Échec du chargement de l’instantané local des données.", error);
+  mapError.textContent = `Impossible de charger le fichier local des données : ${error.message}`;
   mapError.hidden = false;
-  loadMoreButton.disabled = false;
-  loadMoreButton.textContent = "Réessayer";
 });
 }
 
@@ -622,7 +434,6 @@ if (typeof L === "undefined") {
   mapError.textContent =
     "La bibliothèque cartographique n’a pas pu être chargée. Vérifiez votre connexion Internet et rechargez la page.";
   mapError.hidden = false;
-  loadMoreButton.hidden = true;
 } else {
   initializeMap();
 }

@@ -396,6 +396,14 @@ kbd {
   background: #f4f8f5;
 }
 
+.company-row:disabled {
+  cursor: default;
+}
+
+.company-row:disabled:hover {
+  background: transparent;
+}
+
 .company-avatar {
   display: grid;
   width: 29px;
