@@ -6,8 +6,9 @@ chargées depuis une API au runtime.
 
 ## Utilisation
 
-Publiez `index.html`, `app.js` et `styles.css` sur un hébergement statique, puis
-ouvrez la page avec une connexion Internet. Le fond de carte utilise les tuiles
+Publiez les fichiers du site statique, puis ouvrez `index.html` ou
+`dataset.html`. La page d'analyse des sources présente les types de variables
+et les statistiques de l'instantané local. Le fond de carte utilise les tuiles
 IGN / Géoplateforme ; Leaflet et les polices sont chargés depuis des CDN.
 
 Le workflow `.github/workflows/pages.yml` publie automatiquement le site sur
@@ -27,6 +28,23 @@ Pour régénérer le fichier statique, exécutez
 `powershell -ExecutionPolicy Bypass -File scripts\build-static-data.ps1` depuis
 la racine du dépôt. Cette tâche de maintenance interroge l’API publique et
 remplace l’instantané local. Le site publié n’exécute pas ce script.
+
+## Analyser les sources
+
+Pour profiler le catalogue des sources et l’instantané local avec Python,
+installez les dépendances puis exécutez :
+
+```powershell
+python -m pip install -r requirements-analysis.txt
+python scripts\analyze_data_sources.py
+```
+
+Le rapport est généré dans `data\pharmaceutical_data_sources_analysis.md`.
+Le fichier `data\pharmaceutical_data_sources_analysis.json` alimente
+`dataset.html` avec les mêmes statistiques calculées.
+Les fichiers bruts des sources externes ne sont pas inclus dans le dépôt :
+leurs statistiques par colonne nécessitent de télécharger les extractions
+correspondantes.
 
 ## Limites des données
 

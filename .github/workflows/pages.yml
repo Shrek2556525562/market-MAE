@@ -31,8 +31,9 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p _site/data
-          cp index.html app.js styles.css _site/
-          cp data/pharmaceutical-companies-fr.json _site/data/
+          cp index.html app.js styles.css dataset.html dataset.js dataset.css _site/
+          cp data/pharmaceutical-companies-fr.json data/pharmaceutical_data_sources_analysis.json _site/data/
+          cp data/pharmaceutical_data_sources_analysis.md _site/data/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
