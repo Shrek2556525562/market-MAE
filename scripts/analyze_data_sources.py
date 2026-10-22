@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import html
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -696,8 +697,185 @@ def render() -> tuple[str, dict[str, Any]]:
     return "\n".join(lines), analysis
 
 
+def escape(value: Any) -> str:
+    return html.escape(str(value), quote=True)
+
+
+def render_static_page(analysis: dict[str, Any]) -> str:
+    """Render the complete dataset page at build time; the page needs no JavaScript."""
+    catalog = analysis["catalog"]
+    snapshot = analysis["snapshot"]
+
+    def number(value: Any, digits: int = 2) -> str:
+        if value is None or not np.isfinite(float(value)):
+            return "—"
+        return f"{float(value):,.{digits}f}".replace(",", "\u202f").replace(".", ",")
+
+    def profile_rows(profiles: list[dict[str, Any]], unit: str) -> str:
+        return "".join(
+            "<tr>"
+            f"<td>{escape(unit)}</td>"
+            f'<td><code>{escape(profile["column"])}</code></td>'
+            f'<td>{escape(profile["type"])}</td>'
+            f'<td>{number(profile["missing"], 0)} / {number(profile["n"], 0)} '
+            f'({number(profile["missing_pct"], 1)} %)</td>'
+            f'<td>{number(profile["unique"], 0)}</td>'
+            "</tr>"
+            for profile in profiles
+        )
+
+    catalog_rows = "".join(
+        "<tr>"
+        f'<td><code>{escape(profile["column"])}</code></td>'
+        f'<td>{escape(profile["type"])}</td>'
+        f'<td>{number(profile["missing"], 0)} / {number(profile["n"], 0)} '
+        f'({number(profile["missing_pct"], 1)} %)</td>'
+        f'<td>{number(profile["unique"], 0)}</td>'
+        "</tr>"
+        for profile in catalog["columns"]
+    )
+    snapshot_rows = profile_rows(snapshot["metadata"], "Instantané")
+    snapshot_rows += profile_rows(snapshot["companies"]["columns"], "Entreprise")
+    snapshot_rows += profile_rows(snapshot["sites"]["columns"], "Établissement")
+
+    coordinate_rows = "".join(
+        "<tr>"
+        f'<td>{escape(item["level"])} · <code>{escape(item["column"])}</code></td>'
+        f'<td>{number(item["n"], 0)}</td>'
+        f'<td>{number(item["mean"], 3)}</td>'
+        f'<td>{number(item["variance"], 3)}</td>'
+        f'<td>{number(item["std"], 3)}</td>'
+        f'<td>{number(item["q1"], 3)} – {number(item["q3"], 3)}</td>'
+        f'<td>{number(item["min"], 3)} – {number(item["max"], 3)}</td>'
+        "</tr>"
+        for item in snapshot["coordinates"]
+    )
+
+    source_cards = []
+    for source in catalog["sources"]:
+        variables = "".join(
+            "<li class=\"variable-item\">"
+            "<div class=\"variable-heading\">"
+            f'<span class="variable-name">{escape(variable["name"])}</span>'
+            f'<span class="type-badge" data-category="{escape(variable["category"])}">'
+            f'{escape(variable["type"])}</span>'
+            "</div>"
+            f'<p class="variable-description">{escape(variable["description"])}</p>'
+            "</li>"
+            for variable in source["variables"]
+        )
+        source_cards.append(
+            '<article class="source-card">'
+            '<header class="source-card-header">'
+            f'<h3>{escape(source["source"])}</h3>'
+            f'<span class="source-score" title="Estimation éditoriale du catalogue, non fournie par le producteur">'
+            f'{number(source["estimated_quality_percent"], 0)} %</span>'
+            "</header>"
+            f'<p class="source-description">{escape(source["description"])}</p>'
+            '<dl class="source-meta">'
+            f'<div><dt>Nature</dt><dd>{escape(source["dataClass"])}</dd></div>'
+            f'<div><dt>Unité d’observation</dt><dd>{escape(source["unitOfObservation"])}</dd></div>'
+            f'<div><dt>Mise à jour</dt><dd>{escape(source["update_frequency"])}</dd></div>'
+            '<div><dt>Statistiques calculées</dt><dd>Données brutes non présentes</dd></div>'
+            "</dl>"
+            '<h4 class="eyebrow">Variables décrites et types probables</h4>'
+            f'<ul class="variable-list">{variables}</ul>'
+            f'<p class="schema-note">{escape(source["statisticsNote"])}</p>'
+            f'<p class="limitation-note"><strong>Limite :</strong> {escape(source["limitations"])}</p>'
+            '<div class="source-links">'
+            f'<a href="{escape(source["data_url"])}" target="_blank" rel="noreferrer">Fiche source ↗</a>'
+            f'<a href="{escape(source["download_or_query_url"])}" target="_blank" rel="noreferrer">Accès aux données ↗</a>'
+            "</div></article>"
+        )
+
+    quality = catalog["qualityScores"]
+    generated = datetime.fromisoformat(analysis["generatedAt"]).astimezone(timezone.utc)
+    generated_label = generated.strftime("%d/%m/%Y")
+    return f"""<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Analyse statique des sources de données pharmaceutiques : provenance, types de variables et statistiques descriptives.">
+    <meta name="theme-color" content="#f4f7f5">
+    <title>Sources et données — Pharma France</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dataset.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Pharma France, retour à la carte">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3.5v25M3.5 16h25" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="16" cy="16" r="12.5" stroke="currentColor" stroke-width="2"/></svg></span>
+        <span class="brand-name">pharma<span>france</span></span>
+      </a>
+      <nav class="topbar-nav" aria-label="Navigation principale">
+        <a href="index.html">Carte des entreprises</a>
+        <span aria-current="page">Sources &amp; données</span>
+      </nav>
+    </header>
+    <main class="page-shell">
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow">Panorama des données · France</p>
+        <h1 id="page-title">Ce que les sources<br>permettent de mesurer</h1>
+        <p class="hero-copy">{len(catalog["sources"])} sources secondaires pour décrire l’offre pharmaceutique, les médicaments, les remboursements, la recherche et les échanges — avec leurs unités, variables et limites.</p>
+        <p class="hero-note"><span class="note-mark" aria-hidden="true">i</span>Cette page est générée à l’avance : ses résultats et ses fiches sont intégrés au HTML. Elle ne charge aucune donnée au moment de l’ouverture.</p>
+      </section>
+      <section class="summary-grid" aria-label="Chiffres clés">
+        <div class="summary-card"><span class="summary-label">Sources secondaires</span><strong>{len(catalog["sources"])}</strong><span class="summary-detail">cataloguées</span></div>
+        <div class="summary-card"><span class="summary-label">Données primaires</span><strong>0</strong><span class="summary-detail">jeu d’enquête dans le dépôt</span></div>
+        <div class="summary-card"><span class="summary-label">Entreprises observées</span><strong>{number(snapshot["companyCount"], 0)}</strong><span class="summary-detail">instantané local</span></div>
+        <div class="summary-card"><span class="summary-label">Établissements observés</span><strong>{number(snapshot["siteCount"], 0)}</strong><span class="summary-detail">instantané local</span></div>
+      </section>
+      <section class="method-card" aria-labelledby="method-title">
+        <div class="method-heading"><p class="eyebrow">La source d’abord</p><h2 id="method-title">Primaire ou secondaire ?</h2></div>
+        <div class="method-columns">
+          <article><span class="method-tag tag-primary">Primaire · aucune dans ce dépôt</span><p>Donnée recueillie par l’équipe pour sa question : questionnaire, entretien ou observation terrain. Elle est adaptée à l’étude, mais demande du temps et un protocole de collecte.</p></article>
+          <article><span class="method-tag tag-secondary">Secondaire · les {len(catalog["sources"])} sources</span><p>Donnée déjà produite par un tiers pour un autre objectif. Son unité, sa période, sa couverture et ses définitions sont celles du producteur.</p></article>
+        </div>
+      </section>
+      <section class="snapshot-section" aria-labelledby="catalog-title">
+        <div class="section-heading"><div><p class="eyebrow">Catalogue des sources</p><h2 id="catalog-title">Les colonnes du fichier CSV</h2></div></div>
+        <p class="section-intro">Le catalogue décrit les sources et non leurs observations brutes. Ses champs textuels et ses URLs sont qualitatifs ; seul le score estimé est numérique. Aucun champ du CSV n’est manquant.</p>
+        <div class="table-wrap"><table><caption class="visually-hidden">Profil des colonnes du catalogue CSV</caption>
+          <thead><tr><th scope="col">Colonne</th><th scope="col">Type de variable</th><th scope="col">Valeurs manquantes</th><th scope="col">Valeurs distinctes</th></tr></thead>
+          <tbody>{catalog_rows}</tbody>
+        </table></div>
+        <aside class="catalog-score">Scores de qualité estimés : moyenne <strong>{number(quality["mean"])} %</strong>, médiane <strong>{number(quality["median"])} %</strong>, variance de population <strong>{number(quality["variance"])} points²</strong> et écart-type <strong>{number(quality["std"])} points</strong>. Ce sont des estimations éditoriales, pas des indicateurs publiés par les producteurs.</aside>
+      </section>
+      <section class="snapshot-section" aria-labelledby="snapshot-title">
+        <div class="section-heading"><div><p class="eyebrow">Données effectivement fournies</p><h2 id="snapshot-title">Instantané local des entreprises</h2></div><a class="text-link" href="data/pharmaceutical_data_sources_analysis.md">Lire le rapport complet ↗</a></div>
+        <p class="section-intro">Instantané secondaire de l’API Recherche d’entreprises, généré le {escape(snapshot["generatedAt"][:10])}. Les identifiants SIREN/SIRET, codes NAF et codes postaux sont des variables catégorielles, pas des quantités mesurables.</p>
+        <div class="table-wrap"><table><caption class="visually-hidden">Colonnes du JSON local et taux de valeurs manquantes</caption>
+          <thead><tr><th scope="col">Table / unité</th><th scope="col">Colonne</th><th scope="col">Type de variable</th><th scope="col">Valeurs manquantes</th><th scope="col">Valeurs distinctes</th></tr></thead>
+          <tbody>{snapshot_rows}</tbody>
+        </table></div>
+        <div class="stats-block"><div><p class="eyebrow">Quantitatives continues</p><h3>Dispersion des coordonnées</h3></div><p class="table-note">Variance et écart-type en degrés : descriptifs, pas une distance géographique. Variance de population (ddof=0).</p></div>
+        <div class="table-wrap"><table><caption class="visually-hidden">Statistiques des coordonnées des sièges et des établissements</caption>
+          <thead><tr><th scope="col">Niveau / variable</th><th scope="col">n</th><th scope="col">Moyenne</th><th scope="col">Variance (degrés²)</th><th scope="col">Écart-type (degrés)</th><th scope="col">Q1 – Q3</th><th scope="col">Min – max</th></tr></thead>
+          <tbody>{coordinate_rows}</tbody>
+        </table></div>
+        <p class="section-intro">Les sources externes sont absentes de l’instantané : leurs distributions et taux de valeurs manquantes ne peuvent pas être calculés sans récupérer les fichiers bruts. L’instantané Sirene est filtré sur les codes NAF 21.10Z et 21.20Z ; il ne constitue pas un inventaire certifié des sites de production.</p>
+      </section>
+      <section class="sources-section" aria-labelledby="sources-title">
+        <div class="section-heading"><div><p class="eyebrow">Fiches par source</p><h2 id="sources-title">Quelles variables, quels usages ?</h2></div><span class="source-total">{len(catalog["sources"])} sources</span></div>
+        <p class="section-intro">Les variables ci-dessous sont déduites du catalogue, pas vérifiées dans les colonnes des fichiers sources. Une année n’est pas une quantité continue ; un code d’identification, même composé de chiffres, reste qualitatif.</p>
+        <div class="source-grid">{"".join(source_cards)}</div>
+      </section>
+      <footer class="page-footer">
+        <p>Méthode : CM 2, « De la source à la preuve : les statistiques », <a href="https://mae.iae-mod.fr/seances/seance-cm-2.html" target="_blank" rel="noreferrer">cours Smart Data Marketing</a>. Unités d’observation et limites précisent ce que chaque source autorise à conclure.</p>
+        <p>Analyse générée le {generated_label} · <a href="pharmaceutical_data_sources_fr.csv">Catalogue CSV</a></p>
+      </footer>
+    </main>
+  </body>
+</html>
+"""
+
+
 def main() -> None:
     report, analysis = render()
+    (ROOT / "dataset.html").write_text(render_static_page(analysis), encoding="utf-8")
     REPORT_PATH.write_text(report, encoding="utf-8")
     ANALYSIS_PATH.write_text(
         json.dumps(analysis, ensure_ascii=False, indent=2) + "\n",
