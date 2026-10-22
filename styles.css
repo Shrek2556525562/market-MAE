@@ -84,6 +84,11 @@ input {
   color: #677670;
   font-size: 12px;
   font-weight: 600;
+  text-decoration: none;
+}
+
+.topbar-note:hover {
+  color: var(--green-dark);
 }
 
 .live-dot {

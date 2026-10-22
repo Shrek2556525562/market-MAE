@@ -1,0 +1,865 @@
+{
+  "generatedAt": "2026-10-22T13:11:52.300710+00:00",
+  "scope": {
+    "sourceCount": 11,
+    "catalogColumnCount": 8,
+    "primarySourcesPresent": 0,
+    "externalRawFilesPresent": 0
+  },
+  "catalog": {
+    "columns": [
+      {
+        "column": "source",
+        "type": "Qualitative nominale",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 11
+      },
+      {
+        "column": "data_url",
+        "type": "Qualitative nominale (URL)",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 11
+      },
+      {
+        "column": "download_or_query_url",
+        "type": "Qualitative nominale (URL)",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 11
+      },
+      {
+        "column": "description",
+        "type": "Qualitative textuelle",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 11
+      },
+      {
+        "column": "estimated_quality_percent",
+        "type": "Quantitative; score entier dans le catalogue (discret), mais estimation subjective",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 9
+      },
+      {
+        "column": "quality_score_basis",
+        "type": "Qualitative textuelle",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 11
+      },
+      {
+        "column": "update_frequency",
+        "type": "Qualitative catégorielle / temporelle",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 11
+      },
+      {
+        "column": "limitations",
+        "type": "Qualitative textuelle",
+        "n": 11,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 11
+      }
+    ],
+    "qualityScores": {
+      "n": 11,
+      "mean": 85.36363636363636,
+      "median": 87.0,
+      "q1": 81.5,
+      "q3": 91.0,
+      "min": 72.0,
+      "max": 94.0,
+      "variance": 48.95867768595041,
+      "std": 6.9970477835977665
+    },
+    "sources": [
+      {
+        "source": "INSEE Sirene",
+        "data_url": "https://www.insee.fr/fr/information/3591226",
+        "download_or_query_url": "https://annuaire-entreprises.data.gouv.fr/export-sirene",
+        "description": "Registre national des entreprises et établissements : identifiants SIREN/SIRET, adresses, activités et statut administratif. Les codes NAF 21.10Z et 21.20Z sont un premier filtre, pas un registre certifié des sites pharmaceutiques.",
+        "estimated_quality_percent": 92,
+        "quality_score_basis": "Practical estimate based on official provenance, coverage, freshness, relevance and usability; not a publisher-provided score.",
+        "update_frequency": "API mise à jour quotidiennement ; stocks diffusés périodiquement.",
+        "limitations": "Le filtrage par activité peut manquer des entreprises pertinentes. Sirene ne certifie ni les autorisations pharmaceutiques ni les sites de fabrication.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Unité légale ou établissement",
+        "variables": [
+          {
+            "name": "SIREN / SIRET",
+            "type": "Qualitative nominale",
+            "description": "Identifiant d'une unité légale / d'un établissement.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Dénomination",
+            "type": "Qualitative nominale",
+            "description": "Nom de l'entreprise ou de l'établissement.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Adresse et commune",
+            "type": "Qualitative textuelle / nominale",
+            "description": "Localisation administrative.",
+            "category": "text"
+          },
+          {
+            "name": "Code NAF",
+            "type": "Qualitative nominale",
+            "description": "Code d'activité, pas une quantité.",
+            "category": "qualitative"
+          },
+          {
+            "name": "État administratif",
+            "type": "Qualitative nominale",
+            "description": "Établissement actif ou fermé.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Effectif salarié",
+            "type": "Quantitative discrète",
+            "description": "Nombre de salariés, si inclus dans l'extrait.",
+            "category": "discrete"
+          },
+          {
+            "name": "Chiffre d'affaires",
+            "type": "Quantitative continue",
+            "description": "Montant en euros, si disponible pour l'unité observée.",
+            "category": "continuous"
+          },
+          {
+            "name": "Coordonnées",
+            "type": "Quantitatives continues",
+            "description": "Latitude et longitude, si présentes.",
+            "category": "continuous"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "Base de données publique des médicaments (BDPM)",
+        "data_url": "https://base-donnees-publique.medicaments.gouv.fr/telechargement",
+        "download_or_query_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt",
+        "description": "Base publique officielle des médicaments : autorisations, statut de commercialisation et laboratoire ou titulaire associé.",
+        "estimated_quality_percent": 87,
+        "quality_score_basis": "Practical estimate based on official provenance, freshness, relevance and usability; not a publisher-provided score.",
+        "update_frequency": "Mise à jour mensuelle ; certains fichiers peuvent être produits plus souvent.",
+        "limitations": "Décrit des produits et non un registre exhaustif d'entreprises ou de sites. À croiser avec Sirene.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Médicament ou présentation",
+        "variables": [
+          {
+            "name": "CIS / CIP",
+            "type": "Qualitative nominale",
+            "description": "Identifiants du médicament ou de sa présentation.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Dénomination du médicament",
+            "type": "Qualitative textuelle",
+            "description": "Nom du produit.",
+            "category": "text"
+          },
+          {
+            "name": "Laboratoire / titulaire",
+            "type": "Qualitative nominale",
+            "description": "Entité associée à l'autorisation.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Statut d'autorisation / commercialisation",
+            "type": "Qualitative nominale",
+            "description": "État réglementaire ou commercial du produit.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Dates d'autorisation / commercialisation",
+            "type": "Temporelles",
+            "description": "Dates associées au cycle de vie du produit, selon le fichier.",
+            "category": "temporal"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "Open Medic (Assurance Maladie)",
+        "data_url": "https://www.data.gouv.fr/datasets/open-medic-base-complete-sur-les-depenses-de-medicaments-interregimes",
+        "download_or_query_url": "https://open-data-assurance-maladie.ameli.fr/medicaments/download.php?Dir_Rep=Open_MEDIC_Base_Complete&Annee=2025",
+        "description": "Données annuelles sur l'utilisation des médicaments en pharmacie de ville : dépenses, remboursements, boîtes et ventilations démographiques ou géographiques.",
+        "estimated_quality_percent": 94,
+        "quality_score_basis": "Practical estimate based on official provenance, documented methodology, coverage and open availability; not a publisher-provided score.",
+        "update_frequency": "Annuelle.",
+        "limitations": "Mesure des usages et remboursements, pas le chiffre d'affaires total des fabricants. Données agrégées, réparties en plusieurs tables et assorties de précautions propres à chaque millésime.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Agrégat de consommation (la dimension exacte dépend du fichier)",
+        "variables": [
+          {
+            "name": "Période",
+            "type": "Temporelle",
+            "description": "Année de consommation couverte par le fichier.",
+            "category": "temporal"
+          },
+          {
+            "name": "Dépenses / remboursements",
+            "type": "Quantitative continue",
+            "description": "Montants en euros.",
+            "category": "continuous"
+          },
+          {
+            "name": "Boîtes dispensées",
+            "type": "Quantitative discrète",
+            "description": "Comptage d'unités dispensées.",
+            "category": "discrete"
+          },
+          {
+            "name": "Âge / tranche d'âge",
+            "type": "Qualitative ordinale ou quantitative",
+            "description": "La nature dépend du codage : tranche ou âge mesuré.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Sexe, région, prescripteur",
+            "type": "Qualitatives nominales",
+            "description": "Dimensions de ventilation des agrégats.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Produit / classification",
+            "type": "Qualitative nominale",
+            "description": "Détail produit dépendant du fichier et de la nomenclature.",
+            "category": "qualitative"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "Medic'AM (Assurance Maladie)",
+        "data_url": "https://www.data.gouv.fr/datasets/medicam-medicaments-rembourses-par-lassurance-maladie-par-type-de-prescripteur-donnees-interregimes",
+        "download_or_query_url": "https://www.data.gouv.fr/datasets/medicam-medicaments-rembourses-par-lassurance-maladie-par-type-de-prescripteur-donnees-interregimes",
+        "description": "Remboursements de médicaments délivrés en pharmacie de ville, identifiés par CIP, avec base et montants remboursés, nombres de boîtes et types de prescripteur.",
+        "estimated_quality_percent": 92,
+        "quality_score_basis": "Practical estimate based on official provenance, medicine-level identifiers, documented fields and recurring publication; not a publisher-provided score.",
+        "update_frequency": "Mensuelle à partir de 2015 ; annuelle pour les années antérieures.",
+        "limitations": "Ne couvre ni toutes les ventes ni les usages hospitaliers et ne mesure pas les revenus nets des fabricants.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Médicament (CIP) × période × type de prescripteur",
+        "variables": [
+          {
+            "name": "CIP",
+            "type": "Qualitative nominale",
+            "description": "Identifiant de présentation du médicament.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Période",
+            "type": "Temporelle",
+            "description": "Mois ou année de publication.",
+            "category": "temporal"
+          },
+          {
+            "name": "Type de prescripteur",
+            "type": "Qualitative nominale",
+            "description": "Catégorie du prescripteur.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Base / montant remboursé",
+            "type": "Quantitatives continues",
+            "description": "Montants en euros.",
+            "category": "continuous"
+          },
+          {
+            "name": "Boîtes remboursées",
+            "type": "Quantitative discrète",
+            "description": "Comptage de boîtes.",
+            "category": "discrete"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "Eurostat Structural Business Statistics (NACE C21)",
+        "data_url": "https://ec.europa.eu/eurostat/databrowser/view/sbs_ovw_act/default/table?lang=en",
+        "download_or_query_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sbs_ovw_act?geo=FR&nace_r2=C21",
+        "description": "Indicateurs structurels annuels pour la fabrication pharmaceutique (NACE C21) : entreprises, emplois, ETP, salaires et chiffre d'affaires.",
+        "estimated_quality_percent": 90,
+        "quality_score_basis": "Practical estimate based on official statistical provenance, breadth of indicators, comparable definitions and machine-readable access; not a publisher-provided score.",
+        "update_frequency": "Annuelle ; dates de publication et révisions variables selon l'indicateur.",
+        "limitations": "Agrégats sectoriels, sans noms d'entreprises ni détail par établissement. Certaines ventilations peuvent être indisponibles ou confidentielles.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Secteur × territoire × année × indicateur",
+        "variables": [
+          {
+            "name": "Année",
+            "type": "Temporelle (discrète)",
+            "description": "Année de référence de l'indicateur.",
+            "category": "temporal"
+          },
+          {
+            "name": "Géographie / secteur NACE",
+            "type": "Qualitatives nominales",
+            "description": "Territoire et secteur agrégé C21.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Indicateur",
+            "type": "Qualitative nominale",
+            "description": "Nature de la mesure publiée.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Nombre d'entreprises / de salariés",
+            "type": "Quantitatives discrètes",
+            "description": "Effectifs agrégés.",
+            "category": "discrete"
+          },
+          {
+            "name": "ETP, salaires, chiffre d'affaires",
+            "type": "Quantitatives continues",
+            "description": "Mesures d'emploi et montants agrégés.",
+            "category": "continuous"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "EMA EudraGMDP",
+        "data_url": "https://www.ema.europa.eu/en/human-regulatory-overview/research-development/compliance-research-development/good-manufacturing-practice/eudragmdp-database",
+        "download_or_query_url": "https://eudragmdp.ema.europa.eu/inspections/gmpc/searchGMPCompliance.do",
+        "description": "Base européenne de données publiques sur les autorisations de fabrication et d'importation, certificats GMP et autres enregistrements réglementaires.",
+        "estimated_quality_percent": 88,
+        "quality_score_basis": "Practical estimate based on regulator provenance and direct relevance to authorisations; not a publisher-provided score. Score reflects that records require filtering and entity matching.",
+        "update_frequency": "Mise à jour au fil des publications et modifications des autorités nationales.",
+        "limitations": "Portail européen sans extraction nationale simple. Une autorisation ne décrit ni les volumes produits ni l'activité commerciale.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Autorisation, certificat, site ou enregistrement réglementaire",
+        "variables": [
+          {
+            "name": "Type d'enregistrement / identifiant",
+            "type": "Qualitative nominale",
+            "description": "Autorisation, certificat ou enregistrement.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Site / pays",
+            "type": "Qualitatives nominales",
+            "description": "Lieu associé à l'enregistrement.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Type d'autorisation / statut",
+            "type": "Qualitative nominale",
+            "description": "Catégorie et état réglementaire.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Dates de délivrance / validité",
+            "type": "Temporelles",
+            "description": "Jalons de l'autorisation ou du certificat.",
+            "category": "temporal"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "EU Clinical Trials Information System (CTIS)",
+        "data_url": "https://euclinicaltrials.eu/search-for-clinical-trials/",
+        "download_or_query_url": "https://euclinicaltrials.eu/search-for-clinical-trials/",
+        "description": "Portail public européen des essais cliniques : promoteurs, médicaments étudiés, statut et pays ou sites participants.",
+        "estimated_quality_percent": 83,
+        "quality_score_basis": "Practical estimate based on official EU registry provenance, public access and relevance to pharmaceutical R&D; not a publisher-provided score.",
+        "update_frequency": "Mise à jour lors des soumissions et modifications des essais.",
+        "limitations": "Les promoteurs peuvent être des universités, hôpitaux, prestataires ou filiales; leurs noms ne correspondent pas toujours à un SIREN. Un essai n'est pas une mesure de ventes ou de succès commercial.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Essai clinique, pays ou site participant selon l'extraction",
+        "variables": [
+          {
+            "name": "Identifiant d'essai",
+            "type": "Qualitative nominale",
+            "description": "Identifiant du registre, même s'il est composé de chiffres.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Promoteur / médicament",
+            "type": "Qualitatives nominales",
+            "description": "Entités et produit étudié.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Statut d'essai",
+            "type": "Qualitative nominale",
+            "description": "État réglementaire ou opérationnel.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Pays / sites participants",
+            "type": "Qualitatives nominales",
+            "description": "Localisation des participations.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Dates de l'essai",
+            "type": "Temporelles",
+            "description": "Dates d'enregistrement et de suivi.",
+            "category": "temporal"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "Eurostat Comext international trade in goods",
+        "data_url": "https://ec.europa.eu/eurostat/web/international-trade-in-goods/database",
+        "download_or_query_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ext_lt_intertrd?geo=FR",
+        "description": "Statistiques des importations et exportations par produit, pays partenaire et période, en valeur et en quantité.",
+        "estimated_quality_percent": 87,
+        "quality_score_basis": "Practical estimate based on official statistical provenance, detailed product/partner breakdowns and machine-readable access; not a publisher-provided score.",
+        "update_frequency": "Mensuelle et annuelle ; des révisions sont possibles.",
+        "limitations": "Totaux nationaux sans données de vente par entreprise. Les codes produits évoluent et les flux ne correspondent ni à la consommation domestique ni au chiffre d'affaires des fabricants.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Produit × pays partenaire × période",
+        "variables": [
+          {
+            "name": "Période",
+            "type": "Temporelle",
+            "description": "Mois ou année du flux.",
+            "category": "temporal"
+          },
+          {
+            "name": "Code produit / pays partenaire / flux",
+            "type": "Qualitatives nominales",
+            "description": "Classification du produit, du partenaire et import/export.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Valeur commerciale",
+            "type": "Quantitative continue",
+            "description": "Valeur monétaire du flux.",
+            "category": "continuous"
+          },
+          {
+            "name": "Quantité échangée",
+            "type": "Quantitative dépendant de l'unité",
+            "description": "Nature discrète ou continue selon l'unité de mesure publiée.",
+            "category": "discrete"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "French public procurement data (DECP)",
+        "data_url": "https://data.economie.gouv.fr/pages/donnees-essentielles-de-la-commande-publique/",
+        "download_or_query_url": "https://data.economie.gouv.fr/explore/dataset/decp_augmente/",
+        "description": "Marchés publics attribués : acheteurs, fournisseurs, descriptions et montants, pour compléter l'analyse des ventes et clients.",
+        "estimated_quality_percent": 72,
+        "quality_score_basis": "Practical estimate based on public-source availability and potential supplier/value fields; not a publisher-provided score. Score is reduced for incomplete buyer reporting and variable descriptions.",
+        "update_frequency": "Consolidation régulière annoncée ; délais et fréquence varient selon les déclarations.",
+        "limitations": "La couverture et les descriptions sont variables. Les montants de marché ne sont pas le chiffre d'affaires de l'entreprise et peuvent couvrir plusieurs années ou des fournitures plus larges.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Marché ou contrat public",
+        "variables": [
+          {
+            "name": "Identifiant de contrat",
+            "type": "Qualitative nominale",
+            "description": "Identifiant du marché, non une mesure.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Acheteur / fournisseur",
+            "type": "Qualitatives nominales",
+            "description": "Entités contractantes.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Description",
+            "type": "Qualitative textuelle",
+            "description": "Objet déclaré du marché.",
+            "category": "text"
+          },
+          {
+            "name": "Date / période",
+            "type": "Temporelle",
+            "description": "Date de notification ou période du marché.",
+            "category": "temporal"
+          },
+          {
+            "name": "Montant attribué",
+            "type": "Quantitative continue",
+            "description": "Montant financier déclaré.",
+            "category": "continuous"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "ANSM medicine availability and shortages",
+        "data_url": "https://ansm.sante.fr/disponibilites-des-produits-de-sante/medicaments",
+        "download_or_query_url": "https://ansm.sante.fr/disponibilites-des-produits-de-sante/medicaments",
+        "description": "Informations de l'ANSM sur la disponibilité des médicaments et les tensions d'approvisionnement, à relier aux produits de la BDPM.",
+        "estimated_quality_percent": 80,
+        "quality_score_basis": "Practical estimate based on regulator provenance and relevance to product availability; not a publisher-provided score. Score reflects the operational nature and potentially changing page structure.",
+        "update_frequency": "Mise à jour selon l'évolution des informations de disponibilité.",
+        "limitations": "Ne constitue ni un registre historique d'entreprises ni une mesure des ventes, des volumes en pénurie ou des parts de marché.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Médicament ou présentation",
+        "variables": [
+          {
+            "name": "Médicament / présentation / laboratoire",
+            "type": "Qualitatives nominales",
+            "description": "Entités concernées par le signal.",
+            "category": "qualitative"
+          },
+          {
+            "name": "État de disponibilité",
+            "type": "Qualitative nominale",
+            "description": "Disponibilité ou signal de tension selon la publication.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Dates de mise à jour",
+            "type": "Temporelles",
+            "description": "Repères temporels de l'information publiée.",
+            "category": "temporal"
+          },
+          {
+            "name": "Volumes de pénurie",
+            "type": "Non documentés",
+            "description": "Le descriptif ne garantit pas de mesure de volume.",
+            "category": "text"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      },
+      {
+        "source": "European Patent Office Espacenet",
+        "data_url": "https://worldwide.espacenet.com/",
+        "download_or_query_url": "https://ops.epo.org/",
+        "description": "Recherche de brevets pour repérer demandes, déposants, domaines technologiques et chronologie de l'innovation pharmaceutique.",
+        "estimated_quality_percent": 74,
+        "quality_score_basis": "Practical estimate based on authoritative patent records and relevance to innovation; not a publisher-provided score. Lower score reflects the complexity of bulk access, applicant matching and interpretation.",
+        "update_frequency": "Mise à jour au fil de la publication des brevets et événements juridiques.",
+        "limitations": "N'est pas un jeu France-pharmacie prêt à l'emploi. Les noms de déposants demandent une normalisation; un brevet n'atteste ni d'un produit commercialisé ni de sa valeur.",
+        "dataClass": "Secondaire",
+        "unitOfObservation": "Demande ou famille de brevets",
+        "variables": [
+          {
+            "name": "Identifiant / famille de brevets",
+            "type": "Qualitative nominale",
+            "description": "Identifiant documentaire, pas une mesure.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Déposant",
+            "type": "Qualitative nominale",
+            "description": "Organisation ayant déposé la demande.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Domaine / classification technologique",
+            "type": "Qualitative nominale",
+            "description": "Classification du contenu breveté.",
+            "category": "qualitative"
+          },
+          {
+            "name": "Dates de dépôt / publication",
+            "type": "Temporelles",
+            "description": "Chronologie documentaire.",
+            "category": "temporal"
+          },
+          {
+            "name": "Nombre de brevets",
+            "type": "Quantitative discrète après agrégation",
+            "description": "Comptage construit en agrégeant les enregistrements.",
+            "category": "discrete"
+          }
+        ],
+        "statisticsAvailable": false,
+        "statisticsNote": "Le dépôt fournit le descriptif de la source, pas son extraction brute. Les colonnes ci-dessous sont déduites du descriptif et doivent être vérifiées sur le fichier téléchargé."
+      }
+    ]
+  },
+  "snapshot": {
+    "generatedAt": "2026-10-18T16:03:30.3454105Z",
+    "sourceUrl": "https://recherche-entreprises.api.gouv.fr/search",
+    "companyCount": 789,
+    "companySiteSearchCount": 789,
+    "siteCount": 604,
+    "activityTotals": {
+      "21.10Z": 230,
+      "21.20Z": 559
+    },
+    "metadata": [
+      {
+        "column": "generatedAt",
+        "type": "Date/heure (temporelle)",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      },
+      {
+        "column": "source",
+        "type": "Qualitative nominale (URL)",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      },
+      {
+        "column": "activityTotals",
+        "type": "Quantitative discrète par code NAF",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      },
+      {
+        "column": "companyCount",
+        "type": "Quantitative discrète (effectif)",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      },
+      {
+        "column": "companySiteSearchCount",
+        "type": "Quantitative discrète (effectif)",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      },
+      {
+        "column": "siteCount",
+        "type": "Quantitative discrète (effectif)",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      },
+      {
+        "column": "companies",
+        "type": "Table imbriquée (entreprise)",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      },
+      {
+        "column": "sites",
+        "type": "Table imbriquée (établissement)",
+        "n": 1,
+        "missing": 0,
+        "missing_pct": 0.0,
+        "unique": 1
+      }
+    ],
+    "companies": {
+      "count": 789,
+      "unitOfObservation": "Entreprise",
+      "columns": [
+        {
+          "column": "siren",
+          "type": "Identifiant qualitatif nominal",
+          "n": 789,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 789
+        },
+        {
+          "column": "nom_complet",
+          "type": "Qualitative textuelle / nominale",
+          "n": 789,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 788
+        },
+        {
+          "column": "activityCodes",
+          "type": "Qualitative nominale (liste de codes)",
+          "n": 789,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 2
+        },
+        {
+          "column": "siege.libelle_commune",
+          "type": "Qualitative nominale",
+          "n": 789,
+          "missing": 328,
+          "missing_pct": 41.57160963244613,
+          "unique": 286
+        },
+        {
+          "column": "siege.code_postal",
+          "type": "Qualitative nominale (code)",
+          "n": 789,
+          "missing": 257,
+          "missing_pct": 32.57287705956908,
+          "unique": 356
+        },
+        {
+          "column": "siege.coordonnees.latitude",
+          "type": "Quantitative continue (latitude)",
+          "n": 789,
+          "missing": 333,
+          "missing_pct": 42.20532319391635,
+          "unique": 441
+        },
+        {
+          "column": "siege.coordonnees.longitude",
+          "type": "Quantitative continue (longitude)",
+          "n": 789,
+          "missing": 333,
+          "missing_pct": 42.20532319391635,
+          "unique": 441
+        }
+      ]
+    },
+    "sites": {
+      "count": 604,
+      "unitOfObservation": "Établissement",
+      "columns": [
+        {
+          "column": "siret",
+          "type": "Identifiant qualitatif nominal",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 604
+        },
+        {
+          "column": "companySiren",
+          "type": "Identifiant qualitatif nominal",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 425
+        },
+        {
+          "column": "companyName",
+          "type": "Qualitative textuelle / nominale",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 425
+        },
+        {
+          "column": "etablissement.adresse",
+          "type": "Qualitative textuelle",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 582
+        },
+        {
+          "column": "etablissement.libelle_commune",
+          "type": "Qualitative nominale",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 351
+        },
+        {
+          "column": "etablissement.activite_principale",
+          "type": "Qualitative nominale (code NAF)",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 2
+        },
+        {
+          "column": "coordinates.latitude",
+          "type": "Quantitative continue (latitude)",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 588
+        },
+        {
+          "column": "coordinates.longitude",
+          "type": "Quantitative continue (longitude)",
+          "n": 604,
+          "missing": 0,
+          "missing_pct": 0.0,
+          "unique": 588
+        }
+      ]
+    },
+    "coordinates": [
+      {
+        "level": "Sièges sociaux",
+        "column": "siege.coordonnees.latitude",
+        "n": 456,
+        "mean": 46.846245634976405,
+        "median": 48.5001272095,
+        "q1": 45.73056185125,
+        "q3": 48.8646105824809,
+        "min": -21.07118306,
+        "max": 51.010920446,
+        "variance": 25.590337981407345,
+        "std": 5.058689354112125
+      },
+      {
+        "level": "Sièges sociaux",
+        "column": "siege.coordonnees.longitude",
+        "n": 456,
+        "mean": 2.326835788520053,
+        "median": 2.3415673173,
+        "q1": 1.8345444748396196,
+        "q3": 4.79244626195,
+        "min": -61.5327142927528,
+        "max": 55.223181822,
+        "variance": 56.47017373621299,
+        "std": 7.514663913723154
+      },
+      {
+        "level": "Établissements",
+        "column": "coordinates.latitude",
+        "n": 604,
+        "mean": 47.060874167032,
+        "median": 48.302265983,
+        "q1": 45.741213779084326,
+        "q3": 48.86969881275,
+        "min": -21.07118306,
+        "max": 51.010920446,
+        "variance": 16.98060472325489,
+        "std": 4.1207529315957405
+      },
+      {
+        "level": "Établissements",
+        "column": "coordinates.longitude",
+        "n": 604,
+        "mean": 2.5827496420376073,
+        "median": 2.34208488395,
+        "q1": 1.438390219238735,
+        "q3": 4.79244626195,
+        "min": -61.5327142927528,
+        "max": 55.223181822,
+        "variance": 30.64562252520434,
+        "std": 5.5358488531754855
+      }
+    ]
+  }
+}
