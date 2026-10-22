@@ -40,8 +40,9 @@ python scripts\analyze_data_sources.py
 ```
 
 Le rapport est généré dans `data\pharmaceutical_data_sources_analysis.md`.
-Le fichier `data\pharmaceutical_data_sources_analysis.json` alimente
-`dataset.html` avec les mêmes statistiques calculées.
+La page `dataset.html` est pré-rendue par le même script Python : ses fiches
+et statistiques sont intégrées au HTML, sans requête réseau ni JavaScript au
+chargement. Elle peut être publiée comme fichier statique avec `dataset.css`.
 Les fichiers bruts des sources externes ne sont pas inclus dans le dépôt :
 leurs statistiques par colonne nécessitent de télécharger les extractions
 correspondantes.

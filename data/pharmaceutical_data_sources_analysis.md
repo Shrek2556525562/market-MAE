@@ -1,6 +1,6 @@
 # Analyse des sources de données pharmaceutiques
 
-Analyse générée le 2026-10-22 13:11 UTC.
+Analyse générée le 2026-10-22 13:17 UTC.
 
 ## Périmètre et méthode
 
