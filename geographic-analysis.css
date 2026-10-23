@@ -1,0 +1,47 @@
+.geographic-page {
+  padding-bottom: 48px;
+}
+
+.geographic-page .hero {
+  padding-top: 48px;
+}
+
+.geographic-figure {
+  margin: 0;
+}
+
+.geographic-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.geographic-figure figcaption,
+.geographic-method p {
+  color: #5f7068;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.geographic-figure figcaption {
+  margin-top: 12px;
+}
+
+.geographic-method p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 720px) {
+  .geographic-page .hero {
+    padding-top: 32px;
+  }
+
+  .geographic-page .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

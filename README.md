@@ -44,6 +44,15 @@ industriels dans une carte IGN, avec recherche commune, filtres et résultats
 sélectionnables. Elle utilise Leaflet 1.9.4 et Leaflet.markercluster 1.5.3,
 hébergés avec leurs licences dans `assets/leaflet/`.
 
+La page `geographic-analysis.html` compare les positions des sièges sociaux
+pharmaceutiques et des formations Parcoursup avec deux droites de régression.
+Pour recalculer le graphique SVG après une mise à jour des instantanés, exécutez
+`python scripts/analyze_geographic_distribution.py`. La comparaison complémentaire
+des répartitions par cellules de 50 km aide à interpréter les droites, qui ne
+permettent pas à elles seules de conclure à une offre homogène. Les modèles
+linéaires suivent l’approche Python/scikit-learn du
+[cours de machine learning de Vincent Barra](https://vbarra.github.io/MLbook/intro.html).
+
 ## Mettre à jour l’instantané
 
 Pour régénérer les données d’entreprise, exécutez
