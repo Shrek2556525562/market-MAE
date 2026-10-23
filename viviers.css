@@ -1,0 +1,279 @@
+/* Page « Viviers de formation » : complète styles.css. */
+
+.topbar-note.is-current {
+  color: var(--green-dark);
+}
+
+.topbar-note.is-current::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3eac7d;
+  box-shadow: 0 0 0 4px #e8f5ee;
+  content: "";
+}
+
+.viviers-sidebar .sidebar-scroll {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-color: #cfdad3 transparent;
+  scrollbar-width: thin;
+}
+
+.finding-card {
+  margin: 0 20px 18px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--orange);
+  border-radius: 0 9px 9px 0;
+  background: #fdf6f0;
+}
+
+.finding-card .eyebrow {
+  margin-bottom: 6px;
+  color: #b4652b;
+}
+
+.finding-card h2 {
+  margin: 0 0 6px;
+  font-family: Manrope, sans-serif;
+  font-size: 14px;
+  font-weight: 750;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+}
+
+.finding-card h2 span {
+  color: #b4652b;
+}
+
+.finding-text {
+  margin: 0;
+  color: #5b6a64;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.swatch-level-bac2 { color: #df8a49; background: #df8a49; }
+.swatch-level-bac3 { color: #16745c; background: #16745c; }
+.swatch-level-bac5 { color: #3c64b1; background: #3c64b1; }
+.swatch-domain { color: var(--green); border-radius: 3px; }
+.swatch-university { color: #7a4fa3; }
+.swatch-site { color: var(--ink); background: var(--ink); border-radius: 2px; }
+
+.filter-option input:not(:checked) + .filter-swatch {
+  background: transparent;
+}
+
+.isolated-section {
+  flex: 0 0 auto;
+}
+
+.isolated-section .company-list {
+  max-height: 340px;
+}
+
+.isolated-section .result-count {
+  width: auto;
+}
+
+.company-avatar.is-zero {
+  background: #fbe9dc;
+  color: #b4652b;
+}
+
+.isolated-section .company-avatar {
+  width: auto;
+  min-width: 34px;
+  padding: 0 5px;
+  font-size: 10px;
+}
+
+.isolated-section .company-row {
+  grid-template-columns: auto minmax(0, 1fr) 14px;
+}
+
+.sidebar-footer a {
+  color: var(--green);
+}
+
+.vivier-site {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid white;
+  border-radius: 2px;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px rgb(24 42 37 / 35%);
+}
+
+.viviers-legend {
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot,
+.legend-ring,
+.legend-square {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+}
+
+.legend-dot {
+  border-radius: 50%;
+}
+
+.legend-dot.level-bac2 { background: #df8a49; }
+.legend-dot.level-bac3 { background: #16745c; }
+.legend-dot.level-bac5 { background: #3c64b1; }
+
+.legend-ring {
+  border: 2px solid #7a4fa3;
+  border-radius: 50%;
+}
+
+.legend-square {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+.legend-hint {
+  color: var(--muted);
+}
+
+.method-panel {
+  max-width: 1100px;
+  margin: 8px auto 40px;
+  padding: 26px 30px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+
+.method-panel h2 {
+  margin-bottom: 16px;
+  font-family: Manrope, sans-serif;
+  font-size: 19px;
+  letter-spacing: -0.5px;
+}
+
+.method-panel h3 {
+  margin: 0 0 8px;
+  color: var(--green);
+  font-size: 12px;
+}
+
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+}
+
+.method-panel p {
+  color: #4d5c56;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.method-date {
+  margin: 8px 0 0;
+  color: var(--muted) !important;
+  font-size: 11px !important;
+}
+
+@media (max-width: 860px) {
+  .topbar-links {
+    gap: 14px;
+  }
+
+  .finding-card {
+    margin-right: 14px;
+    margin-left: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar-links .topbar-note:not(.is-current) {
+    font-size: 11px;
+  }
+
+  .topbar-links .topbar-note[href="dataset.html"] {
+    display: none;
+  }
+
+  .workspace {
+    grid-template: minmax(0, 1fr) 330px / minmax(0, 1fr);
+  }
+
+  .viviers-sidebar .sidebar-heading {
+    display: block;
+  }
+
+  .viviers-sidebar .intro {
+    margin-top: 6px;
+  }
+
+  .viviers-sidebar .stats-card {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: auto;
+    margin: 0 15px 12px;
+  }
+
+  .viviers-sidebar .filter-section {
+    display: block;
+  }
+
+  .finding-card {
+    margin: 0 15px 12px;
+  }
+
+  .viviers-legend {
+    font-size: 10px;
+  }
+
+  .legend-hint {
+    display: none;
+  }
+
+  .method-panel {
+    margin: 9px;
+    padding: 20px 16px;
+  }
+
+  .method-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}
+
+.topbar-links .topbar-note {
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .topbar-links {
+    gap: 12px;
+  }
+
+  .topbar-links .topbar-note {
+    font-size: 10px;
+  }
+
+  .topbar-note.is-current::before {
+    display: none;
+  }
+}

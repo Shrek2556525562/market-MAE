@@ -77,6 +77,12 @@ input {
   color: var(--green);
 }
 
+.topbar-links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
 .topbar-note {
   display: flex;
   align-items: center;

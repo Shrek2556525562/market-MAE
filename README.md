@@ -1,8 +1,21 @@
 # Pharma France
 
-Carte statique des entreprises pharmaceutiques en France. Les données sont
-stockées localement dans `data/pharmaceutical-companies-fr.json` et ne sont pas
-chargées depuis une API au runtime.
+> **Pour les RH des sites pharmaceutiques qui doivent recruter un technicien,
+> un ingénieur ou un alternant, Pharma France montre les formations en chimie,
+> biologie, procédés et pharmacie à moins de 50 km de chaque site, par niveau
+> de sortie, contrairement aux annonces publiées à l’aveugle sur un job board.**
+
+**Utilisateur** : le ou la responsable RH d’un site de production pharmaceutique.
+
+**Sa question** : « Où se forment, près de mon site, les profils Bac+2, Bac+3 ou
+Bac+5 dont j’ai besoin ? »
+
+Carte statique des entreprises pharmaceutiques en France. Les données brutes
+des cartes sont **écrites directement dans les pages** (`index.html`,
+`viviers.html`) par `scripts/embed_data.py` : aucune API ni aucun fichier n’est
+appelé à l’ouverture, et les cartes s’affichent aussi en ouvrant le fichier
+HTML depuis le disque. Seuls Leaflet, les polices et le fond de carte IGN
+restent chargés depuis Internet.
 
 ## Utilisation
 
@@ -22,12 +35,42 @@ portant l’un de ces deux codes, avec leurs coordonnées disponibles. Les
 entreprises et sites sont filtrés localement dans l’instantané complet ; aucun
 bouton de pagination ni requête vers l’API n’est nécessaire.
 
+## Viviers de formation
+
+La page `viviers.html` croise les 604 sites industriels pharma avec :
+
+- les formations post-bac de **Parcoursup 2025** utiles aux labos (BTS
+  Bioanalyses, Métiers de la chimie, Biotechnologie, Bioqualité, Pilotage des
+  procédés ; BUT Chimie, Génie chimique, Génie biologique ; licences chimie et
+  sciences de la vie ; écoles d’ingénieurs post-bac), avec leur capacité
+  d’accueil en 1re année ;
+- les inscrits 2024-25 en **chimie, sciences de la vie et pharmacie** des
+  universités et écoles publiques (SIES, secteurs disciplinaires SISE 03, 06
+  et 09).
+
+Le fichier `data/viviers-formations.json` est produit par :
+
+```powershell
+python scripts\build_viviers.py
+```
+
+Le script affiche aussi le résumé chiffré et la liste des sites sans aucune
+formation utile à moins de 50 km. Les règles de sélection des formations sont
+écrites en tête du script ; la page détaille la méthode et les limites (une
+place en 1re année n’est pas un diplômé, Parcoursup ne couvre ni les masters
+ni les écoles recrutant après une prépa, distances à vol d’oiseau).
+
 ## Mettre à jour l’instantané
 
 Pour régénérer le fichier statique, exécutez
 `powershell -ExecutionPolicy Bypass -File scripts\build-static-data.ps1` depuis
 la racine du dépôt. Cette tâche de maintenance interroge l’API publique et
-remplace l’instantané local. Le site publié n’exécute pas ce script.
+remplace l’instantané local. Le site publié n’exécute pas ce script. Ensuite,
+réintégrez les données dans les pages :
+
+```powershell
+python scripts\embed_data.py
+```
 
 ## Analyser les sources
 

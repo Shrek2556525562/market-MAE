@@ -1,4 +1,4 @@
-const DATA_URL = "data/pharmaceutical-companies-fr.json";
+const DATA_ELEMENT_ID = "companies-data";
 const SITE_CODES = new Set(["21.10Z", "21.20Z"]);
 const FRANCE_BOUNDS = [
   [41.25, -5.2],
@@ -383,13 +383,13 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-async function loadStaticData() {
-  const response = await fetch(DATA_URL);
-  if (!response.ok) {
-    throw new Error(`Le fichier de données a répondu avec le statut ${response.status}.`);
+function loadStaticData() {
+  // Données brutes intégrées dans index.html par scripts/embed_data.py.
+  const element = document.getElementById(DATA_ELEMENT_ID);
+  if (!element) {
+    throw new Error("les données ne sont pas intégrées dans la page (lancez scripts/embed_data.py).");
   }
-
-  const snapshot = await response.json();
+  const snapshot = JSON.parse(element.textContent);
   if (!Array.isArray(snapshot.companies) || !Array.isArray(snapshot.sites)) {
     throw new Error("Le fichier de données ne contient pas les entreprises et établissements attendus.");
   }
@@ -423,11 +423,13 @@ async function loadStaticData() {
   updateView();
 }
 
-loadStaticData().catch((error) => {
-  console.error("Échec du chargement de l’instantané local des données.", error);
-  mapError.textContent = `Impossible de charger le fichier local des données : ${error.message}`;
+try {
+  loadStaticData();
+} catch (error) {
+  console.error("Échec de la lecture des données intégrées.", error);
+  mapError.textContent = `Impossible de lire les données de la page : ${error.message}`;
   mapError.hidden = false;
-});
+}
 }
 
 if (typeof L === "undefined") {
