@@ -44,6 +44,13 @@ industriels dans une carte IGN, avec recherche commune, filtres et résultats
 sélectionnables. Elle utilise Leaflet 1.9.4 et Leaflet.markercluster 1.5.3,
 hébergés avec leurs licences dans `assets/leaflet/`.
 
+La page `repartition.html` compare les concentrations de formations avec les
+sièges d’entreprise ou les sites industriels, par région ou département. Les
+comptages sont calculés à l’avance depuis les coordonnées des instantanés et
+les limites départementales ; ils sont embarqués localement, sans requête au
+chargement. Après régénération du bundle statique, actualisez les résultats
+avec `python scripts/build-pharma-geographic-analysis.py`.
+
 ## Mettre à jour l’instantané
 
 Pour régénérer les données d’entreprise, exécutez
@@ -51,8 +58,9 @@ Pour régénérer les données d’entreprise, exécutez
 la racine du dépôt. Cette tâche de maintenance interroge l’API publique et
 remplace l’instantané local. Après toute mise à jour, reconstruisez les fichiers
 de formation puis le bundle statique avec `python scripts/build-pharma-training-data.py`
-et `python scripts/build-browser-data.py`. Le site publié n’exécute aucun de ces
-scripts.
+et `python scripts/build-browser-data.py`, puis la répartition avec
+`python scripts/build-pharma-geographic-analysis.py`. Le site publié n’exécute
+aucun de ces scripts.
 
 ## Analyser les sources
 

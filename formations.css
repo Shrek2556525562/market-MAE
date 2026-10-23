@@ -186,6 +186,10 @@
     display: none;
   }
 
+  .ecosystem-nav a[href="index.html"] {
+    display: none;
+  }
+
   .ecosystem-nav {
     gap: 12px;
   }

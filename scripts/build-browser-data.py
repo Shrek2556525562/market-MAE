@@ -26,6 +26,7 @@ def main():
 
     snapshot = {
         "generatedAt": companies.get("generatedAt"),
+        "trainingGeneratedAt": training.get("generatedAt"),
         "activityTotals": companies.get("activityTotals", {}),
         "companies": companies["companies"],
         "sites": companies["sites"],

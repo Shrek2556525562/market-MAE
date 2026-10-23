@@ -34,7 +34,8 @@ jobs:
           cp index.html app.js static-map.js styles.css dataset.html dataset.css _site/
           cp formations.html formations.js formations.css _site/
           cp panorama.html panorama.js panorama.css _site/
-          cp data/pharma-static-data.js data/france-metropolitaine.svg _site/data/
+          cp repartition.html repartition.js repartition.css _site/
+          cp data/pharma-static-data.js data/pharma-geographic-analysis.js data/france-metropolitaine.svg _site/data/
           cp data/pharmaceutical_data_sources_analysis.md _site/data/
           cp -R assets/leaflet/. _site/assets/leaflet/
 

@@ -1,0 +1,338 @@
+.repartition-current {
+  color: var(--green-dark);
+}
+
+.repartition-page {
+  width: min(1060px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 42px 0 54px;
+}
+
+.repartition-hero {
+  max-width: 720px;
+}
+
+.repartition-hero .eyebrow {
+  margin-bottom: 12px;
+}
+
+.repartition-hero h1 {
+  margin: 0;
+  color: var(--ink);
+  font-family: Manrope, Arial, sans-serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.08;
+}
+
+.repartition-hero > p:last-child {
+  max-width: 620px;
+  margin: 14px 0 0;
+  color: #718079;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.repartition-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 27px 0 18px;
+}
+
+.repartition-controls label {
+  display: grid;
+  min-width: 205px;
+  gap: 6px;
+  color: #718079;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.repartition-controls select {
+  min-height: 39px;
+  padding: 0 34px 0 11px;
+  border: 1px solid #dce5df;
+  border-radius: 7px;
+  background: #fff;
+  color: #30423a;
+  font-size: 12px;
+}
+
+.repartition-controls select:focus-visible {
+  outline: 3px solid #d8e9df;
+  outline-offset: 1px;
+}
+
+.repartition-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.repartition-highlight {
+  display: grid;
+  min-height: 111px;
+  align-content: center;
+  gap: 7px;
+  padding: 16px 18px;
+  border: 1px solid #e4ebe6;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(35 64 52 / 3%);
+}
+
+.repartition-highlight-label {
+  color: #78867f;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.repartition-highlight strong {
+  overflow: hidden;
+  color: #29483b;
+  font-family: Manrope, Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repartition-highlight small {
+  color: #89958e;
+  font-size: 10px;
+}
+
+.repartition-similarity {
+  background: #f7faf8;
+}
+
+.repartition-chart {
+  padding: 22px 24px 12px;
+  border: 1px solid #e4ebe6;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(35 64 52 / 3%);
+}
+
+.repartition-chart-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.repartition-chart-heading .eyebrow {
+  margin-bottom: 7px;
+  font-size: 9px;
+}
+
+.repartition-chart-heading h2 {
+  margin: 0;
+  color: #294238;
+  font-family: Manrope, Arial, sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.4px;
+}
+
+.repartition-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #66766e;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.repartition-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.repartition-legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.training-swatch {
+  background: #7554a8;
+}
+
+.pharma-swatch {
+  background: #16745c;
+}
+
+.repartition-chart-note {
+  margin: 8px 0 14px;
+  color: #89958e;
+  font-size: 10px;
+}
+
+.repartition-table-wrap {
+  overflow-x: auto;
+}
+
+.repartition-chart table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.repartition-chart th {
+  padding: 9px 10px;
+  border-bottom: 1px solid #e8eeea;
+  color: #859189;
+  font-size: 9px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.repartition-chart th:first-child {
+  width: 22%;
+}
+
+.repartition-chart td {
+  padding: 10px;
+  border-bottom: 1px solid #f0f3f1;
+  vertical-align: middle;
+}
+
+.repartition-chart tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.repartition-zone-name {
+  color: #354a40;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.repartition-zone-code {
+  display: block;
+  margin-top: 3px;
+  color: #98a29c;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.repartition-value {
+  display: flex;
+  min-width: 130px;
+  align-items: center;
+  gap: 9px;
+}
+
+.repartition-bar-track {
+  height: 8px;
+  flex: 1 1 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f0f3f1;
+}
+
+.repartition-bar {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: inherit;
+}
+
+.repartition-bar.training {
+  background: #7554a8;
+}
+
+.repartition-bar.pharma {
+  background: #16745c;
+}
+
+.repartition-value-label {
+  width: 83px;
+  flex: 0 0 auto;
+  color: #64746b;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.repartition-method {
+  margin-top: 16px;
+  padding: 17px 19px;
+  border: 1px solid #e4ebe6;
+  border-radius: 9px;
+  background: #f7faf8;
+  color: #718079;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.repartition-method strong {
+  color: #42564c;
+  font-size: 11px;
+}
+
+.repartition-method p {
+  margin: 6px 0 0;
+}
+
+@media (max-width: 700px) {
+  .repartition-page {
+    width: min(100% - 28px, 580px);
+    padding: 28px 0 36px;
+  }
+
+  .repartition-hero h1 {
+    font-size: clamp(30px, 8vw, 40px);
+    letter-spacing: -1.3px;
+  }
+
+  .repartition-hero > p:last-child {
+    font-size: 12px;
+  }
+
+  .repartition-highlights {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .repartition-highlight {
+    min-height: 80px;
+    padding: 12px 15px;
+  }
+
+  .repartition-highlight strong {
+    font-size: 17px;
+  }
+
+  .repartition-chart {
+    padding: 17px 13px 8px;
+  }
+
+  .repartition-chart-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .repartition-chart-heading h2 {
+    font-size: 16px;
+  }
+
+  .repartition-chart table {
+    min-width: 620px;
+  }
+}
+
+@media (max-width: 400px) {
+  .repartition-navigation {
+    gap: 9px;
+  }
+
+  .repartition-navigation .topbar-note {
+    font-size: 9px;
+  }
+}
