@@ -1,8 +1,10 @@
 const analysis = window.PHARMA_GEO_ANALYSIS;
+const staticData = window.PHARMA_STATIC_DATA;
 const FRANCE_BOUNDS = [
   [41.2, -5.3],
   [51.3, 9.8],
 ];
+const POINTS_MIN_ZOOM = 8;
 const PALETTES = {
   formations: ["#f0ebf7", "#d9cbea", "#b99dd4", "#9571bb", "#7554a8"],
   pharma: ["#e7f3ec", "#c5e0d1", "#94c6ac", "#56a17d", "#16745c"],
@@ -30,7 +32,98 @@ const layerReferences = {
 };
 const geoJsonLayers = new Map();
 const mapReferences = {};
+const pointLayers = {};
 let currentHighlight = null;
+
+function isInFrance(coordinates) {
+  return (
+    Array.isArray(coordinates) &&
+    coordinates.length === 2 &&
+    Number.isFinite(coordinates[0]) &&
+    Number.isFinite(coordinates[1]) &&
+    coordinates[0] >= FRANCE_BOUNDS[0][0] &&
+    coordinates[0] <= FRANCE_BOUNDS[1][0] &&
+    coordinates[1] >= FRANCE_BOUNDS[0][1] &&
+    coordinates[1] <= FRANCE_BOUNDS[1][1]
+  );
+}
+
+function companyCoordinates(company) {
+  if (typeof company.siege?.coordonnees !== "string") return null;
+  const coordinates = company.siege.coordonnees.split(",").map(Number);
+  return isInFrance(coordinates) ? coordinates : null;
+}
+
+function pointTooltip(title, detail) {
+  const content = document.createElement("span");
+  const name = document.createElement("strong");
+  name.className = "map-tooltip-title";
+  name.textContent = title;
+  content.append(name);
+  if (detail) {
+    const place = document.createElement("span");
+    place.className = "map-tooltip-value";
+    place.textContent = detail;
+    content.append(place);
+  }
+  return content;
+}
+
+function addPoint(layer, coordinates, color, title, detail) {
+  if (!isInFrance(coordinates)) return;
+  L.circleMarker(coordinates, {
+    radius: 4,
+    color: "#fff",
+    weight: 1,
+    fillColor: color,
+    fillOpacity: 0.95,
+  })
+  .bindTooltip(pointTooltip(title, detail), {
+    direction: "top",
+    className: "comparison-point-tooltip",
+  })
+    .addTo(layer);
+}
+
+function makePointLayers() {
+  pointLayers.formations = L.layerGroup();
+  for (const course of staticData.courses) {
+    addPoint(
+      pointLayers.formations,
+      course.coordinates,
+      "#7554a8",
+      course.title,
+      [course.institution, course.city].filter(Boolean).join(" · "),
+    );
+  }
+
+  pointLayers.pharma = L.layerGroup();
+  for (const company of staticData.companies) {
+    const coordinates = companyCoordinates(company);
+    if (!coordinates) continue;
+    addPoint(
+      pointLayers.pharma,
+      coordinates,
+      "#16745c",
+      company.nom_complet,
+      [company.siege?.libelle_commune, company.siege?.code_postal]
+        .filter(Boolean)
+        .join(" · "),
+    );
+  }
+}
+
+function updatePointVisibility() {
+  for (const category of ["formations", "pharma"]) {
+    const map = mapReferences[category];
+    const layer = pointLayers[category];
+    if (map.getZoom() >= POINTS_MIN_ZOOM && !map.hasLayer(layer)) {
+      layer.addTo(map);
+    } else if (map.getZoom() < POINTS_MIN_ZOOM && map.hasLayer(layer)) {
+      map.removeLayer(layer);
+    }
+  }
+}
 
 function countFor(properties, category, metric) {
   return category === "formations"
@@ -230,6 +323,7 @@ function makeMap(container, category) {
   });
   map.fitBounds(FRANCE_BOUNDS, { animate: false });
   mapReferences[category] = map;
+  map.on("zoomend", updatePointVisibility);
   return map;
 }
 
@@ -355,6 +449,9 @@ function initialize() {
     !analysis ||
     !analysis.mapDepartments ||
     !Array.isArray(analysis.mapDepartments.features) ||
+    !staticData ||
+    !Array.isArray(staticData.courses) ||
+    !Array.isArray(staticData.companies) ||
     typeof L === "undefined"
   ) {
     throw new Error("Les données cartographiques locales sont introuvables.");
@@ -362,8 +459,10 @@ function initialize() {
 
   makeMap(document.querySelector("#training-map"), "formations");
   makeMap(document.querySelector("#pharma-map"), "pharma");
+  makePointLayers();
   linkMapZoom();
   renderMaps();
+  updatePointVisibility();
 
   levelSelect.addEventListener("change", () => {
     currentHighlight = null;

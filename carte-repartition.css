@@ -195,6 +195,11 @@
   color: #718079;
 }
 
+.comparison-map .comparison-point-tooltip {
+  max-width: 240px;
+  white-space: normal;
+}
+
 .map-card-legend {
   display: flex;
   min-height: 43px;
