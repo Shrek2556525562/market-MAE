@@ -52,20 +52,30 @@ depuis leur portail ou API ; l’export Onisep renvoie actuellement HTTP 403.
 
 ## Formations utiles aux laboratoires pharmaceutiques
 
-Le fichier `data/formations-pharma-fr.csv` regroupe les offres Parcoursup 2025
-liées à la pharmacie, aux sciences du vivant, à la chimie et aux métiers
-industriels. Les coordonnées manquantes dans Parcoursup sont recherchées dans
-le répertoire SIES des établissements. Le champ `pertinence_pharma` sépare
-les formations directement liées des cursus à compétences transférables.
+Le fichier `data/formations-pharma-fr.csv` regroupe des offres Parcoursup 2025
+et des formations en apprentissage issues de La bonne alternance, liées à la
+pharmacie, aux sciences du vivant, à la chimie et aux métiers industriels. Les
+coordonnées manquantes dans Parcoursup sont recherchées dans le répertoire SIES
+des établissements ; les campus LBA sont géocodés par la Base Adresse
+Nationale. Le champ `pertinence_pharma` sépare les formations directement
+liées des cursus à compétences transférables.
 
-Pour régénérer le fichier à partir des exports locaux, exécutez
-`powershell -ExecutionPolicy Bypass -File scripts\build-pharma-training-csv.ps1`.
-Les lignes correspondent aux offres d’admission et campus publiés dans
-Parcoursup, pas à l’ensemble des formations françaises : les masters, la
-formation continue, les formations absentes de Parcoursup et l’offre Onisep
-(export inaccessible lors de la collecte) n’y sont pas recensés. Les lignes
-sans coordonnées restent dans le CSV mais ne pourront pas être affichées
-directement sur une carte.
+Pour actualiser l’apprentissage puis reconstruire le fichier fusionné, exécutez
+depuis la racine du dépôt :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\refresh-lba-pharma-training.ps1
+powershell -ExecutionPolicy Bypass -File scripts\build-pharma-training-csv.ps1
+```
+
+Le snapshot LBA est issu de 20 recherches thématiques et ne constitue pas un
+recensement exhaustif de l’offre nationale. Le CSV fusionné n’est pas non plus
+exhaustif : il ne couvre pas toutes les formations continues, tous les masters
+ni les formations absentes des catalogues interrogés. L’export Onisep était
+inaccessible (HTTP 403) lors de la collecte. Les lignes sans coordonnées sont
+conservées dans le CSV, mais ne pourront pas être affichées directement sur
+une carte. Les instantanés sources et leurs métadonnées figurent dans
+`data/downloads/` et `data/downloads/manifest.json`.
 
 ## Limites des données
 

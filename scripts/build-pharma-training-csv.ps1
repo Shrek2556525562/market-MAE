@@ -3,6 +3,7 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $parcoursupPath = Join-Path $root 'data\downloads\parcoursup-2025-applications-and-admission-responses.csv'
 $directoryPath = Join-Path $root 'data\downloads\sies-directory-of-principal-higher-education-institutions.csv'
+$lbaPath = Join-Path $root 'data\downloads\lba-pharma-training-offers.csv'
 $outputPath = Join-Path $root 'data\formations-pharma-fr.csv'
 
 foreach ($path in @($parcoursupPath, $directoryPath)) {
@@ -115,6 +116,9 @@ foreach ($offer in (Import-Csv -LiteralPath $parcoursupPath -Delimiter ';')) {
 
     $records.Add([pscustomobject][ordered]@{
         annee = $offer.session
+        type_offre = 'Parcoursup'
+        identifiant_source = $offer.cod_aff_form
+        modalite_formation = 'Parcoursup'
         categorie = $matchedRule.Category
         pertinence_pharma = $relevance
         formation = $offer.lib_for_voe_ins
@@ -127,8 +131,10 @@ foreach ($offer in (Import-Csv -LiteralPath $parcoursupPath -Delimiter ';')) {
         code_departement = $offer.dep
         departement = $offer.dep_lib
         region = $offer.region_etab_aff
+        adresse = ''
         latitude = $latitude
         longitude = $longitude
+        score_geocodage = ''
         source_coordonnees = $coordinatesSource
         url_source_coordonnees = if ($coordinatesSource -eq 'Parcoursup 2025') {
             'https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/'
@@ -141,9 +147,51 @@ foreach ($offer in (Import-Csv -LiteralPath $parcoursupPath -Delimiter ';')) {
         }
         code_offre_parcoursup = $offer.cod_aff_form
         statut_etablissement = $offer.contrat_etab
+        date_collecte = ''
+        url_formation = $offer.lien_form_psup
         source = 'Parcoursup 2025; repertoire SIES des etablissements'
         url_source = 'https://data.enseignementsup-recherche.gouv.fr/explore/dataset/fr-esr-parcoursup/'
     })
+}
+
+if (Test-Path -LiteralPath $lbaPath -PathType Leaf) {
+    foreach ($offer in (Import-Csv -LiteralPath $lbaPath -Delimiter ';')) {
+        $records.Add([pscustomobject][ordered]@{
+            annee = ''
+            type_offre = 'La bonne alternance'
+            identifiant_source = $offer.identifiant_source
+            modalite_formation = 'Apprentissage'
+            categorie = $offer.categorie
+            pertinence_pharma = $offer.pertinence_pharma
+            formation = $offer.formation
+            intitule_admission = $offer.formation
+            parcours = ''
+            filiere = 'Apprentissage'
+            etablissement = $offer.etablissement
+            code_uai = ''
+            ville = $offer.ville
+            code_departement = $offer.code_departement
+            departement = $offer.departement
+            region = $offer.region
+            adresse = $offer.adresse
+            latitude = $offer.latitude
+            longitude = $offer.longitude
+            score_geocodage = $offer.precision_geocodage
+            source_coordonnees = $offer.source_coordonnees
+            url_source_coordonnees = if ($offer.source_coordonnees) {
+                'https://api-adresse.data.gouv.fr/'
+            }
+            else {
+                ''
+            }
+            code_offre_parcoursup = ''
+            statut_etablissement = ''
+            date_collecte = $offer.date_collecte
+            url_formation = $offer.url_formation
+            source = $offer.source
+            url_source = $offer.url_source
+        })
+    }
 }
 
 if ($records.Count -eq 0) {
@@ -155,4 +203,5 @@ $records |
     Export-Csv -LiteralPath $outputPath -Delimiter ';' -NoTypeInformation -Encoding UTF8
 
 $located = @($records | Where-Object { $_.latitude -and $_.longitude }).Count
-Write-Output "Wrote $($records.Count) training offers to $outputPath; $located have map coordinates."
+$sourceCounts = $records | Group-Object type_offre | ForEach-Object { "$($_.Name): $($_.Count)" }
+Write-Output "Wrote $($records.Count) training offers to $outputPath ($($sourceCounts -join ', ')); $located have map coordinates."

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-23T12:09:37.472041+00:00",
+  "generated_at": "2026-10-23T13:34:22Z",
   "catalog": "../pharmaceutical_data_sources_fr.csv",
   "datasets": [
     {
@@ -180,6 +180,18 @@
       "source": "France Travail Mes événements emploi calendar",
       "status": "not_direct_export",
       "catalog_url": "https://mesevenementsemploi.francetravail.fr/mes-evenements-emploi/evenements"
+    },
+    {
+      "source": "La bonne alternance training offers relevant to pharmaceutical companies",
+      "status": "generated",
+      "file": "lba-pharma-training-offers.csv",
+      "catalog_url": "https://labonnealternance.apprentissage.beta.gouv.fr/recherche",
+      "bytes": 72637,
+      "sha256": "f62e5d3f7d258a047e915c713a4e54d4d0a2796d568e5747325c9967314eaf03",
+      "data_rows": 98,
+      "queries": 20,
+      "geocoded_rows": 90,
+      "collected_at": "2026-10-23"
     }
   ]
 }
