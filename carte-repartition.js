@@ -74,11 +74,11 @@ function pointTooltip(title, detail) {
 function addPoint(layer, coordinates, color, title, detail) {
   if (!isInFrance(coordinates)) return;
   L.circleMarker(coordinates, {
-    radius: 4,
+    radius: 5.5,
     color: "#fff",
-    weight: 1,
+    weight: 1.5,
     fillColor: color,
-    fillOpacity: 0.95,
+    fillOpacity: 1,
   })
   .bindTooltip(pointTooltip(title, detail), {
     direction: "top",
@@ -298,7 +298,7 @@ function setHighlight(key) {
         layer.setStyle(
           featureKey === key
             ? { weight: 2.7, color: "#263b32", fillOpacity: 0.88 }
-            : { weight: levelSelect.value === "regions" ? 0.7 : 0.9, color: "#fff", fillOpacity: 0.68 },
+            : { weight: levelSelect.value === "regions" ? 0.7 : 0.9, color: "#fff", fillOpacity: 0.55 },
         );
       }
     }
@@ -312,7 +312,7 @@ function styleFeature(value, category, scales) {
     weight: levelSelect.value === "regions" ? 0.55 : 0.9,
     opacity: 1,
     fillColor: colorFor(value, scales[category], palette),
-    fillOpacity: 0.68,
+    fillOpacity: 0.55,
   };
 }
 
