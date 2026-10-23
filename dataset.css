@@ -9,7 +9,7 @@
   --green-dark: #105b48;
   --mint: #e9f4ef;
   --orange: #b76d37;
-  font-family: "DM Sans", sans-serif;
+  font-family: Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -709,6 +709,12 @@ td:first-child {
   .topbar-nav {
     gap: 12px;
     font-size: 10px;
+  }
+
+  .topbar-nav a[href="index.html"],
+  .topbar-nav a[href="formations.html"],
+  .topbar-nav a[href="panorama.html"] {
+    display: none;
   }
 
   .brand {

@@ -1,0 +1,367 @@
+.carte-repartition-current {
+  color: var(--green-dark);
+}
+
+.map-comparison-page {
+  position: relative;
+  width: min(1440px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 26px 0 34px;
+}
+
+.map-comparison-error[hidden] {
+  display: none;
+}
+
+.map-comparison-intro {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 18px;
+}
+
+.map-comparison-intro > div:first-child {
+  max-width: 670px;
+}
+
+.map-comparison-intro .eyebrow {
+  margin-bottom: 7px;
+  font-size: 9px;
+}
+
+.map-comparison-intro h1 {
+  margin: 0;
+  color: #294238;
+  font-family: Manrope, Arial, sans-serif;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 800;
+  letter-spacing: -1.1px;
+  line-height: 1.15;
+}
+
+.map-comparison-intro > div > p:last-child {
+  max-width: 580px;
+  margin: 8px 0 0;
+  color: #718079;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.map-comparison-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 9px;
+}
+
+.map-comparison-controls label {
+  display: grid;
+  min-width: 150px;
+  gap: 5px;
+  color: #718079;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.map-comparison-controls select {
+  min-height: 36px;
+  padding: 0 28px 0 9px;
+  border: 1px solid #dce5df;
+  border-radius: 6px;
+  background: white;
+  color: #30423a;
+  font-size: 10px;
+}
+
+.map-comparison-controls select:focus-visible {
+  outline: 3px solid #d8e9df;
+  outline-offset: 1px;
+}
+
+.map-comparison-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.map-comparison-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e2e9e4;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 18px rgb(35 64 52 / 5%);
+}
+
+.map-card-heading {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+}
+
+.map-card-icon {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.training-card-icon {
+  background: #f0eafa;
+  color: #7554a8;
+}
+
+.pharma-card-icon {
+  border-radius: 50%;
+  background: #e8f4ed;
+  color: #16745c;
+  font-size: 19px;
+}
+
+.map-card-heading > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.map-card-heading strong {
+  overflow: hidden;
+  color: #31473c;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-card-heading small {
+  color: #89958e;
+  font-size: 9px;
+}
+
+.map-card-total {
+  margin-left: auto;
+  color: #344a3f;
+  font-family: Manrope, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.comparison-map {
+  position: relative;
+  height: min(57vh, 550px);
+  min-height: 330px;
+  background: #eaf0ec;
+}
+
+.comparison-map .leaflet-container {
+  background: #eaf0ec;
+  font: 11px Arial, sans-serif;
+}
+
+.comparison-map .leaflet-interactive {
+  transition: fill-opacity 100ms ease, stroke-width 100ms ease;
+}
+
+.comparison-map .leaflet-tooltip {
+  padding: 7px 9px;
+  border: 1px solid #e2e9e4;
+  border-radius: 6px;
+  box-shadow: 0 3px 12px rgb(29 56 44 / 12%);
+  color: #354a40;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.comparison-map .leaflet-tooltip::before {
+  display: none;
+}
+
+.map-tooltip-title {
+  display: block;
+  color: #294238;
+  font-weight: 700;
+}
+
+.map-tooltip-value {
+  display: block;
+  color: #718079;
+}
+
+.comparison-map .comparison-point-tooltip {
+  max-width: 240px;
+  white-space: normal;
+}
+
+.map-card-legend {
+  display: flex;
+  min-height: 43px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-top: 1px solid #edf1ee;
+}
+
+.map-point-key {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  margin: 0;
+  padding: 4px 10px 8px;
+  color: #718079;
+  font-size: 8px;
+}
+
+.map-point-key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.map-point-dot {
+  width: 9px;
+  height: 9px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(41 66 56 / 25%);
+}
+
+.pharma-headquarters-dot {
+  background: #16745c;
+}
+
+.industrial-site-dot {
+  background: #1769aa;
+}
+
+.map-point-key-hint {
+  color: #89958e;
+}
+
+.map-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #7b8981;
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-legend-swatch {
+  width: 11px;
+  height: 11px;
+  border: 1px solid rgb(47 68 57 / 10%);
+  border-radius: 3px;
+}
+
+.map-comparison-insight {
+  display: flex;
+  min-height: 45px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 13px;
+  padding: 9px 13px;
+  border: 1px solid #e2e9e4;
+  border-radius: 8px;
+  background: #f7faf8;
+}
+
+.insight-mark {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 7px;
+  background: #e8f4ed;
+  color: #16745c;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.map-comparison-insight p {
+  margin: 0;
+  color: #5e7066;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.map-comparison-error {
+  position: absolute;
+  z-index: 600;
+  inset: 12px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #efc3ba;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 95%);
+  color: #963b2d;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .map-comparison-page {
+    width: min(100% - 24px, 600px);
+    padding: 20px 0 28px;
+  }
+
+  .map-comparison-intro {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .map-comparison-intro h1 {
+    font-size: 26px;
+  }
+
+  .map-comparison-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .map-comparison-controls label {
+    min-width: 0;
+  }
+
+  .map-comparison-cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 11px;
+  }
+
+  .comparison-map {
+    height: 48vh;
+    min-height: 300px;
+    max-height: 430px;
+  }
+
+  .map-card-legend {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 400px) {
+  .carte-repartition-navigation .topbar-note {
+    font-size: 8px;
+  }
+
+  .carte-repartition-navigation a[href="panorama.html"] {
+    display: none;
+  }
+
+  .map-comparison-controls {
+    gap: 7px;
+  }
+}
