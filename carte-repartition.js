@@ -104,7 +104,7 @@ function makePointLayers() {
     addPoint(
       pointLayers.pharma,
       site.coordinates,
-      "#56a17d",
+      "#1769aa",
       site.companyName,
       [
         "Site industriel",
@@ -309,13 +309,14 @@ function tooltipContent(properties, count, category, metric) {
 
 function setHighlight(key) {
   currentHighlight = key;
-  for (const group of Object.values(layerReferences)) {
+  for (const [category, group] of Object.entries(layerReferences)) {
+    const fillOpacity = category === "pharma" ? 0.64 : 0.55;
     for (const [featureKey, layers] of group) {
       for (const layer of layers) {
         layer.setStyle(
           featureKey === key
             ? { weight: 2.7, color: "#263b32", fillOpacity: 0.88 }
-            : { weight: levelSelect.value === "regions" ? 0.7 : 0.9, color: "#fff", fillOpacity: 0.55 },
+            : { weight: levelSelect.value === "regions" ? 0.7 : 0.9, color: "#fff", fillOpacity },
         );
       }
     }
@@ -328,8 +329,11 @@ function styleFeature(value, category, scales) {
     color: "#fff",
     weight: levelSelect.value === "regions" ? 0.55 : 0.9,
     opacity: 1,
-    fillColor: colorFor(value, scales[category], palette),
-    fillOpacity: 0.55,
+    fillColor:
+      category === "pharma" && value === 0
+        ? palette[0]
+        : colorFor(value, scales[category], palette),
+    fillOpacity: category === "pharma" ? 0.64 : 0.55,
   };
 }
 
