@@ -4,6 +4,8 @@ const FRANCE_BOUNDS = [
   [41.2, -5.3],
   [51.3, 9.8],
 ];
+const IGN_BASEMAP_URL =
+  "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM_0_19&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png";
 const POINTS_MIN_ZOOM = 8;
 const PALETTES = {
   formations: ["#f0ebf7", "#d9cbea", "#b99dd4", "#9571bb", "#7554a8"],
@@ -295,8 +297,8 @@ function setHighlight(key) {
       for (const layer of layers) {
         layer.setStyle(
           featureKey === key
-            ? { weight: 2.7, color: "#263b32", fillOpacity: 0.98 }
-            : { weight: levelSelect.value === "regions" ? 0.7 : 0.9, color: "#fff", fillOpacity: 0.86 },
+            ? { weight: 2.7, color: "#263b32", fillOpacity: 0.88 }
+            : { weight: levelSelect.value === "regions" ? 0.7 : 0.9, color: "#fff", fillOpacity: 0.68 },
         );
       }
     }
@@ -310,7 +312,7 @@ function styleFeature(value, category, scales) {
     weight: levelSelect.value === "regions" ? 0.55 : 0.9,
     opacity: 1,
     fillColor: colorFor(value, scales[category], palette),
-    fillOpacity: 0.86,
+    fillOpacity: 0.68,
   };
 }
 
@@ -321,6 +323,14 @@ function makeMap(container, category) {
     minZoom: 4,
     maxZoom: 11,
   });
+  L.tileLayer(IGN_BASEMAP_URL, {
+    attribution:
+      '<a href="https://cartes.gouv.fr/" target="_blank" rel="noreferrer">IGN / Géoplateforme</a>',
+    minZoom: 0,
+    maxZoom: 11,
+    maxNativeZoom: 19,
+    tileSize: 256,
+  }).addTo(map);
   map.fitBounds(FRANCE_BOUNDS, { animate: false });
   mapReferences[category] = map;
   map.on("zoomend", updatePointVisibility);
