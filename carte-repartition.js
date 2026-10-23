@@ -104,7 +104,7 @@ function makePointLayers() {
     addPoint(
       pointLayers.pharma,
       site.coordinates,
-      "#1769aa",
+      "#56a17d",
       site.companyName,
       [
         "Site industriel",
