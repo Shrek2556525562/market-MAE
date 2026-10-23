@@ -83,6 +83,78 @@ SOURCE_NOTES = {
         "dates de dépôt/publication (temporelles). Un compte de brevets est "
         "quantitatif discret après agrégation.",
     ),
+    "SIES student enrolments by higher-education institution (excluding university-CPGE double registrations)": (
+        "Établissement × année universitaire × formation ou discipline",
+        "UAI, établissement, type, diplôme et discipline (qualitatifs nominaux); "
+        "année (temporelle); effectifs inscrits (quantitatif discret); sexe, "
+        "origine du bac et géographie (qualitatifs).",
+    ),
+    "SIES Atlas regional higher-education enrolments (aggregable dataset)": (
+        "Commune × année universitaire × regroupement de formation",
+        "Commune, secteur et regroupement (qualitatifs nominaux); année "
+        "(temporelle); effectifs étudiants (quantitatif discret); sexe "
+        "(qualitatif nominal).",
+    ),
+    "SIES directory of principal higher-education institutions": (
+        "Établissement principal",
+        "UAI, type, secteur et périmètre de recherche (qualitatifs nominaux); "
+        "adresse et commune (qualitatives); latitude/longitude (quantitatives "
+        "continues); inscriptions éventuelles (quantitatives discrètes).",
+    ),
+    "Parcoursup 2025 applications and admission responses": (
+        "Formation Parcoursup × campagne 2025",
+        "Formation, établissement, ville et académie (qualitatifs nominaux); "
+        "vœux, propositions et admissions (quantitatifs discrets); parts de "
+        "profils admis (quantitatives continues); profil bac et académie "
+        "d'origine (qualitatifs).",
+    ),
+    "Parcoursup 2025 admission proposals by general-baccalaureate subject specialities": (
+        "Formation × combinaison de spécialités du bac général × campagne",
+        "Formation, spécialités et année de bac (qualitatifs nominaux ou "
+        "temporels); vœux, propositions et acceptations (quantitatifs discrets).",
+    ),
+    "SIES international and foreign student enrolments by origin": (
+        "Origine géographique × région × type de formation × année",
+        "Nationalité, zone d'origine, région et type de formation "
+        "(qualitatifs nominaux); année (temporelle); effectifs "
+        "(quantitatifs discrets).",
+    ),
+    "InserSup graduate employment outcomes": (
+        "Diplôme × établissement × cohorte × indicateur d'insertion",
+        "Diplôme, discipline, sexe, nationalité et géographie "
+        "(qualitatifs nominaux); cohorte (temporelle); taux d'emploi et "
+        "salaires (quantitatifs continus); effectifs (quantitatifs discrets).",
+    ),
+    "SIES new doctoral enrolments by doctoral school and origin of prior diploma": (
+        "École doctorale × année × origine du diplôme antérieur",
+        "École doctorale, type de diplôme et continent d'obtention "
+        "(qualitatifs nominaux); année (temporelle); nouveaux inscrits "
+        "(quantitatif discret).",
+    ),
+    "France Compétences RNCP and Répertoire spécifique": (
+        "Certification professionnelle ou fiche de certification",
+        "Code RNCP/RS, domaine, métier et blocs de compétences "
+        "(qualitatifs nominaux/textuels); niveau de certification "
+        "(qualitatif ordinal); dates de validité (temporelles).",
+    ),
+    "Onisep Idéo initial training catalogue": (
+        "Formation initiale",
+        "Intitulé, diplôme, spécialité NSF et domaines Onisep "
+        "(qualitatifs nominaux/textuels); niveau de sortie (qualitatif "
+        "ordinal); durée (quantitative discrète ou continue selon l'unité).",
+    ),
+    "L'Étudiant student and recruitment fairs calendar": (
+        "Salon ou événement",
+        "Nom, ville et thème (qualitatifs nominaux/textuels); date "
+        "(temporelle); fréquentation et profil des visiteurs "
+        "(non documentés dans un export ouvert identifié).",
+    ),
+    "France Travail Mes événements emploi calendar": (
+        "Événement emploi, formation ou recrutement",
+        "Intitulé, type, commune et organisateur (qualitatifs nominaux/textuels); "
+        "date (temporelle); fréquentation et profil des participants "
+        "(non documentés dans un export ouvert identifié).",
+    ),
 }
 
 SOURCE_VARIABLES = {
@@ -164,6 +236,83 @@ SOURCE_VARIABLES = {
         ("Dates de dépôt / publication", "Temporelles", "Chronologie documentaire.", "temporal"),
         ("Nombre de brevets", "Quantitative discrète après agrégation", "Comptage construit en agrégeant les enregistrements.", "discrete"),
     ],
+    "SIES student enrolments by higher-education institution (excluding university-CPGE double registrations)": [
+        ("Année universitaire", "Temporelle", "Millésime des inscriptions.", "temporal"),
+        ("Établissement / UAI", "Qualitative nominale", "Établissement et identifiant administratif.", "qualitative"),
+        ("Diplôme / discipline", "Qualitatives nominales", "Formation ou discipline agrégée.", "qualitative"),
+        ("Effectif inscrit", "Quantitative discrète", "Nombre d'étudiants inscrits dans la cellule.", "discrete"),
+        ("Sexe / origine du bac / géographie", "Qualitatives", "Ventilations agrégées selon les champs disponibles.", "qualitative"),
+    ],
+    "SIES Atlas regional higher-education enrolments (aggregable dataset)": [
+        ("Commune / département / académie / région", "Qualitatives nominales", "Localisation agrégée des effectifs.", "qualitative"),
+        ("Année universitaire", "Temporelle", "Millésime des inscriptions.", "temporal"),
+        ("Regroupement de formation / secteur", "Qualitatives nominales", "Nomenclature de formation et secteur d'établissement.", "qualitative"),
+        ("Effectif étudiant", "Quantitative discrète", "Nombre d'étudiants compté dans la cellule.", "discrete"),
+        ("Sexe", "Qualitative nominale", "Ventilation agrégée, selon les champs publiés.", "qualitative"),
+    ],
+    "SIES directory of principal higher-education institutions": [
+        ("UAI / type / secteur", "Qualitatives nominales", "Identifiants et catégories d'établissement.", "qualitative"),
+        ("Adresse / commune / académie / région", "Qualitatives textuelles ou nominales", "Localisation administrative.", "text"),
+        ("Latitude / longitude", "Quantitatives continues", "Coordonnées géographiques, si disponibles.", "continuous"),
+        ("Inscriptions par année", "Quantitatives discrètes", "Effectifs éventuels fournis par le répertoire.", "discrete"),
+        ("Champ de recherche", "Qualitative nominale", "Champ ou périmètre associé à l'établissement.", "qualitative"),
+    ],
+    "Parcoursup 2025 applications and admission responses": [
+        ("Formation / établissement / ville / académie", "Qualitatives nominales", "Clés descriptives et géographiques de la formation.", "qualitative"),
+        ("Vœux / propositions / admissions", "Quantitatives discrètes", "Comptages d'actions agrégés par formation.", "discrete"),
+        ("Profil des admis / académie d'origine", "Qualitative ou quantitative continue", "Catégories et proportions publiées pour les candidats admis.", "qualitative"),
+        ("Campagne", "Temporelle", "Campagne Parcoursup 2025.", "temporal"),
+    ],
+    "Parcoursup 2025 admission proposals by general-baccalaureate subject specialities": [
+        ("Spécialité ou combinaison de spécialités", "Qualitative nominale", "Enseignements de spécialité du bac général.", "qualitative"),
+        ("Formation / regroupement", "Qualitative nominale", "Formation agrégée à laquelle se rapporte l'indicateur.", "qualitative"),
+        ("Vœux / propositions / acceptations", "Quantitatives discrètes", "Comptages agrégés par spécialité et formation.", "discrete"),
+        ("Année du bac", "Temporelle", "Année de cohorte des candidats.", "temporal"),
+    ],
+    "SIES international and foreign student enrolments by origin": [
+        ("Nationalité / zone géographique d'origine", "Qualitatives nominales", "Origines publiées sous forme de catégories agrégées.", "qualitative"),
+        ("Région / type de formation", "Qualitatives nominales", "Niveaux géographiques et catégories d'étude disponibles.", "qualitative"),
+        ("Année universitaire", "Temporelle", "Millésime des inscriptions.", "temporal"),
+        ("Effectif", "Quantitative discrète", "Nombre d'étudiants dans l'agrégat.", "discrete"),
+    ],
+    "InserSup graduate employment outcomes": [
+        ("Diplôme / discipline / établissement", "Qualitatives nominales", "Dimensions de diplôme et de formation.", "qualitative"),
+        ("Cohorte / durée après diplôme", "Temporelles", "Année de sortie et horizon de mesure de l'insertion.", "temporal"),
+        ("Région / académie / sexe / nationalité", "Qualitatives nominales", "Ventilations disponibles selon la taille et le champ.", "qualitative"),
+        ("Taux d'emploi", "Quantitative continue", "Proportion de diplômés en emploi, selon la définition publiée.", "continuous"),
+        ("Salaire", "Quantitative continue", "Mesure salariale et quantiles publiés.", "continuous"),
+        ("Effectif", "Quantitative discrète", "Taille de cohorte ou d'agrégat, si publiée.", "discrete"),
+    ],
+    "SIES new doctoral enrolments by doctoral school and origin of prior diploma": [
+        ("École doctorale / type de diplôme antérieur", "Qualitatives nominales", "École d'inscription et catégorie du diplôme antérieur.", "qualitative"),
+        ("Pays / continent d'obtention du diplôme", "Qualitative nominale", "Origine géographique du diplôme, pas nationalité.", "qualitative"),
+        ("Année", "Temporelle", "Année d'inscription en doctorat.", "temporal"),
+        ("Nouveaux inscrits", "Quantitative discrète", "Nombre agrégé de nouveaux doctorants.", "discrete"),
+    ],
+    "France Compétences RNCP and Répertoire spécifique": [
+        ("Code RNCP / RS", "Qualitative nominale", "Identifiant de la certification.", "qualitative"),
+        ("Intitulé / métier / domaine / bloc de compétences", "Qualitatives textuelles ou nominales", "Description de la certification et des compétences.", "text"),
+        ("Niveau de certification", "Qualitative ordinale", "Niveau de qualification, catégorie ordonnée.", "qualitative"),
+        ("Dates de validité", "Temporelles", "Dates d'enregistrement et d'échéance.", "temporal"),
+    ],
+    "Onisep Idéo initial training catalogue": [
+        ("Formation / diplôme", "Qualitatives textuelles ou nominales", "Intitulé du parcours et diplôme préparé.", "text"),
+        ("Spécialité NSF / domaine Onisep", "Qualitatives nominales", "Nomenclatures thématiques et de spécialité.", "qualitative"),
+        ("Niveau de sortie", "Qualitative ordinale", "Niveau indicatif associé à la formation.", "qualitative"),
+        ("Durée", "Quantitative discrète ou continue", "Durée publiée, selon l'unité du fichier.", "continuous"),
+        ("Code RNCP", "Qualitative nominale", "Lien de nomenclature vers une certification.", "qualitative"),
+    ],
+    "L'Étudiant student and recruitment fairs calendar": [
+        ("Nom / thème / ville", "Qualitatives textuelles ou nominales", "Descriptif de l'événement et localisation.", "text"),
+        ("Date", "Temporelle", "Date ou période de tenue du salon.", "temporal"),
+        ("Nombre et profil des visiteurs", "Non documentés", "Aucun export ouvert de fréquentation observée identifié.", "text"),
+        ("Exposants", "Qualitative textuelle, si publiée", "Liste susceptible d'être disponible sur la page de chaque événement.", "text"),
+    ],
+    "France Travail Mes événements emploi calendar": [
+        ("Intitulé / type / commune / organisateur", "Qualitatives textuelles ou nominales", "Description et localisation de l'événement.", "text"),
+        ("Date", "Temporelle", "Date de l'événement à venir.", "temporal"),
+        ("Nombre et profil des participants", "Non documentés", "Aucun export historique ouvert de fréquentation identifié.", "text"),
+    ],
 }
 
 SOURCE_TRANSLATIONS = {
@@ -221,6 +370,66 @@ SOURCE_TRANSLATIONS = {
         "description": "Recherche de brevets pour repérer demandes, déposants, domaines technologiques et chronologie de l'innovation pharmaceutique.",
         "frequency": "Mise à jour au fil de la publication des brevets et événements juridiques.",
         "limitations": "N'est pas un jeu France-pharmacie prêt à l'emploi. Les noms de déposants demandent une normalisation; un brevet n'atteste ni d'un produit commercialisé ni de sa valeur.",
+    },
+    "SIES student enrolments by higher-education institution (excluding university-CPGE double registrations)": {
+        "description": "Statistiques annuelles du SIES sur les inscriptions effectives par établissement, formation, discipline et territoire.",
+        "frequency": "Annuelle; la dernière année publiée varie selon l'indicateur.",
+        "limitations": "Couvre les établissements publics du champ ministériel, pas toutes les écoles privées. Certains indicateurs excluent les doubles inscriptions université-CPGE.",
+    },
+    "SIES Atlas regional higher-education enrolments (aggregable dataset)": {
+        "description": "Effectifs étudiants agrégés à la commune et ventilables selon les regroupements de formation et le secteur.",
+        "frequency": "Mise à jour selon les nouvelles éditions de l'Atlas régional.",
+        "limitations": "Les cellules sont agrégées et certains regroupements peuvent se chevaucher; respecter les définitions avant de sommer.",
+    },
+    "SIES directory of principal higher-education institutions": {
+        "description": "Répertoire ministériel des principaux établissements avec types, identifiants, localisation et informations d'inscription ou de recherche disponibles.",
+        "frequency": "Mise à jour périodique; métadonnées consultées modifiées en février 2025.",
+        "limitations": "Ne couvre pas nécessairement les établissements composantes des établissements publics expérimentaux; ce n'est pas un inventaire complet de tous les campus ou formations.",
+    },
+    "Parcoursup 2025 applications and admission responses": {
+        "description": "Statistiques agrégées de la campagne Parcoursup 2025 par formation : vœux, propositions, admissions et profils des admis.",
+        "frequency": "Annuelle; métadonnées 2025 mises à jour en mars 2026.",
+        "limitations": "Les admissions ne sont pas des inscriptions constatées ni des visiteurs de salons. Le jeu standard exclut l'apprentissage et ne fournit pas de parcours individuels.",
+    },
+    "Parcoursup 2025 admission proposals by general-baccalaureate subject specialities": {
+        "description": "Vœux, propositions et acceptations Parcoursup 2025 rapprochés des spécialités du baccalauréat général.",
+        "frequency": "Annuelle; métadonnées 2025 mises à jour en mai 2026.",
+        "limitations": "Couvre les candidats au bac général selon des regroupements de formation; ne décrit ni tous les étudiants inscrits ni leurs parcours individuels.",
+    },
+    "SIES international and foreign student enrolments by origin": {
+        "description": "Effectifs annuels d'étudiants étrangers ou en mobilité, ventilés par nationalité/zone géographique et grandes catégories de formation et de territoire.",
+        "frequency": "Annuelle; métadonnées consultées mises à jour en mars 2026.",
+        "limitations": "Les origines sont des catégories agrégées, distinctes du domicile ou d'un parcours individuel; le niveau de détail est inférieur aux tables d'inscriptions par établissement.",
+    },
+    "InserSup graduate employment outcomes": {
+        "description": "Insertion professionnelle des diplômés du supérieur par diplôme, discipline, cohorte et territoire, avec taux d'emploi et indicateurs salariaux.",
+        "frequency": "Mise à jour périodique; métadonnées consultées mises à jour en juillet 2026.",
+        "limitations": "Mesure les résultats des diplômés, pas la demande des employeurs. Vérifier les champs couverts, les tailles de cohortes et les règles de secret statistique.",
+    },
+    "SIES new doctoral enrolments by doctoral school and origin of prior diploma": {
+        "description": "Nouveaux inscrits en doctorat par école doctorale et origine du diplôme le plus élevé obtenu précédemment.",
+        "frequency": "Publication annuelle ou périodique; métadonnées consultées modifiées en juillet 2025.",
+        "limitations": "Le pays ou continent est celui d'obtention du diplôme antérieur, pas la nationalité ou le domicile; le champ est limité aux entrants en doctorat.",
+    },
+    "France Compétences RNCP and Répertoire spécifique": {
+        "description": "Référentiels officiels RNCP et RS des certifications, niveaux, compétences, domaines professionnels et métiers associés.",
+        "frequency": "Révisions fréquentes; exporter un nouvel instantané depuis data.gouv.fr pour actualiser le fichier.",
+        "limitations": "Décrit des certifications et non les établissements qui les dispensent, les effectifs d'étudiants ou les diplômés. L'archive référencée est un instantané daté.",
+    },
+    "Onisep Idéo initial training catalogue": {
+        "description": "Catalogue Idéo des formations initiales, diplômes, niveaux de sortie et domaines/spécialités, utile pour repérer les offres spécialisées.",
+        "frequency": "Mises à jour fréquentes annoncées par l'éditeur; vérifier le schéma de chaque export.",
+        "limitations": "Une offre de formation ne fournit pas les effectifs inscrits ni la fréquentation d'un salon. L'URL CSV directe a renvoyé HTTP 403 lors de la vérification; accès à confirmer.",
+    },
+    "L'Étudiant student and recruitment fairs calendar": {
+        "description": "Calendrier éditorial de salons étudiants et de recrutement, avec dates, villes et thèmes annoncés.",
+        "frequency": "Les événements sont publiés et modifiés au fil de la saison.",
+        "limitations": "Pas d'export ouvert stable ou de fréquentation observée identifiés. Le public annoncé ne permet pas de déduire le profil réel des visiteurs ou la composition des exposants.",
+    },
+    "France Travail Mes événements emploi calendar": {
+        "description": "Calendrier France Travail de salons, forums, job datings et événements d'emploi ou de formation.",
+        "frequency": "Calendrier interactif évolutif selon les événements publiés.",
+        "limitations": "Aucun export statique groupé ni historique de fréquentation identifié; les événements ne comportent pas de profil ouvert comparable de leurs participants.",
     },
 }
 
