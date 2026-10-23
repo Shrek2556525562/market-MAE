@@ -1,0 +1,294 @@
+.ecosystem-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.ecosystem-nav a {
+  color: #677670;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.ecosystem-nav a:hover {
+  color: var(--green-dark);
+}
+
+.ecosystem-workspace {
+  grid-template-columns: 390px minmax(0, 1fr);
+}
+
+.ecosystem-sidebar .sidebar-heading {
+  padding-bottom: 13px;
+}
+
+.ecosystem-sidebar .sidebar-heading h1 {
+  font-size: 22px;
+}
+
+.ecosystem-sidebar .stats-card {
+  min-height: 80px;
+  margin-bottom: 11px;
+}
+
+.ecosystem-sidebar .search-box {
+  margin-bottom: 11px;
+}
+
+.ecosystem-sidebar .filter-section {
+  padding-bottom: 11px;
+}
+
+.swatch-training {
+  border-color: #7554a8;
+  background: #7554a8;
+  color: #7554a8;
+}
+
+.swatch-sites {
+  border-color: #334d71;
+  background: #334d71;
+  color: #334d71;
+}
+
+.filter-option input:not(:checked) + .swatch-training,
+.filter-option input:not(:checked) + .swatch-sites {
+  border-color: #c6ceca;
+  background: transparent;
+  color: #c6ceca;
+}
+
+.training-marker {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #7554a8;
+  box-shadow: 0 2px 8px rgb(53 34 83 / 35%);
+  color: white;
+}
+
+.training-marker svg {
+  width: 16px;
+  height: 16px;
+}
+
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.map-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #53635b;
+}
+
+.map-legend small {
+  width: 100%;
+  color: #69766f;
+  font-size: 9px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 12%);
+}
+
+.training-key {
+  background: #7554a8;
+}
+
+.company-key {
+  background: #16745c;
+}
+
+.site-key {
+  background: #334d71;
+}
+
+.ecosystem-course-row {
+  grid-template-columns: 29px minmax(0, 1fr) 14px;
+}
+
+.ecosystem-course-row .company-avatar {
+  background: #f0eafa;
+  color: #68469e;
+}
+
+.ecosystem-course-row:nth-child(3n) .company-avatar {
+  background: #f0eafa;
+  color: #68469e;
+}
+
+.ecosystem-course-row-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.ecosystem-course-row-copy strong {
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ecosystem-course-row-copy small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ecosystem-footer .source-status {
+  padding-top: 8px;
+  padding-bottom: 9px;
+}
+
+.ecosystem-footer .source-status a {
+  font-weight: 700;
+}
+
+.ecosystem-sidebar .company-section {
+  min-height: 130px;
+}
+
+.ecosystem-workspace .map-heading {
+  top: 18px;
+  left: 18px;
+}
+
+.ecosystem-workspace .map-controls {
+  top: 18px;
+  right: 18px;
+}
+
+@media (max-width: 860px) {
+  .ecosystem-workspace {
+    grid-template-columns: 340px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .ecosystem-nav a[href="dataset.html"] {
+    display: none;
+  }
+
+  .ecosystem-nav {
+    gap: 12px;
+  }
+
+  .ecosystem-nav a {
+    font-size: 8px;
+  }
+
+  .ecosystem-workspace {
+    grid-template: minmax(0, 1fr) 285px / minmax(0, 1fr);
+  }
+
+  .ecosystem-sidebar .sidebar-heading {
+    display: block;
+    padding: 10px 15px 7px;
+  }
+
+  .ecosystem-sidebar .sidebar-heading .eyebrow {
+    margin-bottom: 4px;
+  }
+
+  .ecosystem-sidebar .sidebar-heading h1 {
+    font-size: 16px;
+  }
+
+  .ecosystem-sidebar .intro {
+    margin-top: 5px;
+  }
+
+  .ecosystem-sidebar .stats-card {
+    top: 67px;
+    width: 132px;
+    min-height: 52px;
+    margin: 0;
+  }
+
+  .ecosystem-sidebar .search-box {
+    margin-bottom: 6px;
+  }
+
+  .ecosystem-sidebar .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 10px;
+    padding-bottom: 6px;
+  }
+
+  .ecosystem-sidebar .filter-option {
+    min-height: 20px;
+  }
+
+  .ecosystem-sidebar .filter-copy strong {
+    font-size: 8px;
+  }
+
+  .ecosystem-sidebar .company-section {
+    min-height: 45px;
+  }
+
+  .ecosystem-sidebar .company-list {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .ecosystem-course-row {
+    width: 210px;
+    min-width: 210px;
+    min-height: 45px;
+  }
+
+  .ecosystem-footer {
+    display: block;
+  }
+
+  .ecosystem-footer .source-status {
+    display: block;
+    padding: 5px 15px 7px;
+    font-size: 8px;
+  }
+
+  .ecosystem-workspace .map-controls {
+    top: 50px;
+    right: 10px;
+  }
+
+  .ecosystem-workspace .map-heading {
+    top: 10px;
+    left: 10px;
+  }
+
+  .ecosystem-workspace .map-note {
+    right: 9px;
+    bottom: 15px;
+    padding: 7px 9px;
+    font-size: 8px;
+  }
+
+  .map-legend {
+    gap: 5px 8px;
+  }
+
+  .map-legend small {
+    font-size: 8px;
+  }
+}
