@@ -43,9 +43,12 @@ Le rapport est généré dans `data\pharmaceutical_data_sources_analysis.md`.
 La page `dataset.html` est pré-rendue par le même script Python : ses fiches
 et statistiques sont intégrées au HTML, sans requête réseau ni JavaScript au
 chargement. Elle peut être publiée comme fichier statique avec `dataset.css`.
-Les fichiers bruts des sources externes ne sont pas inclus dans le dépôt :
-leurs statistiques par colonne nécessitent de télécharger les extractions
-correspondantes.
+Les exports directs du catalogue `pharmaceutical_data_sources_fr.csv` sont
+téléchargés dans `data/downloads/`. Le manifeste `data/downloads/manifest.json`
+indique les sources, URL de téléchargement, empreintes SHA-256 et nombres de
+lignes pour les CSV. Treize exports ont été récupérés le 23 octobre 2026
+(environ 936 Mo). Neuf autres sources nécessitent une extraction spécifique
+depuis leur portail ou API ; l’export Onisep renvoie actuellement HTTP 403.
 
 ## Limites des données
 
