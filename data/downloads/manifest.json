@@ -1,0 +1,185 @@
+{
+  "generated_at": "2026-10-23T12:09:37.472041+00:00",
+  "catalog": "../pharmaceutical_data_sources_fr.csv",
+  "datasets": [
+    {
+      "source": "INSEE Sirene",
+      "status": "not_direct_export",
+      "catalog_url": "https://annuaire-entreprises.data.gouv.fr/export-sirene"
+    },
+    {
+      "source": "Base de données publique des médicaments (BDPM)",
+      "status": "downloaded",
+      "file": "base-de-donnees-publique-des-medicaments-bdpm.txt",
+      "catalog_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt",
+      "download_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt",
+      "bytes": 3175357,
+      "sha256": "332b95926f76f1a2ab3d70cdf64205397fc13e74b7cc9afad9b625fbb6961640"
+    },
+    {
+      "source": "Open Medic (Assurance Maladie)",
+      "status": "downloaded",
+      "file": "open-medic-assurance-maladie.zip",
+      "catalog_url": "https://open-data-assurance-maladie.ameli.fr/medicaments/download.php?Dir_Rep=Open_MEDIC_Base_Complete&Annee=2025",
+      "download_url": "https://open-data-assurance-maladie.ameli.fr/medicaments/download_file.php?token=95ff24a9f40c427f37614231fa42641a&file=Open_MEDIC_Base_Complete/OPEN_MEDIC_2025.zip",
+      "bytes": 26746721,
+      "sha256": "4ca3d4b9204c46458014b68a47663028020eb52f50e09b50107ceed4088cceb3",
+      "archive_members": 1
+    },
+    {
+      "source": "Medic'AM (Assurance Maladie)",
+      "status": "not_direct_export",
+      "catalog_url": "https://www.data.gouv.fr/datasets/medicam-medicaments-rembourses-par-lassurance-maladie-par-type-de-prescripteur-donnees-interregimes"
+    },
+    {
+      "source": "Eurostat Structural Business Statistics (NACE C21)",
+      "status": "downloaded",
+      "file": "eurostat-structural-business-statistics-nace-c21.json",
+      "catalog_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sbs_ovw_act?geo=FR&nace_r2=C21",
+      "download_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sbs_ovw_act?geo=FR&nace_r2=C21",
+      "bytes": 9939,
+      "sha256": "ee6f3f04d4c29c951ab3331fcbd93c0787707415114520830c6761c6de6e4cdf"
+    },
+    {
+      "source": "EMA EudraGMDP",
+      "status": "not_direct_export",
+      "catalog_url": "https://eudragmdp.ema.europa.eu/inspections/gmpc/searchGMPCompliance.do"
+    },
+    {
+      "source": "EU Clinical Trials Information System (CTIS)",
+      "status": "not_direct_export",
+      "catalog_url": "https://euclinicaltrials.eu/search-for-clinical-trials/"
+    },
+    {
+      "source": "Eurostat Comext international trade in goods",
+      "status": "downloaded",
+      "file": "eurostat-comext-international-trade-in-goods.json",
+      "catalog_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ext_lt_intertrd?geo=FR",
+      "download_url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ext_lt_intertrd?geo=FR",
+      "bytes": 30335,
+      "sha256": "117cc4248ed3c494c2a7b49bfe8f736ae9822499cdc90e6a8fb29ebba132ad8b"
+    },
+    {
+      "source": "French public procurement data (DECP)",
+      "status": "not_direct_export",
+      "catalog_url": "https://data.economie.gouv.fr/explore/dataset/decp_augmente/"
+    },
+    {
+      "source": "ANSM medicine availability and shortages",
+      "status": "not_direct_export",
+      "catalog_url": "https://ansm.sante.fr/disponibilites-des-produits-de-sante/medicaments"
+    },
+    {
+      "source": "European Patent Office Espacenet",
+      "status": "not_direct_export",
+      "catalog_url": "https://ops.epo.org/"
+    },
+    {
+      "source": "SIES student enrolments by higher-education institution (excluding university-CPGE double registrations)",
+      "status": "downloaded",
+      "file": "sies-student-enrolments-by-higher-education-institution-excluding-university-cpge-double-registrations.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-etablissement-hcp/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 2116030,
+      "sha256": "7c8145f4d52af5a2a5b2d9a0a498ae7ac11ccb41f5040b566d0c550287353f04",
+      "data_rows": 2854
+    },
+    {
+      "source": "SIES Atlas regional higher-education enrolments (aggregable dataset)",
+      "status": "downloaded",
+      "file": "sies-atlas-regional-higher-education-enrolments-aggregable-dataset.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-atlas_regional-effectifs-d-etudiants-inscrits_agregeables/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-atlas_regional-effectifs-d-etudiants-inscrits_agregeables/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 37177936,
+      "sha256": "3694835adbbd2816195f496e93a607874700ecf6f403c901fc4824068bb42d60",
+      "data_rows": 165064
+    },
+    {
+      "source": "SIES directory of principal higher-education institutions",
+      "status": "downloaded",
+      "file": "sies-directory-of-principal-higher-education-institutions.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-principaux-etablissements-enseignement-superieur/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-principaux-etablissements-enseignement-superieur/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 301726,
+      "sha256": "0dd177ad75443bed91fce6f609eeef42257a79a7822354210fadda46f44395f5",
+      "data_rows": 245
+    },
+    {
+      "source": "Parcoursup 2025 applications and admission responses",
+      "status": "downloaded",
+      "file": "parcoursup-2025-applications-and-admission-responses.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-parcoursup/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-parcoursup/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 12880730,
+      "sha256": "5bb0e6604c7d87a01d7bbcae4aa00cab3677e59679cdda38add2af2aa0f87807",
+      "data_rows": 14252
+    },
+    {
+      "source": "Parcoursup 2025 admission proposals by general-baccalaureate subject specialities",
+      "status": "downloaded",
+      "file": "parcoursup-2025-admission-proposals-by-general-baccalaureate-subject-specialities.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-parcoursup-enseignements-de-specialite-bacheliers-generaux-3/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-parcoursup-enseignements-de-specialite-bacheliers-generaux-3/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 3997059,
+      "sha256": "acc9cd6e636ac51848b06d84f3815b215ec874f529b921b279893de53253472e",
+      "data_rows": 17211
+    },
+    {
+      "source": "SIES international and foreign student enrolments by origin",
+      "status": "downloaded",
+      "file": "sies-international-and-foreign-student-enrolments-by-origin.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-effectifs-d-etudiants-etrangers-france/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-effectifs-d-etudiants-etrangers-france/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 339633,
+      "sha256": "c5de268d5344f50c4e8c0b92f6f25b501ef8918b9cd34bd04a36938a6840cffe",
+      "data_rows": 2353
+    },
+    {
+      "source": "InserSup graduate employment outcomes",
+      "status": "downloaded",
+      "file": "insersup-graduate-employment-outcomes.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-insersup/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-insersup/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 773596899,
+      "sha256": "dc77864960d3995b4227eb5055063eca955e64b38ba1180db7be3e31955379e1",
+      "data_rows": 1036781
+    },
+    {
+      "source": "SIES new doctoral enrolments by doctoral school and origin of prior diploma",
+      "status": "downloaded",
+      "file": "sies-new-doctoral-enrolments-by-doctoral-school-and-origin-of-prior-diploma.csv",
+      "catalog_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-nouveaux-inscrits-doctorat-diplome-de-plus-haut-niveau-france-etranger/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "download_url": "https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-nouveaux-inscrits-doctorat-diplome-de-plus-haut-niveau-france-etranger/exports/csv?lang=fr&timezone=Europe%2FParis",
+      "bytes": 522628,
+      "sha256": "33ed5c59dfc6cb62ed39c1fae89b3a1753e2f101808db406411ee2be0ddee018",
+      "data_rows": 4252
+    },
+    {
+      "source": "France Compétences RNCP and Répertoire spécifique",
+      "status": "downloaded",
+      "file": "france-competences-rncp-and-repertoire-specifique.zip",
+      "catalog_url": "https://static.data.gouv.fr/resources/repertoire-national-des-certifications-professionnelles-et-repertoire-specifique/20261022-020116/export-fiches-rncp-v4-1-2026-10-22.zip",
+      "download_url": "https://static.data.gouv.fr/resources/repertoire-national-des-certifications-professionnelles-et-repertoire-specifique/20261022-020116/export-fiches-rncp-v4-1-2026-10-22.zip",
+      "bytes": 74991005,
+      "sha256": "bbfa6ca30aa1615bb4d902fd09086072cb92ec90ca4f93f867997c89ea0bdc9b",
+      "archive_members": 1
+    },
+    {
+      "source": "Onisep Idéo initial training catalogue",
+      "status": "unavailable",
+      "http_status": 403,
+      "catalog_url": "https://api.opendata.onisep.fr/downloads/5fa591127f501/5fa591127f501.csv",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "source": "L'Étudiant student and recruitment fairs calendar",
+      "status": "not_direct_export",
+      "catalog_url": "https://www.letudiant.fr/etudes/salons.html"
+    },
+    {
+      "source": "France Travail Mes événements emploi calendar",
+      "status": "not_direct_export",
+      "catalog_url": "https://mesevenementsemploi.francetravail.fr/mes-evenements-emploi/evenements"
+    }
+  ]
+}
