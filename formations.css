@@ -105,7 +105,7 @@ h1 { margin: 0; font-family: Manrope, sans-serif; font-size: clamp(25px, 3vw, 34
   .filters input,.filters select { min-height: 29px; grid-row: auto; padding: 0 6px; font-size: 9px; }
   .search-label { grid-column: 1 / -1; }
   #training-search { grid-column: 1 / -1; }
-  .map-key { display: flex; grid-column: 1 / -1; gap: 15px; margin: 2px 0 0; padding-top: 5px; font-size: 8px; }
+  .map-key { display: flex; flex-wrap: wrap; grid-column: 1 / -1; gap: 8px 15px; margin: 2px 0 0; padding-top: 5px; font-size: 8px; }
   .data-note,.source-note { display: none; }
 }
 

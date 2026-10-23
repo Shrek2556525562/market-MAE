@@ -4,6 +4,11 @@ $root = Split-Path -Parent $PSScriptRoot
 $parcoursupPath = Join-Path $root 'data\downloads\parcoursup-2025-applications-and-admission-responses.csv'
 $directoryPath = Join-Path $root 'data\downloads\sies-directory-of-principal-higher-education-institutions.csv'
 $lbaPath = Join-Path $root 'data\downloads\lba-pharma-training-offers.csv'
+$officialSourcePaths = @(
+    (Join-Path $root 'data\downloads\intercarif-pharma-training-offers.csv'),
+    (Join-Path $root 'data\downloads\campus-france-pharma-programmes.csv'),
+    (Join-Path $root 'data\downloads\cpf-pharma-training-offers.csv')
+)
 $outputPath = Join-Path $root 'data\formations-pharma-fr.csv'
 
 foreach ($path in @($parcoursupPath, $directoryPath)) {
@@ -40,12 +45,12 @@ $rules = @(
     },
     [pscustomobject]@{
         Category = 'Chimie et sciences analytiques'
-        Relevance = 'Directe'
+        Relevance = $transferable
         Pattern = '(?i)\bchimie\b|chimie analytique|formulation'
     },
     [pscustomobject]@{
         Category = $processCategory
-        Relevance = 'Directe'
+        Relevance = $transferable
         Pattern = '(?i)pilotage des proc[\u00e9]d[\u00e9]s|g[\u00e9]nie chimique|contr[\u00f4]le industriel|r[\u00e9]gulation automatique|g[\u00e9]nie industriel et maintenance|maintenance des syst[\u00e8]mes - option a'
     },
     [pscustomobject]@{
@@ -66,6 +71,7 @@ $rules = @(
 )
 
 $excludePattern = '(?i)professorat|professeur|enseignement|kin[\u00e9]|ecologie|g[\u00e9]ologie|g[\u00e9]oscience|v[\u00e9]t[\u00e9]rinaire|sciences de l['']environnement|environnement et [e\u00e9]cotechnologies|di[e\u00e9]t[e\u00e9]tique|nutrition|staps|sciences du sport|parcours agro|agronomie|agronomique'
+$officialExcludePattern = '(?i)di[e\u00e9]t[e\u00e9]tique|nutrition|sciences de l['']aliment|agroalimentaire|agronomie|agronomique|v[e\u00e9]t[e\u00e9]rinaire|kin[e\u00e9]|staps|sciences du sport|sciences de l['']environnement|risques et environnement'
 $records = [System.Collections.Generic.List[object]]::new()
 
 foreach ($offer in (Import-Csv -LiteralPath $parcoursupPath -Delimiter ';')) {
@@ -194,8 +200,44 @@ if (Test-Path -LiteralPath $lbaPath -PathType Leaf) {
     }
 }
 
+foreach ($sourcePath in $officialSourcePaths) {
+    if (-not (Test-Path -LiteralPath $sourcePath -PathType Leaf)) {
+        continue
+    }
+    foreach ($offer in (Import-Csv -LiteralPath $sourcePath -Delimiter ';')) {
+        $title = [string]$offer.formation
+        $isExplicitPharma = $title -match '(?i)pharmaceut|pharmac|pharmacie|m[\u00e9]dicament|produits? de sant[\u00e9]'
+        if (-not $isExplicitPharma -and $title -match $officialExcludePattern) {
+            continue
+        }
+
+        $matchedRule = $null
+        foreach ($rule in $rules) {
+            if ($title -match $rule.Pattern) {
+                $matchedRule = $rule
+                break
+            }
+        }
+        if (-not $matchedRule) {
+            continue
+        }
+
+        $offer.categorie = $matchedRule.Category
+        $offer.pertinence_pharma = $matchedRule.Relevance
+        $records.Add($offer)
+    }
+}
+
 if ($records.Count -eq 0) {
     throw 'No relevant Parcoursup offers matched the configured training categories.'
+}
+
+foreach ($record in $records) {
+    foreach ($property in $record.PSObject.Properties) {
+        if ($property.Value -is [string]) {
+            $property.Value = ($property.Value -replace '\s+', ' ').Trim()
+        }
+    }
 }
 
 $records |

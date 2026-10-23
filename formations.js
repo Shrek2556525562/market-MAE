@@ -6,6 +6,9 @@ const FRANCE_BOUNDS = [
 const SOURCE_COLORS = {
   Parcoursup: "#16745c",
   "La bonne alternance": "#c46e35",
+  "InterCarif-Oref": "#3867a8",
+  "Campus France": "#8052a0",
+  "Mon Compte Formation (CPF)": "#b64568",
 };
 const REGION_ALIASES = new Map([
   ["centre", "Centre-Val de Loire"],
@@ -21,6 +24,7 @@ const totalCount = document.querySelector("#total-count");
 const mappedCount = document.querySelector("#mapped-count");
 const resultCount = document.querySelector("#result-count");
 const coordinateNote = document.querySelector("#coordinate-note");
+const sourceLegend = document.querySelector("#map-key");
 const searchInput = document.querySelector("#training-search");
 const categoryFilter = document.querySelector("#category-filter");
 const sourceFilter = document.querySelector("#source-filter");
@@ -133,6 +137,7 @@ function createPopup(offer) {
     "p",
     [offer.modalite_formation, offer.type_offre].filter(Boolean).join(" · "),
   );
+  if (offer.source) addText(card, "p", `Source : ${offer.source}`);
 
   if (offer.url_formation) {
     const link = document.createElement("a");
@@ -142,16 +147,25 @@ function createPopup(offer) {
     link.textContent = "Voir la fiche de formation ↗";
     card.append(link);
   }
+  if (offer.url_source && offer.url_source !== offer.url_formation) {
+    const sourceLink = document.createElement("a");
+    sourceLink.href = offer.url_source;
+    sourceLink.target = "_blank";
+    sourceLink.rel = "noreferrer";
+    sourceLink.textContent = "Consulter le catalogue source ↗";
+    card.append(sourceLink);
+  }
   return card;
 }
 
 function makeMarker(offer, coordinates) {
   const isAlternance = offer.type_offre === "La bonne alternance";
+  const color = SOURCE_COLORS[offer.type_offre] ?? "#64748b";
   const marker = isAlternance
     ? L.marker(coordinates, {
         icon: L.divIcon({
           className: "",
-          html: '<span class="training-marker alternance" aria-hidden="true"></span>',
+          html: `<span class="training-marker alternance" style="background:${color}" aria-hidden="true"></span>`,
           iconSize: [15, 15],
           iconAnchor: [7.5, 7.5],
         }),
@@ -160,7 +174,7 @@ function makeMarker(offer, coordinates) {
         radius: 5,
         color: "#fff",
         weight: 1.5,
-        fillColor: SOURCE_COLORS.Parcoursup,
+        fillColor: color,
         fillOpacity: 0.88,
       });
   marker.bindPopup(createPopup(offer), { minWidth: 225 });
@@ -184,6 +198,7 @@ function filteredOffers() {
       offer.departement,
       offer.region,
       offer.categorie,
+      offer.source,
     ]
       .join(" ")
       .toLocaleLowerCase("fr")
@@ -215,6 +230,35 @@ async function loadTrainingData() {
   const offers = parseCsv(await response.text());
   totalCount.textContent = offers.length.toLocaleString("fr-FR");
 
+  const sourceCounts = new Map();
+  for (const offer of offers) {
+    const counts = sourceCounts.get(offer.type_offre) ?? { total: 0, mapped: 0 };
+    counts.total += 1;
+    if (validCoordinates(offer)) counts.mapped += 1;
+    sourceCounts.set(offer.type_offre, counts);
+  }
+  sourceFilter.replaceChildren(sourceFilter.options[0]);
+  sourceLegend.replaceChildren();
+  for (const [source, counts] of [...sourceCounts.entries()].sort(([left], [right]) =>
+    left.localeCompare(right, "fr"),
+  )) {
+    const option = document.createElement("option");
+    option.value = source;
+    option.textContent = `${source} (${counts.mapped.toLocaleString("fr-FR")} points / ${counts.total.toLocaleString("fr-FR")} offres)`;
+    option.disabled = counts.mapped === 0;
+    sourceFilter.append(option);
+
+    if (counts.mapped > 0) {
+      const item = document.createElement("span");
+      const dot = document.createElement("i");
+      dot.className = "key-dot";
+      dot.setAttribute("aria-hidden", "true");
+      dot.style.backgroundColor = SOURCE_COLORS[source] ?? "#64748b";
+      item.append(dot, document.createTextNode(source));
+      sourceLegend.append(item);
+    }
+  }
+
   const categories = [...new Set(offers.map((offer) => offer.categorie).filter(Boolean))]
     .sort((left, right) => left.localeCompare(right, "fr"));
   for (const category of categories) {
@@ -233,16 +277,18 @@ async function loadTrainingData() {
   }
 
   let missingCoordinates = 0;
+  let cpfWithoutCoordinates = 0;
   for (const offer of offers) {
     const coordinates = validCoordinates(offer);
     if (!coordinates) {
       missingCoordinates += 1;
+      if (offer.type_offre === "Mon Compte Formation (CPF)") cpfWithoutCoordinates += 1;
       continue;
     }
     makeMarker(offer, coordinates);
   }
   coordinateNote.textContent = missingCoordinates
-    ? `${missingCoordinates.toLocaleString("fr-FR")} formation(s) sans coordonnées fiables restent dans le CSV mais ne figurent pas sur la carte.`
+    ? `${missingCoordinates.toLocaleString("fr-FR")} offre(s) sans coordonnées de campus fiables restent dans le CSV mais ne figurent pas sur la carte.${cpfWithoutCoordinates ? ` Les ${cpfWithoutCoordinates.toLocaleString("fr-FR")} offres CPF n’indiquent que le département ou la région, pas le lieu de formation.` : ""}`
     : "Toutes les formations du fichier disposent de coordonnées.";
   map.fitBounds(FRANCE_BOUNDS);
   updateMap();

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-23T13:34:22Z",
+  "generated_at": "2026-10-23T14:33:35Z",
   "catalog": "../pharmaceutical_data_sources_fr.csv",
   "datasets": [
     {
@@ -8,7 +8,7 @@
       "catalog_url": "https://annuaire-entreprises.data.gouv.fr/export-sirene"
     },
     {
-      "source": "Base de données publique des médicaments (BDPM)",
+      "source": "Base de donnÃ©es publique des mÃ©dicaments (BDPM)",
       "status": "downloaded",
       "file": "base-de-donnees-publique-des-medicaments-bdpm.txt",
       "catalog_url": "https://base-donnees-publique.medicaments.gouv.fr/download/file/CIS_bdpm.txt",
@@ -155,7 +155,7 @@
       "data_rows": 4252
     },
     {
-      "source": "France Compétences RNCP and Répertoire spécifique",
+      "source": "France CompÃ©tences RNCP and RÃ©pertoire spÃ©cifique",
       "status": "downloaded",
       "file": "france-competences-rncp-and-repertoire-specifique.zip",
       "catalog_url": "https://static.data.gouv.fr/resources/repertoire-national-des-certifications-professionnelles-et-repertoire-specifique/20261022-020116/export-fiches-rncp-v4-1-2026-10-22.zip",
@@ -165,19 +165,19 @@
       "archive_members": 1
     },
     {
-      "source": "Onisep Idéo initial training catalogue",
+      "source": "Onisep IdÃ©o initial training catalogue",
       "status": "unavailable",
       "http_status": 403,
       "catalog_url": "https://api.opendata.onisep.fr/downloads/5fa591127f501/5fa591127f501.csv",
       "error": "HTTP Error 403: Forbidden"
     },
     {
-      "source": "L'Étudiant student and recruitment fairs calendar",
+      "source": "L'Ã‰tudiant student and recruitment fairs calendar",
       "status": "not_direct_export",
       "catalog_url": "https://www.letudiant.fr/etudes/salons.html"
     },
     {
-      "source": "France Travail Mes événements emploi calendar",
+      "source": "France Travail Mes Ã©vÃ©nements emploi calendar",
       "status": "not_direct_export",
       "catalog_url": "https://mesevenementsemploi.francetravail.fr/mes-evenements-emploi/evenements"
     },
@@ -191,6 +191,94 @@
       "data_rows": 98,
       "queries": 20,
       "geocoded_rows": 90,
+      "collected_at": "2026-10-23"
+    },
+    {
+      "source": "InterCarif-Oref apprenticeship catalogue",
+      "status": "generated",
+      "file": "intercarif-pharma-training-offers.csv",
+      "catalog_url": "https://catalogue-apprentissage.intercariforef.org/recherche/formations",
+      "download_url": "https://catalogue-apprentissage.intercariforef.org/recherche/formations",
+      "bytes": 552075,
+      "sha256": "a159d9cdbc86a7febc41ea366508e1a12b89b575554945fc8b69333e76ee2cfa",
+      "data_rows": 302,
+      "queries": [
+        "pharmacie",
+        "pharmaceutique",
+        "médicament",
+        "biotechnologie",
+        "bioprocédés",
+        "bioanalyse",
+        "biochimie",
+        "microbiologie",
+        "pharmacologie",
+        "chimie analytique",
+        "formulation pharmaceutique",
+        "production pharmaceutique",
+        "industrie pharmaceutique",
+        "controle qualite",
+        "qualité pharmaceutique",
+        "genie des procédés",
+        "bonnes pratiques de fabrication",
+        "conditionnement pharmaceutique",
+        "reglementation pharmaceutique"
+      ],
+      "coverage": "Keyword-search union; active published offers; mapped coordinates are retained only when corroborated against the training address and department through BAN.",
+      "collected_at": "2026-10-23"
+    },
+    {
+      "source": "Campus France Licence and Master catalogues",
+      "status": "generated",
+      "file": "campus-france-pharma-programmes.csv",
+      "catalog_url": "https://cataloguelm.campusfrance.org/",
+      "download_url": "https://cataloguelm.campusfrance.org/",
+      "bytes": 498928,
+      "sha256": "4124260b80f054e38c011a82f5435a0bf9a9126c0ddb1221b2b7b36ae34addd7",
+      "data_rows": 853,
+      "queries": [
+        "pharmacie",
+        "pharmaceutique",
+        "médicament",
+        "biotechnologie",
+        "bioprocédés",
+        "microbiologie",
+        "pharmacologie",
+        "chimie",
+        "biochimie",
+        "toxicologie",
+        "qualite"
+      ],
+      "coverage": "Current searchable Licence/Master catalogues; 0 detail records lacked a successful detail response; intended for international applicants, not a complete national register.",
+      "collected_at": "2026-10-23"
+    },
+    {
+      "source": "Mon Compte Formation catalogue",
+      "status": "generated",
+      "file": "cpf-pharma-training-offers.csv",
+      "catalog_url": "https://opendata.caissedesdepots.fr/explore/dataset/moncompteformation_catalogueformation/",
+      "download_url": "https://opendata.caissedesdepots.fr/explore/dataset/moncompteformation_catalogueformation/",
+      "bytes": 529257,
+      "sha256": "bd1bfcb5ed5a151ac591185ef4d82c811335f7458da4e82696ddd7445a560edf",
+      "data_rows": 299,
+      "queries": [
+        "pharmacie",
+        "pharmaceutique",
+        "médicament",
+        "biotechnologie",
+        "bioproduction",
+        "bioprocédés",
+        "microbiologie",
+        "bioanalyse",
+        "biochimie",
+        "pharmacologie",
+        "formulation pharmaceutique",
+        "qualité pharmaceutique",
+        "industrie pharmaceutique",
+        "bonnes pratiques de fabrication",
+        "controle qualite pharmaceutique",
+        "chimie analytique"
+      ],
+      "coverage": "Filtered official catalogue records; the source has provider department/region but no verified course-site coordinates, so rows are retained but not plotted.",
       "collected_at": "2026-10-23"
     }
   ]
