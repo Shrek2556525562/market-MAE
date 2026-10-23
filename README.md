@@ -76,6 +76,9 @@ inaccessible (HTTP 403) lors de la collecte. Les lignes sans coordonnées sont
 conservées dans le CSV, mais ne pourront pas être affichées directement sur
 une carte. Les instantanés sources et leurs métadonnées figurent dans
 `data/downloads/` et `data/downloads/manifest.json`.
+La carte interactive correspondante est disponible dans `formations.html` ;
+elle permet de filtrer les offres par domaine, source, lien avec la pharmacie,
+région ou recherche textuelle.
 
 ## Limites des données
 

@@ -87,6 +87,14 @@ input {
   text-decoration: none;
 }
 
+.topbar-note a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: inherit;
+  text-decoration: none;
+}
+
 .topbar-note:hover {
   color: var(--green-dark);
 }
