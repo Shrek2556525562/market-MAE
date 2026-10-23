@@ -50,6 +50,23 @@ lignes pour les CSV. Treize exports ont été récupérés le 23 octobre 2026
 (environ 936 Mo). Neuf autres sources nécessitent une extraction spécifique
 depuis leur portail ou API ; l’export Onisep renvoie actuellement HTTP 403.
 
+## Formations utiles aux laboratoires pharmaceutiques
+
+Le fichier `data/formations-pharma-fr.csv` regroupe les offres Parcoursup 2025
+liées à la pharmacie, aux sciences du vivant, à la chimie et aux métiers
+industriels. Les coordonnées manquantes dans Parcoursup sont recherchées dans
+le répertoire SIES des établissements. Le champ `pertinence_pharma` sépare
+les formations directement liées des cursus à compétences transférables.
+
+Pour régénérer le fichier à partir des exports locaux, exécutez
+`powershell -ExecutionPolicy Bypass -File scripts\build-pharma-training-csv.ps1`.
+Les lignes correspondent aux offres d’admission et campus publiés dans
+Parcoursup, pas à l’ensemble des formations françaises : les masters, la
+formation continue, les formations absentes de Parcoursup et l’offre Onisep
+(export inaccessible lors de la collecte) n’y sont pas recensés. Les lignes
+sans coordonnées restent dans le CSV mais ne pourront pas être affichées
+directement sur une carte.
+
 ## Limites des données
 
 L’instantané est construit à partir des recherches de l’API par activité
