@@ -335,4 +335,8 @@
   .repartition-navigation .topbar-note {
     font-size: 9px;
   }
+
+  .repartition-navigation a[href="panorama.html"] {
+    display: none;
+  }
 }

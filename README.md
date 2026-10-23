@@ -51,6 +51,12 @@ les limites départementales ; ils sont embarqués localement, sans requête au
 chargement. Après régénération du bundle statique, actualisez les résultats
 avec `python scripts/build-pharma-geographic-analysis.py`.
 
+La page `carte-repartition.html` met cette comparaison en carte : deux cartes
+choroplèthes côte à côte, avec zoom synchronisé, survol croisé et regroupement
+par département ou région. Les contours et les comptages sont inclus dans le
+bundle statique de répartition ; aucun fond IGN ni téléchargement n’est
+nécessaire sur cette page.
+
 ## Mettre à jour l’instantané
 
 Pour régénérer les données d’entreprise, exécutez

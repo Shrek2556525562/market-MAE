@@ -190,6 +190,10 @@
     display: none;
   }
 
+  .ecosystem-nav a[href="panorama.html"] {
+    display: none;
+  }
+
   .ecosystem-nav {
     gap: 12px;
   }

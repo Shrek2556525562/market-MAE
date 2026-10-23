@@ -649,7 +649,8 @@
 @media (max-width: 640px) {
   .panorama-navigation a:nth-child(2),
   .panorama-navigation a:nth-child(3),
-  .panorama-navigation a:nth-child(5) {
+  .panorama-navigation a:nth-child(5),
+  .panorama-navigation a:nth-child(6) {
     display: none;
   }
 

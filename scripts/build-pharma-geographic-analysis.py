@@ -211,12 +211,35 @@ def main():
             },
         })
 
+    map_features = []
+    for feature in collection["features"]:
+        code = str(feature["properties"].get("code", ""))
+        if code not in DEPARTMENT_REGIONS:
+            continue
+        map_features.append({
+            "type": "Feature",
+            "geometry": feature["geometry"],
+            "properties": {
+                "code": code,
+                "name": str(feature["properties"]["nom"]),
+                "region": DEPARTMENT_REGIONS[code],
+                **{
+                    field: department_counters[field][code]
+                    for field in COUNT_FIELDS
+                },
+            },
+        })
+
     analysis = {
         "generatedAt": snapshot.get("generatedAt"),
         "trainingGeneratedAt": snapshot.get("trainingGeneratedAt"),
         "totals": totals,
         "regions": region_rows,
         "departments": department_rows,
+        "mapDepartments": {
+            "type": "FeatureCollection",
+            "features": map_features,
+        },
     }
     OUTPUT.write_text(
         f"window.PHARMA_GEO_ANALYSIS = {json.dumps(analysis, ensure_ascii=False, separators=(',', ':'))};\n",
