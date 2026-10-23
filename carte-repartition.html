@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="Carte comparative des pôles de formations pharma et de sites industriels en France."
+      content="Comparez sur deux cartes les sièges des entreprises pharmaceutiques et les formations en France."
     >
     <meta name="theme-color" content="#f4f7f5">
     <title>Carte des pôles pharma et formation — Pharma France</title>
@@ -35,10 +35,11 @@
       <section class="map-comparison-intro">
         <div>
           <p class="eyebrow">Les pôles se superposent-ils&nbsp;?</p>
-          <h1>Formations et pharma, côte à côte.</h1>
+          <h1>Entreprises et formations, côte à côte.</h1>
           <p>
             Les deux cartes partagent le même zoom. Une couleur plus soutenue
-            indique une plus forte concentration dans la catégorie affichée.
+            indique une plus forte concentration ; survolez une zone pour voir
+            le nombre exact de sièges ou de formations.
           </p>
         </div>
         <div class="map-comparison-controls">
@@ -49,17 +50,23 @@
               <option value="regions">Régions</option>
             </select>
           </label>
-          <label>
-            <span>Indicateur pharma</span>
-            <select id="map-pharma-metric">
-              <option value="sites">Sites industriels</option>
-              <option value="entreprises">Sièges d’entreprise</option>
-            </select>
-          </label>
         </div>
       </section>
 
       <section class="map-comparison-cards" aria-label="Cartes côte à côte">
+        <article class="map-comparison-card">
+          <header class="map-card-heading">
+            <span class="map-card-icon pharma-card-icon" aria-hidden="true">+</span>
+            <span>
+              <strong>Entreprises pharmaceutiques</strong>
+              <small id="pharma-map-summary">Sièges sociaux géolocalisés</small>
+            </span>
+            <span id="pharma-map-total" class="map-card-total">—</span>
+          </header>
+          <div id="pharma-map" class="comparison-map" role="application" aria-label="Carte des entreprises pharmaceutiques par département"></div>
+          <div id="pharma-map-legend" class="map-card-legend" aria-label="Légende des entreprises"></div>
+        </article>
+
         <article class="map-comparison-card">
           <header class="map-card-heading">
             <span class="map-card-icon training-card-icon" aria-hidden="true">F</span>
@@ -69,21 +76,8 @@
             </span>
             <span id="training-map-total" class="map-card-total">—</span>
           </header>
-          <div id="training-map" class="comparison-map" role="application" aria-label="Carte des formations par département"></div>
+          <div id="training-map" class="comparison-map" role="application" aria-label="Carte des formations pharmaceutiques par département"></div>
           <div id="training-map-legend" class="map-card-legend" aria-label="Légende des formations"></div>
-        </article>
-
-        <article class="map-comparison-card">
-          <header class="map-card-heading">
-            <span class="map-card-icon pharma-card-icon" aria-hidden="true">+</span>
-            <span>
-              <strong id="pharma-map-title">Sites industriels pharma</strong>
-              <small id="pharma-map-summary">—</small>
-            </span>
-            <span id="pharma-map-total" class="map-card-total">—</span>
-          </header>
-          <div id="pharma-map" class="comparison-map" role="application" aria-label="Carte des sites pharmaceutiques par département"></div>
-          <div id="pharma-map-legend" class="map-card-legend" aria-label="Légende pharmaceutique"></div>
         </article>
       </section>
 

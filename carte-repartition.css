@@ -9,6 +9,10 @@
   padding: 26px 0 34px;
 }
 
+.map-comparison-error[hidden] {
+  display: none;
+}
+
 .map-comparison-intro {
   display: flex;
   align-items: flex-end;

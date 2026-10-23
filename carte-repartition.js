@@ -8,25 +8,18 @@ const PALETTES = {
   pharma: ["#e7f3ec", "#c5e0d1", "#94c6ac", "#56a17d", "#16745c"],
 };
 const PHARMA_LABELS = {
-  sites: {
-    singular: "site industriel",
-    plural: "sites industriels",
-    title: "Sites industriels pharma",
-  },
   entreprises: {
     singular: "siège d’entreprise",
     plural: "sièges d’entreprise",
-    title: "Sièges d’entreprises pharma",
   },
 };
+const PHARMA_METRIC = "entreprises";
 
 const levelSelect = document.querySelector("#map-zone-level");
-const metricSelect = document.querySelector("#map-pharma-metric");
 const trainingSummary = document.querySelector("#training-map-summary");
 const pharmaSummary = document.querySelector("#pharma-map-summary");
 const trainingTotal = document.querySelector("#training-map-total");
 const pharmaTotal = document.querySelector("#pharma-map-total");
-const pharmaTitle = document.querySelector("#pharma-map-title");
 const trainingLegend = document.querySelector("#training-map-legend");
 const pharmaLegend = document.querySelector("#pharma-map-legend");
 const insight = document.querySelector("#map-comparison-insight");
@@ -264,7 +257,7 @@ function linkMapZoom() {
 
 function renderMaps() {
   const features = analysis.mapDepartments.features;
-  const metric = metricSelect.value;
+  const metric = PHARMA_METRIC;
   const labels = PHARMA_LABELS[metric];
   const level = levelSelect.value;
   const totals = {
@@ -281,9 +274,8 @@ function renderMaps() {
 
   trainingSummary.textContent =
     `${level === "regions" ? "Répartition régionale" : "Par département"} · Parcoursup`;
-  pharmaTitle.textContent = labels.title;
   pharmaSummary.textContent =
-    `${level === "regions" ? "Répartition régionale" : "Par département"} · NAF 21.10Z / 21.20Z`;
+    `${level === "regions" ? "Répartition régionale" : "Par département"} · sièges sociaux géolocalisés`;
   trainingTotal.textContent = formatCount(totals.formations);
   pharmaTotal.textContent = formatCount(totals.pharma);
   renderLegend(
@@ -374,11 +366,6 @@ function initialize() {
   renderMaps();
 
   levelSelect.addEventListener("change", () => {
-    currentHighlight = null;
-    for (const layers of Object.values(layerReferences)) layers.clear();
-    renderMaps();
-  });
-  metricSelect.addEventListener("change", () => {
     currentHighlight = null;
     for (const layers of Object.values(layerReferences)) layers.clear();
     renderMaps();
