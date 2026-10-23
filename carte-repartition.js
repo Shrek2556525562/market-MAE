@@ -71,10 +71,10 @@ function pointTooltip(title, detail) {
   return content;
 }
 
-function addPoint(layer, coordinates, color, title, detail) {
+function addPoint(layer, coordinates, color, title, detail, radius = 5.5) {
   if (!isInFrance(coordinates)) return;
   L.circleMarker(coordinates, {
-    radius: 5.5,
+    radius,
     color: "#fff",
     weight: 1.5,
     fillColor: color,
@@ -100,6 +100,22 @@ function makePointLayers() {
   }
 
   pointLayers.pharma = L.layerGroup();
+  for (const site of staticData.sites) {
+    addPoint(
+      pointLayers.pharma,
+      site.coordinates,
+      "#1769aa",
+      site.companyName,
+      [
+        "Site industriel",
+        site.etablissement?.libelle_commune,
+        site.etablissement?.adresse,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      6.5,
+    );
+  }
   for (const company of staticData.companies) {
     const coordinates = companyCoordinates(company);
     if (!coordinates) continue;
@@ -111,6 +127,7 @@ function makePointLayers() {
       [company.siege?.libelle_commune, company.siege?.code_postal]
         .filter(Boolean)
         .join(" · "),
+      5.5,
     );
   }
 }
@@ -379,7 +396,7 @@ function renderMaps() {
   trainingSummary.textContent =
     `${level === "regions" ? "Répartition régionale" : "Par département"} · Parcoursup`;
   pharmaSummary.textContent =
-    `${level === "regions" ? "Répartition régionale" : "Par département"} · sièges sociaux géolocalisés`;
+    `${level === "regions" ? "Répartition régionale" : "Par département"} · sièges sociaux ; sites industriels au zoom`;
   trainingTotal.textContent = formatCount(totals.formations);
   pharmaTotal.textContent = formatCount(totals.pharma);
   renderLegend(
@@ -462,6 +479,7 @@ function initialize() {
     !staticData ||
     !Array.isArray(staticData.courses) ||
     !Array.isArray(staticData.companies) ||
+    !Array.isArray(staticData.sites) ||
     typeof L === "undefined"
   ) {
     throw new Error("Les données cartographiques locales sont introuvables.");

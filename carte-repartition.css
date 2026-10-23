@@ -210,6 +210,45 @@
   border-top: 1px solid #edf1ee;
 }
 
+.map-point-key {
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  margin: 0;
+  padding: 4px 10px 8px;
+  color: #718079;
+  font-size: 8px;
+}
+
+.map-point-key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.map-point-dot {
+  width: 9px;
+  height: 9px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgb(41 66 56 / 25%);
+}
+
+.pharma-headquarters-dot {
+  background: #16745c;
+}
+
+.industrial-site-dot {
+  background: #1769aa;
+}
+
+.map-point-key-hint {
+  color: #89958e;
+}
+
 .map-legend-item {
   display: inline-flex;
   align-items: center;

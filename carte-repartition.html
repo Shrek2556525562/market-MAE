@@ -39,7 +39,8 @@
           <p>
             Les deux cartes partagent le même zoom. Une couleur soutenue
             indique une forte concentration ; survolez une zone pour le compte
-            exact, puis zoomez pour afficher les sièges sociaux et formations.
+            exact, puis zoomez pour afficher les sièges sociaux, sites
+            industriels et formations.
           </p>
         </div>
         <div class="map-comparison-controls">
@@ -63,8 +64,13 @@
             </span>
             <span id="pharma-map-total" class="map-card-total">—</span>
           </header>
-          <div id="pharma-map" class="comparison-map" role="application" aria-label="Carte des entreprises pharmaceutiques par département"></div>
+          <div id="pharma-map" class="comparison-map" role="application" aria-label="Carte des sièges sociaux et sites industriels pharmaceutiques"></div>
           <div id="pharma-map-legend" class="map-card-legend" aria-label="Légende des entreprises"></div>
+          <p class="map-point-key" aria-label="Légende des points affichés à partir du zoom 8">
+            <span class="map-point-key-item"><i class="map-point-dot pharma-headquarters-dot" aria-hidden="true"></i>Siège social</span>
+            <span class="map-point-key-item"><i class="map-point-dot industrial-site-dot" aria-hidden="true"></i>Site industriel</span>
+            <span class="map-point-key-hint">Points visibles en zoom rapproché</span>
+          </p>
         </article>
 
         <article class="map-comparison-card">
