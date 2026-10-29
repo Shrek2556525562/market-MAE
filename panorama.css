@@ -550,7 +550,7 @@
 }
 
 .panorama-cluster {
-  border: 3px solid #fff;
+  border: 3px solid #000;
   border-radius: 50%;
   box-shadow: 0 2px 9px rgb(25 44 35 / 22%);
   color: #fff;
