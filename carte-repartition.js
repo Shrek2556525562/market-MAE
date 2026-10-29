@@ -1,5 +1,6 @@
 const analysis = window.PHARMA_GEO_ANALYSIS;
 const staticData = window.PHARMA_STATIC_DATA;
+const trainingMap = window.PHARMA_TRAINING_MAP;
 const FRANCE_BOUNDS = [
   [41.2, -5.3],
   [51.3, 9.8],
@@ -89,13 +90,15 @@ function addPoint(layer, coordinates, color, title, detail, radius = 5.5) {
 
 function makePointLayers() {
   pointLayers.formations = L.layerGroup();
-  for (const course of staticData.courses) {
+  for (const course of trainingMap.records) {
     addPoint(
       pointLayers.formations,
       course.coordinates,
       "#7554a8",
       course.title,
-      [course.institution, course.city].filter(Boolean).join(" · "),
+      [course.institution, course.city, course.source]
+        .filter(Boolean)
+        .join(" · "),
     );
   }
 
@@ -144,12 +147,6 @@ function updatePointVisibility() {
   }
 }
 
-function countFor(properties, category, metric) {
-  return category === "formations"
-    ? properties.formations
-    : properties[metric];
-}
-
 function formatCount(value) {
   return value.toLocaleString("fr-FR");
 }
@@ -174,6 +171,7 @@ function aggregateCounts(features, metric, level) {
       name: feature.properties.name,
       formations: feature.properties.formations,
       pharma: feature.properties[metric],
+      sites: feature.properties.sites,
     }));
   }
 
@@ -186,9 +184,11 @@ function aggregateCounts(features, metric, level) {
       name: properties.region,
       formations: 0,
       pharma: 0,
+      sites: 0,
     };
     zone.formations += properties.formations;
     zone.pharma += properties[metric];
+    zone.sites += properties.sites;
     zones.set(properties.region, zone);
   }
   return [...zones.values()];
@@ -201,7 +201,7 @@ function getTopZones(features, metric, level) {
       .sort((a, b) => b.formations - a.formations || a.name.localeCompare(b.name, "fr"))
       .slice(0, 3),
     pharma: [...zones]
-      .sort((a, b) => b.pharma - a.pharma || a.name.localeCompare(b.name, "fr"))
+      .sort((a, b) => (b.pharma + b.sites) - (a.pharma + a.sites) || a.name.localeCompare(b.name, "fr"))
       .slice(0, 3),
   };
 }
@@ -224,8 +224,9 @@ function updateInsight(features, metric) {
   insight.textContent =
     `En ${scaleName}, le premier pôle de formation est ${trainingTop?.name} ` +
     `(${formatCount(trainingTop?.formations || 0)} fiches) ; ` +
-    `celui des ${labels.plural} est ${pharmaTop?.name} ` +
-    `(${formatCount(pharmaTop?.pharma || 0)}). ${overlap} ` +
+    `celui des implantations pharma est ${pharmaTop?.name} ` +
+    `(${formatCount((pharmaTop?.pharma || 0) + (pharmaTop?.sites || 0))} au total : ` +
+    `${formatCount(pharmaTop?.pharma || 0)} sièges et ${formatCount(pharmaTop?.sites || 0)} sites). ${overlap} ` +
     "Survolez une zone pour la comparer sur les deux cartes.";
 }
 
@@ -286,7 +287,7 @@ function renderLegend(container, values, palette) {
   return thresholds;
 }
 
-function tooltipContent(properties, count, category, metric) {
+function tooltipContent(properties, count, category, metric, sitesCount) {
   const content = document.createElement("span");
   const title = document.createElement("strong");
   title.className = "map-tooltip-title";
@@ -294,16 +295,21 @@ function tooltipContent(properties, count, category, metric) {
     levelSelect.value === "regions"
       ? properties.region
       : `${properties.name} (${properties.code})`;
-  const value = document.createElement("span");
-  value.className = "map-tooltip-value";
-  const unit =
-    category === "formations"
-      ? count > 1 ? "formations" : "formation"
-      : count > 1
-        ? PHARMA_LABELS[metric].plural
-        : PHARMA_LABELS[metric].singular;
-  value.textContent = `${formatCount(count)} ${unit}`;
-  content.append(title, value);
+  content.append(title);
+  if (category === "pharma") {
+    const headquarters = document.createElement("span");
+    headquarters.className = "map-tooltip-value";
+    headquarters.textContent = `${formatCount(count)} ${count > 1 ? PHARMA_LABELS[metric].plural : PHARMA_LABELS[metric].singular}`;
+    const sites = document.createElement("span");
+    sites.className = "map-tooltip-value";
+    sites.textContent = `${formatCount(sitesCount)} ${sitesCount > 1 ? "sites industriels" : "site industriel"}`;
+    content.append(headquarters, sites);
+  } else {
+    const value = document.createElement("span");
+    value.className = "map-tooltip-value";
+    value.textContent = `${formatCount(count)} ${count > 1 ? "formations" : "formation"}`;
+    content.append(value);
+  }
   return content;
 }
 
@@ -329,10 +335,7 @@ function styleFeature(value, category, scales) {
     color: "#fff",
     weight: levelSelect.value === "regions" ? 0.55 : 0.9,
     opacity: 1,
-    fillColor:
-      category === "pharma" && value === 0
-        ? palette[0]
-        : colorFor(value, scales[category], palette),
+    fillColor: colorFor(value, scales[category], palette),
     fillOpacity: category === "pharma" ? 0.64 : 0.55,
   };
 }
@@ -388,21 +391,22 @@ function renderMaps() {
   const totals = {
     formations: analysis.totals.formations.located,
     pharma: analysis.totals[metric].located,
+    sites: analysis.totals.sites.located,
   };
   const categories = ["formations", "pharma"];
   const zones = aggregateCounts(features, metric, level);
   const zonesByKey = new Map(zones.map((zone) => [zone.key, zone]));
   const scales = {
     formations: createScale(zones.map((zone) => zone.formations)),
-    pharma: createScale(zones.map((zone) => zone.pharma)),
+    pharma: createScale(zones.map((zone) => zone.pharma + zone.sites)),
   };
 
   trainingSummary.textContent =
-    `${level === "regions" ? "Répartition régionale" : "Par département"} · Parcoursup`;
+    `${formatCount(analysis.totals.formations.records)} offres · ${formatCount(totals.formations)} géolocalisées`;
   pharmaSummary.textContent =
-    `${level === "regions" ? "Répartition régionale" : "Par département"} · sièges sociaux ; sites industriels au zoom`;
+    `${formatCount(totals.pharma)} sièges · ${formatCount(totals.sites)} sites ; vert = sièges et/ou sites`;
   trainingTotal.textContent = formatCount(totals.formations);
-  pharmaTotal.textContent = formatCount(totals.pharma);
+  pharmaTotal.textContent = formatCount(totals.pharma + totals.sites);
   renderLegend(
     trainingLegend,
     zones.map((zone) => zone.formations),
@@ -410,7 +414,7 @@ function renderMaps() {
   );
   renderLegend(
     pharmaLegend,
-    zones.map((zone) => zone.pharma),
+    zones.map((zone) => zone.pharma + zone.sites),
     PALETTES.pharma,
   );
 
@@ -426,7 +430,7 @@ function renderMaps() {
         const key = zoneCode(feature.properties);
         const zone = zonesByKey.get(key);
         return styleFeature(
-          isTraining ? zone.formations : zone.pharma,
+          isTraining ? zone.formations : zone.pharma + zone.sites,
           category,
           scales,
         );
@@ -439,7 +443,7 @@ function renderMaps() {
         const zoneLayers = layerReferences[category].get(key) || [];
         zoneLayers.push(layer);
         layerReferences[category].set(key, zoneLayers);
-        layer.bindTooltip(tooltipContent(properties, count, category, metric), {
+        layer.bindTooltip(tooltipContent(properties, count, category, metric, zone.sites), {
           sticky: true,
           direction: "top",
         });
@@ -460,9 +464,11 @@ function renderMaps() {
                 padding: [16, 16],
               });
             }
-            insight.textContent =
-              `${zoneName(properties)} : ${formatCount(zone.formations)} formations, ` +
-              `${formatCount(zone.pharma)} ${labels.plural}.`;
+            insight.textContent = isTraining
+              ? `${zoneName(properties)} : ${formatCount(zone.formations)} formations, ` +
+                `${formatCount(zone.pharma)} ${labels.plural} et ${formatCount(zone.sites)} sites industriels.`
+              : `${zoneName(properties)} : ${formatCount(zone.pharma)} ${labels.plural}, ` +
+                `${formatCount(zone.sites)} sites industriels.`;
           },
         });
       },
@@ -480,8 +486,9 @@ function initialize() {
     !analysis ||
     !analysis.mapDepartments ||
     !Array.isArray(analysis.mapDepartments.features) ||
+    !trainingMap ||
+    !Array.isArray(trainingMap.records) ||
     !staticData ||
-    !Array.isArray(staticData.courses) ||
     !Array.isArray(staticData.companies) ||
     !Array.isArray(staticData.sites) ||
     typeof L === "undefined"
