@@ -23,7 +23,6 @@ html {
     radial-gradient(circle at 18% 22%, rgb(191 230 211 / 70%), transparent 42%),
     radial-gradient(circle at 85% 78%, rgb(22 116 92 / 16%), transparent 46%),
     linear-gradient(160deg, #ffffff 0%, #f1f8f4 55%, #e3f2ea 100%);
-  touch-action: none;
 }
 
 .landing-brand {
@@ -38,7 +37,7 @@ html {
 .landing-content {
   position: relative;
   z-index: 2;
-  max-width: 760px;
+  max-width: 920px;
   text-align: center;
   animation: landing-rise 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
@@ -99,14 +98,73 @@ html {
 }
 
 .landing-lead {
-  max-width: 520px;
-  margin: 26px auto 34px;
+  max-width: 700px;
+  margin: 22px auto 26px;
   color: #50625b;
   font-size: clamp(15px, 1.6vw, 18px);
   line-height: 1.6;
 }
 
-.landing-lead strong {
+.landing-pathways {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.landing-pathway {
+  display: grid;
+  min-height: 150px;
+  gap: 9px;
+  padding: 18px 20px;
+  border: 1px solid #cfe5da;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 84%);
+  box-shadow: 0 8px 24px rgb(22 116 92 / 7%);
+  color: #50625b;
+  text-decoration: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.landing-pathway:hover {
+  border-color: var(--pill-green);
+  box-shadow: 0 12px 30px rgb(22 116 92 / 14%);
+  transform: translateY(-2px);
+}
+
+.landing-pathway:focus-visible,
+.landing-scroll:focus-visible {
+  outline: 3px solid var(--green-dark);
+  outline-offset: 4px;
+}
+
+.landing-pathway strong {
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+}
+
+.landing-pathway > span:not(.landing-pathway-action) {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.landing-pathway-action {
+  align-self: end;
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.landing-data-note {
+  margin: 14px 0 0;
+  color: #687a72;
+  font-size: 11px;
+}
+
+.landing-data-note strong {
   color: var(--green-dark);
 }
 
@@ -128,8 +186,13 @@ html {
   bottom: 30px;
   left: 50%;
   z-index: 2;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green-dark);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
   transform: translateX(-50%);
 }
 
@@ -436,7 +499,34 @@ html {
 
 @media (max-width: 640px) {
   .landing {
-    padding: 80px 16px 110px;
+    height: auto;
+    min-height: 100dvh;
+    padding: 88px 16px 100px;
+  }
+
+  .landing-pathways {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .landing-pathway {
+    min-height: 0;
+    gap: 6px;
+    padding: 13px 15px;
+  }
+
+  .landing-pathway strong {
+    font-size: 17px;
+  }
+
+  .landing-pathway > span:not(.landing-pathway-action) {
+    font-size: 12px;
+  }
+
+  .landing-data-note {
+    max-width: 360px;
+    margin: 12px auto 0;
+    line-height: 1.5;
   }
 
   .landing-brand {
@@ -457,6 +547,12 @@ html {
 
   .landing-pill-b {
     top: 9%;
+  }
+}
+
+@media (max-height: 760px) and (min-width: 641px) {
+  .landing-footnote {
+    display: none;
   }
 }
 

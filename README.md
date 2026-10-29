@@ -6,12 +6,18 @@ dans `data/pharma-static-data.js` pour être affichées sans requête au runtime
 
 ## Utilisation
 
-Ouvrez `panorama.html`, `index.html`, `formations.html` ou `dataset.html`, ou
-publiez les fichiers du site statique. Les données et les bibliothèques sont
+Ouvrez `index.html` pour choisir entre les parcours recruteur et étudiant/diplômé,
+ou accédez directement à `panorama.html`, `formations.html`, `recruteur.html` ou
+`dataset.html`, puis publiez les fichiers du site statique. Les données et les bibliothèques sont
 servies localement, sans CDN ni requête d’API. Les pages `index.html` et
 `formations.html` utilisent un fond SVG local et fonctionnent hors ligne. Le
 panorama conserve le fond de carte IGN, qui nécessite une connexion Internet ;
 le SVG local reste visible si les tuiles ne peuvent pas être chargées.
+
+La page `recruteur.html` aide à repérer des formations correspondant à un profil
+métier et à un territoire. Elle ne publie pas d’offres d’emploi et ses
+rapprochements de métiers et de niveaux sont indicatifs ; vérifiez les modalités
+auprès des établissements.
 
 Le workflow `.github/workflows/pages.yml` publie automatiquement le site sur
 GitHub Pages après chaque mise à jour de `main` et peut aussi être lancé

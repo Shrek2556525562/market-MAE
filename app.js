@@ -258,7 +258,7 @@ function loadSnapshot() {
     ? new Date(snapshot.generatedAt).toLocaleDateString("fr-FR")
     : "date inconnue";
   loadedCount.textContent =
-    `${companies.size.toLocaleString("fr-FR")} entreprises · ${snapshot.sites.length.toLocaleString("fr-FR")} sites industriels · instantané ${snapshotDate}`;
+    `${companies.size.toLocaleString("fr-FR")} entreprises recensées · ${snapshot.sites.length.toLocaleString("fr-FR")} sites industriels recensés · instantané ${snapshotDate}`;
   updateView();
 }
 

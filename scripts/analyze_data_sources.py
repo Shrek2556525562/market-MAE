@@ -1009,6 +1009,7 @@ def render_static_page(analysis: dict[str, Any]) -> str:
     <meta name="theme-color" content="#f4f7f5">
     <title>Sources et données — Pharma France</title>
     <link rel="stylesheet" href="dataset.css">
+    <link rel="stylesheet" href="navigation.css">
   </head>
   <body>
     <header class="topbar">
@@ -1016,10 +1017,21 @@ def render_static_page(analysis: dict[str, Any]) -> str:
         <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3.5v25M3.5 16h25" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="16" cy="16" r="12.5" stroke="currentColor" stroke-width="2"/></svg></span>
         <span class="brand-name">pharma<span>france</span></span>
       </a>
-      <nav class="topbar-nav" aria-label="Navigation principale">
-        <a href="index.html">Carte des entreprises</a>
-        <a href="formations.html">Formations &amp; forums</a>
-        <span aria-current="page">Sources &amp; données</span>
+      <nav class="site-navigation" aria-label="Navigation principale">
+        <a href="panorama.html">Panorama</a>
+        <a href="index.html">Entreprises</a>
+        <a href="formations.html">Formations</a>
+        <a href="recruteur.html">Recruteur</a>
+        <details class="nav-menu">
+          <summary>Cartes <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="nav-menu-panel">
+            <a href="carte-formations.html">Carte complète</a>
+            <a href="domaines-sciences-vivant.html">Domaines scientifiques</a>
+            <a href="repartition.html">Répartition</a>
+            <a href="carte-repartition.html">Carte comparative</a>
+          </div>
+        </details>
+        <a href="dataset.html" aria-current="page">Sources &amp; données</a>
       </nav>
     </header>
     <main class="page-shell">
