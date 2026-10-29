@@ -33,6 +33,20 @@ const relevanceFilter = document.querySelector("#relevance-filter");
 const markers = [];
 let map;
 
+function offerSources(offer) {
+  return (offer.type_offre ?? "")
+    .split(/\s+\|\|\s+/)
+    .map((source) => source.trim())
+    .filter(Boolean);
+}
+
+function offerLinks(value) {
+  return (value ?? "")
+    .split(/\s+\|\|\s+/)
+    .map((url) => url.trim())
+    .filter(Boolean);
+}
+
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -139,28 +153,38 @@ function createPopup(offer) {
   );
   if (offer.source) addText(card, "p", `Source : ${offer.source}`);
 
-  if (offer.url_formation) {
+  const trainingUrls = offerLinks(offer.url_formation);
+  for (const [index, url] of trainingUrls.entries()) {
     const link = document.createElement("a");
-    link.href = offer.url_formation;
+    link.href = url;
     link.target = "_blank";
     link.rel = "noreferrer";
-    link.textContent = "Voir la fiche de formation ↗";
+    link.textContent =
+      trainingUrls.length > 1
+        ? `Voir la fiche de formation ${index + 1} ↗`
+        : "Voir la fiche de formation ↗";
     card.append(link);
   }
-  if (offer.url_source && offer.url_source !== offer.url_formation) {
+  const trainingUrlSet = new Set(trainingUrls);
+  for (const [index, url] of offerLinks(offer.url_source).entries()) {
+    if (trainingUrlSet.has(url)) continue;
     const sourceLink = document.createElement("a");
-    sourceLink.href = offer.url_source;
+    sourceLink.href = url;
     sourceLink.target = "_blank";
     sourceLink.rel = "noreferrer";
-    sourceLink.textContent = "Consulter le catalogue source ↗";
+    sourceLink.textContent =
+      offerLinks(offer.url_source).length > 1
+        ? `Consulter le catalogue source ${index + 1} ↗`
+        : "Consulter le catalogue source ↗";
     card.append(sourceLink);
   }
   return card;
 }
 
 function makeMarker(offer, coordinates) {
-  const isAlternance = offer.type_offre === "La bonne alternance";
-  const color = SOURCE_COLORS[offer.type_offre] ?? "#64748b";
+  const sources = offerSources(offer);
+  const isAlternance = sources.includes("La bonne alternance");
+  const color = SOURCE_COLORS[sources[0]] ?? "#64748b";
   const marker = isAlternance
     ? L.marker(coordinates, {
         icon: L.divIcon({
@@ -187,7 +211,7 @@ function filteredOffers() {
   const query = searchInput.value.trim().toLocaleLowerCase("fr");
   return markers.filter(({ offer }) => {
     if (categoryFilter.value && offer.categorie !== categoryFilter.value) return false;
-    if (sourceFilter.value && offer.type_offre !== sourceFilter.value) return false;
+    if (sourceFilter.value && !offerSources(offer).includes(sourceFilter.value)) return false;
     if (regionFilter.value && normalizeRegion(offer.region) !== regionFilter.value) return false;
     if (relevanceFilter.value && offer.pertinence_pharma !== relevanceFilter.value) return false;
     if (!query) return true;
@@ -232,10 +256,12 @@ async function loadTrainingData() {
 
   const sourceCounts = new Map();
   for (const offer of offers) {
-    const counts = sourceCounts.get(offer.type_offre) ?? { total: 0, mapped: 0 };
-    counts.total += 1;
-    if (validCoordinates(offer)) counts.mapped += 1;
-    sourceCounts.set(offer.type_offre, counts);
+    for (const source of offerSources(offer)) {
+      const counts = sourceCounts.get(source) ?? { total: 0, mapped: 0 };
+      counts.total += 1;
+      if (validCoordinates(offer)) counts.mapped += 1;
+      sourceCounts.set(source, counts);
+    }
   }
   sourceFilter.replaceChildren(sourceFilter.options[0]);
   sourceLegend.replaceChildren();
@@ -282,7 +308,7 @@ async function loadTrainingData() {
     const coordinates = validCoordinates(offer);
     if (!coordinates) {
       missingCoordinates += 1;
-      if (offer.type_offre === "Mon Compte Formation (CPF)") cpfWithoutCoordinates += 1;
+      if (offerSources(offer).includes("Mon Compte Formation (CPF)")) cpfWithoutCoordinates += 1;
       continue;
     }
     makeMarker(offer, coordinates);

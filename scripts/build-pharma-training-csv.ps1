@@ -240,10 +240,64 @@ foreach ($record in $records) {
     }
 }
 
+$identityFields = @(
+    'annee', 'categorie', 'pertinence_pharma', 'formation', 'intitule_admission',
+    'parcours', 'filiere', 'etablissement', 'code_uai', 'ville',
+    'code_departement', 'departement', 'region', 'adresse', 'latitude', 'longitude'
+)
+$provenanceFields = @(
+    'type_offre', 'identifiant_source', 'modalite_formation', 'code_offre_parcoursup',
+    'date_collecte', 'url_formation', 'source', 'url_source',
+    'source_coordonnees', 'url_source_coordonnees', 'score_geocodage'
+)
+$mergedRecords = [System.Collections.Generic.List[object]]::new()
+$recordByIdentity = @{}
+$duplicateCount = 0
+foreach ($record in $records) {
+    $identity = @(
+        foreach ($field in $identityFields) {
+            ([string]$record.$field).Trim().ToLowerInvariant()
+        }
+    ) -join [char]31
+
+    if (-not $recordByIdentity.ContainsKey($identity)) {
+        $recordByIdentity[$identity] = $record
+        $mergedRecords.Add($record)
+        continue
+    }
+
+    $duplicateCount++
+    $existing = $recordByIdentity[$identity]
+    foreach ($field in $provenanceFields) {
+        $values = [System.Collections.Generic.List[string]]::new()
+        foreach ($value in @([string]$existing.$field, [string]$record.$field)) {
+            foreach ($part in ($value -split '\s+\|\|\s+')) {
+                $clean = $part.Trim()
+                if ($clean -and -not @($values | Where-Object { $_ -ieq $clean }).Count) {
+                    $values.Add($clean)
+                }
+            }
+        }
+        $existing.$field = $values -join ' || '
+    }
+}
+
+$records = $mergedRecords
 $records |
     Sort-Object region, departement, ville, formation, etablissement, code_offre_parcoursup |
     Export-Csv -LiteralPath $outputPath -Delimiter ';' -NoTypeInformation -Encoding UTF8
 
 $located = @($records | Where-Object { $_.latitude -and $_.longitude }).Count
-$sourceCounts = $records | Group-Object type_offre | ForEach-Object { "$($_.Name): $($_.Count)" }
-Write-Output "Wrote $($records.Count) training offers to $outputPath ($($sourceCounts -join ', ')); $located have map coordinates."
+$sourceCounts = @{}
+foreach ($record in $records) {
+    foreach ($source in ($record.type_offre -split '\s+\|\|\s+')) {
+        if (-not $sourceCounts.ContainsKey($source)) {
+            $sourceCounts[$source] = 0
+        }
+        $sourceCounts[$source]++
+    }
+}
+$formattedSourceCounts = $sourceCounts.GetEnumerator() |
+    Sort-Object Name |
+    ForEach-Object { "$($_.Name): $($_.Value)" }
+Write-Output "Wrote $($records.Count) unique training offers to $outputPath ($($formattedSourceCounts -join ', ')); removed $duplicateCount duplicate rows; $located have map coordinates."

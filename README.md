@@ -71,9 +71,11 @@ powershell -ExecutionPolicy Bypass -File scripts\build-pharma-training-csv.ps1
 ```
 
 Le collecteur officiel utilise des requêtes thématiques paginées et déduplique
-les résultats par identifiant à l’intérieur de chaque catalogue. Les offres
-présentes dans plusieurs catalogues restent distinctes pour conserver leur
-provenance. La fusion reclasse les sources officielles à partir des seuls
+les résultats par identifiant à l’intérieur de chaque catalogue. Lors de la
+fusion, les lignes dont les détails du cursus et du lieu sont identiques sont
+rassemblées en une seule entrée ; identifiants, catalogues et liens source sont
+conservés ensemble dans les champs de provenance. Les filtres de la carte
+continuent à présenter séparément chaque catalogue. La fusion reclasse les sources officielles à partir des seuls
 intitulés de formation et écarte les cursus manifestement hors périmètre
 (par exemple nutrition, agroalimentaire et environnement). La chimie générale
 est signalée comme compétence transférable, et non comme spécialisation
@@ -86,8 +88,7 @@ empreinte et requêtes) sont conservés dans `data/downloads/` et
 Cet inventaire est aussi large que le permettent les catalogues publics
 accessibles, mais il ne peut pas être qualifié d’exhaustif au sens strict :
 les recherches par mots-clés peuvent manquer des intitulés inattendus, les
-catalogues ont des périmètres et calendriers différents, et les offres
-identiques de sources distinctes ne sont pas fusionnées. Campus France cible
+catalogues ont des périmètres et calendriers différents. Campus France cible
 notamment les candidats internationaux et ne constitue pas un registre
 national complet. InterCarif-Oref et La bonne alternance couvrent des offres
 d’apprentissage publiées. Le CPF fournit des formations continues, mais
