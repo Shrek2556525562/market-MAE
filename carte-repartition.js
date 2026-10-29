@@ -7,7 +7,6 @@ const FRANCE_BOUNDS = [
 const IGN_BASEMAP_URL =
   "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2&STYLE=normal&TILEMATRIXSET=PM_0_19&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png";
 const POINTS_MIN_ZOOM = 8;
-const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const PALETTES = {
   formations: ["#f0ebf7", "#d9cbea", "#b99dd4", "#9571bb", "#7554a8"],
   pharma: ["#e7f3ec", "#c5e0d1", "#94c6ac", "#56a17d", "#16745c"],
@@ -34,44 +33,9 @@ const layerReferences = {
   pharma: new Map(),
 };
 const geoJsonLayers = new Map();
-const hatchLayers = new Map();
 const mapReferences = {};
 const pointLayers = {};
-const hatchPatterns = {};
 let currentHighlight = null;
-
-function addHatchPattern(map, category) {
-  const renderer = L.svg({ pane: "overlayPane" }).addTo(map);
-  const svg = map.getPane("overlayPane").querySelector("svg:last-of-type");
-  if (!svg) throw new Error("Impossible de préparer les hachures de la carte.");
-
-  let definitions = svg.querySelector("defs");
-  if (!definitions) {
-    definitions = document.createElementNS(SVG_NAMESPACE, "defs");
-    svg.prepend(definitions);
-  }
-
-  const patternId = `headquarters-hatch-${category}`;
-  const pattern = document.createElementNS(SVG_NAMESPACE, "pattern");
-  pattern.setAttribute("id", patternId);
-  pattern.setAttribute("patternUnits", "userSpaceOnUse");
-  pattern.setAttribute("width", "8");
-  pattern.setAttribute("height", "8");
-  pattern.setAttribute("patternTransform", "rotate(45)");
-
-  const stripe = document.createElementNS(SVG_NAMESPACE, "path");
-  stripe.setAttribute("d", "M 0 0 V 8");
-  stripe.setAttribute("stroke", "#155b3f");
-  stripe.setAttribute("stroke-width", "2");
-  stripe.setAttribute("stroke-opacity", "0.8");
-  pattern.append(stripe);
-  definitions.append(pattern);
-
-  hatchPatterns[category] = {
-    renderer,
-    fill: `url(#${patternId})`,
-  };
-}
 
 function isInFrance(coordinates) {
   return (
@@ -180,12 +144,6 @@ function updatePointVisibility() {
   }
 }
 
-function countFor(properties, category, metric) {
-  return category === "formations"
-    ? properties.formations
-    : properties[metric];
-}
-
 function formatCount(value) {
   return value.toLocaleString("fr-FR");
 }
@@ -210,6 +168,7 @@ function aggregateCounts(features, metric, level) {
       name: feature.properties.name,
       formations: feature.properties.formations,
       pharma: feature.properties[metric],
+      sites: feature.properties.sites,
     }));
   }
 
@@ -222,9 +181,11 @@ function aggregateCounts(features, metric, level) {
       name: properties.region,
       formations: 0,
       pharma: 0,
+      sites: 0,
     };
     zone.formations += properties.formations;
     zone.pharma += properties[metric];
+    zone.sites += properties.sites;
     zones.set(properties.region, zone);
   }
   return [...zones.values()];
@@ -261,7 +222,7 @@ function updateInsight(features, metric) {
     `En ${scaleName}, le premier pôle de formation est ${trainingTop?.name} ` +
     `(${formatCount(trainingTop?.formations || 0)} fiches) ; ` +
     `celui des ${labels.plural} est ${pharmaTop?.name} ` +
-    `(${formatCount(pharmaTop?.pharma || 0)}). ${overlap} ` +
+    `(${formatCount(pharmaTop?.pharma || 0)} sièges, ${formatCount(pharmaTop?.sites || 0)} sites). ${overlap} ` +
     "Survolez une zone pour la comparer sur les deux cartes.";
 }
 
@@ -318,21 +279,11 @@ function renderLegend(container, values, palette) {
     item.append(swatch, label);
     fragment.append(item);
   });
-  if (container === pharmaLegend || container === trainingLegend) {
-    const headquarters = document.createElement("span");
-    headquarters.className = "map-legend-item";
-    const hatchSwatch = document.createElement("i");
-    hatchSwatch.className = "map-legend-swatch map-legend-headquarters";
-    const headquartersLabel = document.createElement("span");
-    headquartersLabel.textContent = "Département avec siège social";
-    headquarters.append(hatchSwatch, headquartersLabel);
-    fragment.append(headquarters);
-  }
   container.replaceChildren(fragment);
   return thresholds;
 }
 
-function tooltipContent(properties, count, category, metric) {
+function tooltipContent(properties, count, category, metric, sitesCount) {
   const content = document.createElement("span");
   const title = document.createElement("strong");
   title.className = "map-tooltip-title";
@@ -340,16 +291,21 @@ function tooltipContent(properties, count, category, metric) {
     levelSelect.value === "regions"
       ? properties.region
       : `${properties.name} (${properties.code})`;
-  const value = document.createElement("span");
-  value.className = "map-tooltip-value";
-  const unit =
-    category === "formations"
-      ? count > 1 ? "formations" : "formation"
-      : count > 1
-        ? PHARMA_LABELS[metric].plural
-        : PHARMA_LABELS[metric].singular;
-  value.textContent = `${formatCount(count)} ${unit}`;
-  content.append(title, value);
+  content.append(title);
+  if (category === "pharma") {
+    const headquarters = document.createElement("span");
+    headquarters.className = "map-tooltip-value";
+    headquarters.textContent = `${formatCount(count)} ${count > 1 ? PHARMA_LABELS[metric].plural : PHARMA_LABELS[metric].singular}`;
+    const sites = document.createElement("span");
+    sites.className = "map-tooltip-value";
+    sites.textContent = `${formatCount(sitesCount)} ${sitesCount > 1 ? "sites industriels" : "site industriel"}`;
+    content.append(headquarters, sites);
+  } else {
+    const value = document.createElement("span");
+    value.className = "map-tooltip-value";
+    value.textContent = `${formatCount(count)} ${count > 1 ? "formations" : "formation"}`;
+    content.append(value);
+  }
   return content;
 }
 
@@ -375,10 +331,7 @@ function styleFeature(value, category, scales) {
     color: "#fff",
     weight: levelSelect.value === "regions" ? 0.55 : 0.9,
     opacity: 1,
-    fillColor:
-      category === "pharma" && value === 0
-        ? palette[0]
-        : colorFor(value, scales[category], palette),
+    fillColor: colorFor(value, scales[category], palette),
     fillOpacity: category === "pharma" ? 0.64 : 0.55,
   };
 }
@@ -434,21 +387,22 @@ function renderMaps() {
   const totals = {
     formations: analysis.totals.formations.located,
     pharma: analysis.totals[metric].located,
+    sites: analysis.totals.sites.located,
   };
   const categories = ["formations", "pharma"];
   const zones = aggregateCounts(features, metric, level);
   const zonesByKey = new Map(zones.map((zone) => [zone.key, zone]));
   const scales = {
     formations: createScale(zones.map((zone) => zone.formations)),
-    pharma: createScale(zones.map((zone) => zone.pharma)),
+    pharma: createScale(zones.map((zone) => zone.pharma + zone.sites)),
   };
 
   trainingSummary.textContent =
     `${level === "regions" ? "Répartition régionale" : "Par département"} · Parcoursup`;
   pharmaSummary.textContent =
-    `${level === "regions" ? "Répartition régionale" : "Par département"} · sièges sociaux ; sites industriels au zoom`;
+    `${formatCount(totals.pharma)} sièges · ${formatCount(totals.sites)} sites ; vert = sièges et/ou sites`;
   trainingTotal.textContent = formatCount(totals.formations);
-  pharmaTotal.textContent = formatCount(totals.pharma);
+  pharmaTotal.textContent = formatCount(totals.pharma + totals.sites);
   renderLegend(
     trainingLegend,
     zones.map((zone) => zone.formations),
@@ -456,7 +410,7 @@ function renderMaps() {
   );
   renderLegend(
     pharmaLegend,
-    zones.map((zone) => zone.pharma),
+    zones.map((zone) => zone.pharma + zone.sites),
     PALETTES.pharma,
   );
 
@@ -465,17 +419,14 @@ function renderMaps() {
     const isTraining = category === "formations";
     const previousLayer = geoJsonLayers.get(category);
     if (previousLayer) map.removeLayer(previousLayer);
-    const previousHatchLayer = hatchLayers.get(category);
-    if (previousHatchLayer) map.removeLayer(previousHatchLayer);
     layerReferences[category].clear();
 
     const geoJson = L.geoJSON(analysis.mapDepartments, {
-      renderer: hatchPatterns[category].renderer,
       style: (feature) => {
         const key = zoneCode(feature.properties);
         const zone = zonesByKey.get(key);
         return styleFeature(
-          isTraining ? zone.formations : zone.pharma,
+          isTraining ? zone.formations : zone.pharma + zone.sites,
           category,
           scales,
         );
@@ -488,7 +439,7 @@ function renderMaps() {
         const zoneLayers = layerReferences[category].get(key) || [];
         zoneLayers.push(layer);
         layerReferences[category].set(key, zoneLayers);
-        layer.bindTooltip(tooltipContent(properties, count, category, metric), {
+        layer.bindTooltip(tooltipContent(properties, count, category, metric, zone.sites), {
           sticky: true,
           direction: "top",
         });
@@ -509,29 +460,17 @@ function renderMaps() {
                 padding: [16, 16],
               });
             }
-            insight.textContent =
-              `${zoneName(properties)} : ${formatCount(zone.formations)} formations, ` +
-              `${formatCount(zone.pharma)} ${labels.plural}.`;
+            insight.textContent = isTraining
+              ? `${zoneName(properties)} : ${formatCount(zone.formations)} formations, ` +
+                `${formatCount(zone.pharma)} ${labels.plural} et ${formatCount(zone.sites)} sites industriels.`
+              : `${zoneName(properties)} : ${formatCount(zone.pharma)} ${labels.plural}, ` +
+                `${formatCount(zone.sites)} sites industriels.`;
           },
         });
       },
     });
     geoJson.addTo(map);
     geoJsonLayers.set(category, geoJson);
-
-    const hatch = hatchPatterns[category];
-    const headquartersHatches = L.geoJSON(analysis.mapDepartments, {
-      renderer: hatch.renderer,
-      filter: (feature) => feature.properties[metric] > 0,
-      style: {
-        stroke: false,
-        fill: true,
-        fillColor: hatch.fill,
-        fillOpacity: 1,
-        interactive: false,
-      },
-    }).addTo(map);
-    hatchLayers.set(category, headquartersHatches);
   }
 
   if (currentHighlight !== null) setHighlight(currentHighlight);
@@ -554,8 +493,6 @@ function initialize() {
 
   makeMap(document.querySelector("#training-map"), "formations");
   makeMap(document.querySelector("#pharma-map"), "pharma");
-  addHatchPattern(mapReferences.formations, "formations");
-  addHatchPattern(mapReferences.pharma, "pharma");
   makePointLayers();
   linkMapZoom();
   renderMaps();

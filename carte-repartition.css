@@ -265,16 +265,6 @@
   border-radius: 3px;
 }
 
-.map-legend-headquarters {
-  background-color: #e7f3ec;
-  background-image: repeating-linear-gradient(
-    45deg,
-    transparent 0 3px,
-    #155b3f 3px 4px,
-    transparent 4px 7px
-  );
-}
-
 .map-comparison-insight {
   display: flex;
   min-height: 45px;
