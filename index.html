@@ -9,19 +9,6 @@
     >
     <meta name="theme-color" content="#f4f7f5">
     <title>Pharma France — Carte des entreprises</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    >
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
-      integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    >
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -35,9 +22,16 @@
         </span>
         <span class="brand-name">pharma<span>france</span></span>
       </a>
-      <nav class="topbar-note" aria-label="Navigation principale">
-        <a href="formations.html">Carte des formations</a>
-        <a href="dataset.html"><span class="live-dot" aria-hidden="true"></span>Sources &amp; données</a>
+      <nav class="topbar-links" aria-label="Navigation principale">
+        <a class="topbar-note" href="panorama.html">Panorama</a>
+        <a class="topbar-note" href="formations.html">Formations &amp; forums</a>
+        <a class="topbar-note" href="carte-formations.html">Carte complète</a>
+        <a class="topbar-note" href="repartition.html">Répartition</a>
+        <a class="topbar-note index-sources-link" href="carte-repartition.html">Carte comparative</a>
+        <a class="topbar-note index-sources-link" href="dataset.html">
+          <span class="live-dot" aria-hidden="true"></span>
+          Sources &amp; données
+        </a>
       </nav>
     </header>
 
@@ -52,14 +46,14 @@
         <section class="stats-card" aria-live="polite">
           <div>
             <p class="stat-label">Entreprises recensées</p>
-            <strong id="total-count" class="stat-number">—</strong>
+            <strong id="total-count" class="stat-number">789</strong>
           </div>
           <span class="stat-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
               <path d="M4 20V8.5L12 4l8 4.5V20M8 20v-6h8v6M8 10h.01M12 10h.01M16 10h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </span>
-          <p id="loaded-count" class="stats-caption">Chargement de l’instantané local…</p>
+          <p id="loaded-count" class="stats-caption">Instantané local · octobre 2026</p>
         </section>
 
         <label class="search-box" for="company-search">
@@ -80,7 +74,7 @@
               <strong>Produits pharmaceutiques de base</strong>
               <small>NAF 21.10Z</small>
             </span>
-            <span id="count-2110" class="filter-count">—</span>
+            <span id="count-2110" class="filter-count">230</span>
           </label>
           <label class="filter-option">
             <input type="checkbox" value="21.20Z" checked>
@@ -89,17 +83,17 @@
               <strong>Préparations pharmaceutiques</strong>
               <small>NAF 21.20Z</small>
             </span>
-            <span id="count-2120" class="filter-count">—</span>
+            <span id="count-2120" class="filter-count">559</span>
           </label>
         </section>
 
         <section class="company-section" aria-labelledby="company-title">
           <div class="section-title-row">
             <h2 id="company-title">Entreprises</h2>
-            <span id="visible-count" class="result-count">0</span>
+            <span id="visible-count" class="result-count">789</span>
           </div>
           <div id="company-list" class="company-list" aria-live="polite">
-            <div class="list-state">Chargement des entreprises…</div>
+            <div class="list-state">Données disponibles hors ligne.</div>
           </div>
         </section>
 
@@ -111,18 +105,25 @@
       </aside>
 
       <section class="map-panel" aria-label="Carte des entreprises pharmaceutiques">
-        <div id="map" role="application" aria-label="Carte interactive de France avec sièges sociaux et sites industriels"></div>
+        <svg id="map" viewBox="0 0 900 930" role="application" aria-label="Carte interactive de France avec sièges sociaux et sites industriels">
+          <image href="data/france-metropolitaine.svg" width="900" height="930" aria-hidden="true"/>
+          <g id="map-markers"></g>
+        </svg>
+        <div id="map-popup" class="static-map-popup" role="dialog" aria-label="Détail du point cartographique" hidden>
+          <button class="static-map-popup-close" type="button" aria-label="Fermer">×</button>
+          <div class="static-map-popup-content"></div>
+        </div>
         <div class="map-heading">
           <span class="map-heading-label">France métropolitaine</span>
           <span class="map-heading-divider" aria-hidden="true"></span>
-          <span id="map-result-count">0 point affiché</span>
+          <span id="map-result-count">1 050 points affichés</span>
         </div>
         <div class="map-controls">
           <label class="site-toggle">
             <input id="show-sites" type="checkbox" checked>
             <span class="site-toggle-track" aria-hidden="true"></span>
             <span class="site-toggle-copy">Sites industriels</span>
-            <span id="site-count" class="site-toggle-count">0</span>
+            <span id="site-count" class="site-toggle-count">600</span>
           </label>
           <button id="zoom-france" class="map-control map-control-wide" type="button" aria-label="Recentrer sur la France">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -131,20 +132,20 @@
             Vue d’ensemble
           </button>
         </div>
+        <div class="map-zoom-controls" aria-label="Zoom de la carte">
+          <button id="zoom-in" type="button" aria-label="Zoom avant">+</button>
+          <button id="zoom-out" type="button" aria-label="Zoom arrière">−</button>
+        </div>
         <div class="map-note">
           <span class="note-icon" aria-hidden="true">i</span>
-          <span>Les cercles indiquent les <strong>sièges sociaux</strong> ; les carrés, les établissements actifs en NAF <strong>21.10Z ou 21.20Z</strong>.</span>
+          <span>Les cercles indiquent les <strong>sièges sociaux</strong> et les <strong>sites industriels</strong> actifs en NAF 21.10Z ou 21.20Z. Fond de carte : départements IGN.</span>
         </div>
         <div id="map-error" class="map-error" role="alert" hidden></div>
       </section>
     </main>
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
-      integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+    <script src="data/pharma-static-data.js" defer></script>
+    <script src="static-map.js" defer></script>
     <script src="app.js" defer></script>
   </body>
 </html>

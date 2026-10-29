@@ -1,15 +1,17 @@
 # Pharma France
 
 Carte statique des entreprises pharmaceutiques en France. Les données sont
-stockées localement dans `data/pharmaceutical-companies-fr.json` et ne sont pas
-chargées depuis une API au runtime.
+stockées localement dans `data/pharmaceutical-companies-fr.json` et regroupées
+dans `data/pharma-static-data.js` pour être affichées sans requête au runtime.
 
 ## Utilisation
 
-Publiez les fichiers du site statique, puis ouvrez `index.html` ou
-`dataset.html`. La page d'analyse des sources présente les types de variables
-et les statistiques de l'instantané local. Le fond de carte utilise les tuiles
-IGN / Géoplateforme ; Leaflet et les polices sont chargés depuis des CDN.
+Ouvrez `panorama.html`, `index.html`, `formations.html` ou `dataset.html`, ou
+publiez les fichiers du site statique. Les données et les bibliothèques sont
+servies localement, sans CDN ni requête d’API. Les pages `index.html` et
+`formations.html` utilisent un fond SVG local et fonctionnent hors ligne. Le
+panorama conserve le fond de carte IGN, qui nécessite une connexion Internet ;
+le SVG local reste visible si les tuiles ne peuvent pas être chargées.
 
 Le workflow `.github/workflows/pages.yml` publie automatiquement le site sur
 GitHub Pages après chaque mise à jour de `main` et peut aussi être lancé
@@ -22,12 +24,49 @@ portant l’un de ces deux codes, avec leurs coordonnées disponibles. Les
 entreprises et sites sont filtrés localement dans l’instantané complet ; aucun
 bouton de pagination ni requête vers l’API n’est nécessaire.
 
+La page `formations.html` ajoute une carte des formations ciblées en pharmacie,
+biotechnologies et sciences biomédicales, ainsi que des couches optionnelles
+pour les entreprises et les sites industriels. Son instantané est construit
+depuis l’export Parcoursup 2025 avec `python scripts/build-pharma-training-data.py`
+et contient actuellement 331 formations géolocalisées en métropole. Après mise
+à jour des instantanés, générez le bundle lu directement par les pages avec
+`python scripts/build-browser-data.py`. Les contours métropolitains
+proviennent du dépôt [france-geojson](https://github.com/gregoiredavid/france-geojson),
+lui-même fondé sur les tracés IGN Admin Express sous Licence Ouverte. Le fichier
+SVG local est reproductible avec `python scripts/build-france-map.py`.
+Les forums ne sont pas livrés dans les jeux de données locaux : la page renvoie
+vers les agendas de L'Étudiant et de France Travail au lieu d'afficher des
+événements sans dates ou lieux vérifiables. La sélection des formations par
+intitulé est indicative et n'est pas exhaustive.
+
+La page `panorama.html` réunit les formations, les entreprises et les sites
+industriels dans une carte IGN, avec recherche commune, filtres et résultats
+sélectionnables. Elle utilise Leaflet 1.9.4 et Leaflet.markercluster 1.5.3,
+hébergés avec leurs licences dans `assets/leaflet/`.
+
+La page `repartition.html` compare les concentrations de formations avec les
+sièges d’entreprise ou les sites industriels, par région ou département. Les
+comptages sont calculés à l’avance depuis les coordonnées des instantanés et
+les limites départementales ; ils sont embarqués localement, sans requête au
+chargement. Après régénération du bundle statique, actualisez les résultats
+avec `python scripts/build-pharma-geographic-analysis.py`.
+
+La page `carte-repartition.html` met cette comparaison en carte : deux cartes
+choroplèthes côte à côte, avec zoom synchronisé, survol croisé et regroupement
+par département ou région. Les contours et les comptages sont inclus dans le
+bundle statique de répartition ; aucun fond IGN ni téléchargement n’est
+nécessaire sur cette page.
+
 ## Mettre à jour l’instantané
 
-Pour régénérer le fichier statique, exécutez
+Pour régénérer les données d’entreprise, exécutez
 `powershell -ExecutionPolicy Bypass -File scripts\build-static-data.ps1` depuis
 la racine du dépôt. Cette tâche de maintenance interroge l’API publique et
-remplace l’instantané local. Le site publié n’exécute pas ce script.
+remplace l’instantané local. Après toute mise à jour, reconstruisez les fichiers
+de formation puis le bundle statique avec `python scripts/build-pharma-training-data.py`
+et `python scripts/build-browser-data.py`, puis la répartition avec
+`python scripts/build-pharma-geographic-analysis.py`. Le site publié n’exécute
+aucun de ces scripts.
 
 ## Analyser les sources
 
@@ -75,13 +114,14 @@ les résultats par identifiant à l’intérieur de chaque catalogue. Lors de la
 fusion, les lignes dont les détails du cursus et du lieu sont identiques sont
 rassemblées en une seule entrée ; identifiants, catalogues et liens source sont
 conservés ensemble dans les champs de provenance. Les filtres de la carte
-continuent à présenter séparément chaque catalogue. La fusion reclasse les sources officielles à partir des seuls
-intitulés de formation et écarte les cursus manifestement hors périmètre
-(par exemple nutrition, agroalimentaire et environnement). La chimie générale
-est signalée comme compétence transférable, et non comme spécialisation
-pharmaceutique directe. Les collecteurs CPF interrogent uniquement les
-résultats filtrés et les champs nécessaires ; ils ne téléchargent pas l’export
-complet d’environ 0,84 Go. Les instantanés et leurs métadonnées (date, volume,
+continuent à présenter séparément chaque catalogue. La fusion reclasse les
+sources officielles à partir des seuls intitulés de formation et écarte les
+cursus manifestement hors périmètre (par exemple nutrition, agroalimentaire et
+environnement). La chimie générale est signalée comme compétence transférable,
+et non comme spécialisation pharmaceutique directe. Les collecteurs CPF
+interrogent uniquement les résultats filtrés et les champs nécessaires ; ils
+ne téléchargent pas l’export complet d’environ 0,84 Go. Les instantanés et
+leurs métadonnées (date, volume,
 empreinte et requêtes) sont conservés dans `data/downloads/` et
 `data/downloads/manifest.json`.
 
@@ -107,10 +147,12 @@ privé ; le registre officiel des organismes répertorie des organismes, pas
 leurs formations ou lieux de session, et ne peut donc pas alimenter cette carte.
 L’export Onisep était inaccessible (HTTP 403) lors de la recherche.
 
-La carte `formations.html` filtre les offres géolocalisées par domaine, source,
-lien avec la pharmacie, région ou texte. Le total inclut aussi les lignes du
-CSV qui ne peuvent pas être positionnées ; le lien de téléchargement permet de
-consulter l’inventaire complet.
+La page `formations.html` rassemble le panorama statique des formations,
+entreprises et sites industriels. La carte détaillée `carte-formations.html`
+filtre les offres géolocalisées par domaine, source, lien avec la pharmacie,
+région ou texte. Le total inclut aussi les lignes du CSV qui ne peuvent pas
+être positionnées ; le lien de téléchargement permet de consulter l’inventaire
+complet.
 
 ## Limites des données
 
