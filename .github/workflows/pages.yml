@@ -33,10 +33,13 @@ jobs:
           mkdir -p _site/data _site/assets/leaflet
           cp index.html app.js static-map.js styles.css dataset.html dataset.css _site/
           cp formations.html formations.js formations.css _site/
+          cp carte-formations.html carte-formations.js carte-formations.css _site/
           cp panorama.html panorama.js panorama.css _site/
           cp repartition.html repartition.js repartition.css _site/
           cp carte-repartition.html carte-repartition.js carte-repartition.css _site/
           cp data/pharma-static-data.js data/pharma-geographic-analysis.js data/france-metropolitaine.svg _site/data/
+          cp data/pharmaceutical-companies-fr.json _site/data/
+          cp data/formations-pharma-fr.csv _site/data/
           cp data/pharmaceutical_data_sources_analysis.md _site/data/
           cp -R assets/leaflet/. _site/assets/leaflet/
 
