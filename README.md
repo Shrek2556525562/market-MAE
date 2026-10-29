@@ -61,6 +61,14 @@ géographiques et le bundle de points `data/pharma-training-map.js`, pour un
 affichage statique sans téléchargement des données au chargement. Seul le fond
 de carte IGN nécessite une connexion réseau.
 
+La page `domaines-sciences-vivant.html` se concentre sur le catalogue des
+formations et classe les offres géolocalisées par domaines scientifiques
+(microbiologie, chimie, biologie, biotechnologies, pharmacie, qualité et
+procédés industriels). Filtres, recherche, marqueurs et fiches utilisent le
+bundle local `data/pharma-training-map.js` ; seul le fond IGN nécessite le
+réseau. Reconstruisez les offres et leur classification avec
+`python scripts/build-pharma-geographic-analysis.py`.
+
 ## Mettre à jour l’instantané
 
 Pour régénérer les données d’entreprise, exécutez

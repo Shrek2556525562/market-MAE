@@ -1,0 +1,260 @@
+.domain-explorer {
+  grid-template-columns: 300px minmax(0, 1fr);
+  min-height: 440px;
+}
+
+.domain-filters {
+  gap: 12px;
+  padding: 20px;
+}
+
+.domain-filters .search-label {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.domain-filters #domain-search {
+  min-height: 42px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.domain-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 9px;
+  color: #475a51;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.domain-heading button {
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--green-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+}
+
+.domain-heading button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.domain-list {
+  display: grid;
+  min-height: 0;
+  gap: 3px;
+  overflow: auto;
+  padding: 2px 3px 4px 0;
+}
+
+.domain-option {
+  display: grid;
+  grid-template-columns: 16px 12px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #43564d;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.domain-option:hover,
+.domain-option:focus-within {
+  border-color: #e2ece6;
+  background: #f7faf8;
+}
+
+.domain-option input {
+  width: 16px;
+  min-height: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--green);
+}
+
+.domain-option-count {
+  color: #87948d;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.domain-option-swatch {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgb(24 42 37 / 12%);
+  border-radius: 50%;
+}
+
+.domain-marker {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1px rgb(17 39 30 / 85%),
+    0 2px 7px rgb(17 39 30 / 60%);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.leaflet-marker-icon:hover .domain-marker,
+.leaflet-marker-icon:focus .domain-marker {
+  z-index: 1000;
+  transform: scale(1.3);
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px rgb(17 39 30 / 85%),
+    0 3px 9px rgb(17 39 30 / 60%);
+}
+
+.domain-popup {
+  min-width: 220px;
+  max-width: 310px;
+  padding: 3px;
+}
+
+.domain-popup h3 {
+  margin: 0 0 7px;
+  color: var(--ink);
+  font-family: Manrope, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.domain-popup p {
+  margin: 0 0 5px;
+  color: #69766f;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.domain-popup .domain-popup-tag {
+  color: var(--green-dark);
+  font-weight: 700;
+}
+
+.domain-popup a {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#domain-map {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: #e9eee9;
+}
+
+.domain-map-marker-cluster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background: #125a45;
+  box-shadow:
+    0 0 0 2px rgb(18 55 42 / 72%),
+    0 3px 12px rgb(17 39 30 / 45%);
+  color: white;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.domain-map-marker-cluster.cluster-medium {
+  background: #287c5b;
+}
+
+.domain-map-marker-cluster.cluster-large {
+  background: #0c4939;
+}
+
+.domain-explorer .map-summary strong,
+.domain-explorer .map-summary button {
+  min-height: 40px;
+  padding: 11px 14px;
+  font-size: 12px;
+}
+
+.domain-explorer .leaflet-control-zoom a {
+  width: 38px;
+  height: 38px;
+  font-size: 22px;
+  line-height: 38px;
+}
+
+.domain-explorer .leaflet-control-attribution {
+  font-size: 10px !important;
+}
+
+@media (max-width: 760px) {
+  .domain-explorer {
+    display: flex;
+    height: auto;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .domain-explorer .map-panel {
+    order: -1;
+    flex: 0 0 56dvh;
+    min-height: 320px;
+  }
+
+  .domain-explorer .domain-filters {
+    flex: 0 0 auto;
+  }
+
+  .domain-list {
+    grid-template-columns: 1fr 1fr;
+    max-height: 200px;
+  }
+
+  .domain-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .domain-heading,
+  .domain-list,
+  #domain-search,
+  .domain-filters .search-label {
+    grid-column: 1 / -1;
+  }
+
+  .domain-heading {
+    margin-top: 2px;
+  }
+
+  .domain-filters .source-note,
+  .domain-filters .data-note {
+    display: none;
+  }
+
+  .domain-filters #domain-search {
+    min-height: 36px;
+    font-size: 12px;
+  }
+
+  .domain-option {
+    min-height: 36px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .domain-list {
+    grid-template-columns: 1fr;
+  }
+}
