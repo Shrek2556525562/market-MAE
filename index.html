@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta
       name="description"
-      content="Carte interactive des entreprises pharmaceutiques françaises, à partir des codes d'activité NAF et de l'API publique de l'Annuaire des Entreprises."
+      content="Explorez l’écosystème pharmaceutique français selon votre projet : repérez les formations, les entreprises et les sites industriels."
     >
     <meta name="theme-color" content="#f4f7f5">
-    <title>Pharma France — Carte des entreprises</title>
+    <title>Pharma France — Explorer l’écosystème</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="landing.css">
+    <link rel="stylesheet" href="navigation.css">
   </head>
   <body>
     <section id="accueil" class="landing" aria-labelledby="landing-title">
@@ -34,20 +35,37 @@
       </div>
 
       <div class="landing-content">
-        <p class="landing-eyebrow">Carte délivrée sans ordonnance</p>
+        <p class="landing-eyebrow">L’écosystème pharmaceutique en France</p>
         <h1 id="landing-title" class="landing-title">
-          Le recrutement <span style="white-space: nowrap">labo-rieux</span> a enfin son <em style="white-space: nowrap">anti-doute</em>.
+          La pharma en France, à explorer selon votre projet.
         </h1>
         <p class="landing-lead">
-          <strong id="landing-company-count">789</strong> entreprises et
-          <strong id="landing-site-count">600</strong> sites industriels pharmaceutiques,
-          cartographiés pour toute la France métropolitaine.
+          Repérez les entreprises, les sites industriels et les formations pour préparer
+          un recrutement ou construire votre parcours dans le secteur.
+        </p>
+        <nav class="landing-pathways" aria-label="Choisir votre parcours">
+          <a class="landing-pathway" href="recruteur.html">
+            <strong>Je recrute dans la pharma</strong>
+            <span>Repérer les formations et viviers de compétences par métier et territoire.</span>
+            <span class="landing-pathway-action">Explorer le parcours recruteur <span aria-hidden="true">→</span></span>
+          </a>
+          <a class="landing-pathway" href="carte-formations.html">
+            <strong>Je suis étudiant·e ou diplômé·e</strong>
+            <span>Explorer les formations initiales, l’alternance et la formation continue.</span>
+            <span class="landing-pathway-action">Explorer le catalogue multi-sources <span aria-hidden="true">→</span></span>
+          </a>
+        </nav>
+        <p class="landing-data-note">
+          Les offres d’emploi ne sont pas publiées sur ce site.
+          <strong id="landing-company-count">—</strong> entreprises recensées ·
+          <strong id="landing-site-count">—</strong> sites industriels représentés sur la carte métropolitaine.
         </p>
       </div>
 
-      <p class="landing-footnote">À consulter sans modération. Effets secondaires possibles&nbsp;: curiosité.</p>
+      <p class="landing-footnote">Données publiques · sources et limites consultables sur le site.</p>
 
-      <a class="landing-scroll" href="#carte" aria-label="Descendre vers la carte">
+      <a class="landing-scroll" href="#carte">
+        <span>Explorer la carte des entreprises</span>
         <span class="landing-scroll-mouse" aria-hidden="true"><span></span></span>
       </a>
     </section>
@@ -74,10 +92,7 @@
             <a href="carte-repartition.html">Carte comparative</a>
           </div>
         </details>
-        <a href="dataset.html">
-          <span class="live-dot" aria-hidden="true"></span>
-          Sources &amp; données
-        </a>
+        <a href="dataset.html">Sources &amp; données</a>
       </nav>
     </header>
 
@@ -92,7 +107,7 @@
         <section class="stats-card" aria-live="polite">
           <div>
             <p class="stat-label">Entreprises recensées</p>
-            <strong id="total-count" class="stat-number">789</strong>
+            <strong id="total-count" class="stat-number">—</strong>
           </div>
           <span class="stat-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
@@ -136,7 +151,7 @@
         <section class="company-section" aria-labelledby="company-title">
           <div class="section-title-row">
             <h2 id="company-title">Entreprises</h2>
-            <span id="visible-count" class="result-count">789</span>
+            <span id="visible-count" class="result-count">—</span>
           </div>
           <div id="company-list" class="company-list" aria-live="polite">
             <div class="list-state">Données disponibles hors ligne.</div>
@@ -168,8 +183,8 @@
           <label class="site-toggle">
             <input id="show-sites" type="checkbox" checked>
             <span class="site-toggle-track" aria-hidden="true"></span>
-            <span class="site-toggle-copy">Sites industriels</span>
-            <span id="site-count" class="site-toggle-count">600</span>
+            <span class="site-toggle-copy">Sites industriels affichés</span>
+            <span id="site-count" class="site-toggle-count">—</span>
           </label>
           <button id="zoom-france" class="map-control map-control-wide" type="button" aria-label="Recentrer sur la France">
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

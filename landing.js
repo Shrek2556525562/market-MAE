@@ -1,5 +1,4 @@
-// Landing page : un coup de molette (ou de doigt, ou de flèche) balaie l'écran
-// avec un rideau vert et dépose le visiteur directement sur la carte.
+// Les liens explicites vers la carte utilisent un balayage, sans détourner le défilement natif.
 (() => {
   const landing = document.getElementById("accueil");
   const appScreen = document.getElementById("carte");
@@ -22,8 +21,6 @@
   if (siteCount) document.getElementById("landing-site-count").textContent = siteCount;
 
   const mapTop = () => appScreen.offsetTop;
-  const onLanding = () => window.scrollY < mapTop() - 4;
-  const atMapTop = () => Math.abs(window.scrollY - mapTop()) <= 4;
   const isLocked = () => busy || performance.now() < lockedUntil;
 
   function setHash(hash) {
@@ -78,54 +75,6 @@
     busy = false;
     lockedUntil = performance.now() + COOLDOWN_MS;
   }
-
-  // Un élément défilable (liste d'entreprises…) qui peut encore remonter garde la molette.
-  function canScrollUpInside(target) {
-    for (let node = target; node && node !== appScreen; node = node.parentElement) {
-      if (node.scrollTop > 0 && node.scrollHeight > node.clientHeight) return true;
-    }
-    return false;
-  }
-
-  window.addEventListener(
-    "wheel",
-    (event) => {
-      if (event.ctrlKey) return;
-      if (onLanding()) {
-        event.preventDefault();
-        if (event.deltaY > 0 && !isLocked()) go("down");
-        return;
-      }
-      // La carte utilise la molette pour zoomer : on ne la lui vole pas.
-      if (event.target.closest("#map")) return;
-      if (event.deltaY < 0 && atMapTop() && !canScrollUpInside(event.target)) {
-        event.preventDefault();
-        go("up");
-      } else if (isLocked() && atMapTop()) {
-        event.preventDefault();
-      }
-    },
-    { passive: false },
-  );
-
-  let touchStartY = null;
-  landing.addEventListener("touchstart", (event) => {
-    touchStartY = event.touches[0].clientY;
-  }, { passive: true });
-  landing.addEventListener("touchend", (event) => {
-    if (touchStartY === null) return;
-    const delta = touchStartY - event.changedTouches[0].clientY;
-    touchStartY = null;
-    if (delta > 40) go("down");
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (!onLanding() || ["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
-    if (["ArrowDown", "PageDown", "End"].includes(event.key) || (event.key === " " && document.activeElement === document.body)) {
-      event.preventDefault();
-      go("down");
-    }
-  });
 
   document.querySelectorAll('a[href="#carte"]').forEach((link) => {
     link.addEventListener("click", (event) => {

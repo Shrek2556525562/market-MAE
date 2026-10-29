@@ -11,6 +11,7 @@
     <title>Formations &amp; forums pharma — Pharma France</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="formations.css">
+    <link rel="stylesheet" href="navigation.css">
   </head>
   <body>
     <header class="topbar">
@@ -20,7 +21,7 @@
         </span>
         <span class="brand-name">pharma<span>france</span></span>
       </a>
-      <nav class="site-navigation ecosystem-nav" aria-label="Navigation principale">
+      <nav class="site-navigation" aria-label="Navigation principale">
         <a href="panorama.html">Panorama</a>
         <a href="index.html">Entreprises</a>
         <a href="formations.html" aria-current="page">Formations</a>
@@ -49,7 +50,7 @@
         <section class="stats-card">
           <div>
             <p class="stat-label">Formations géolocalisées</p>
-            <strong id="course-count" class="stat-number">331</strong>
+            <strong id="course-count" class="stat-number">—</strong>
           </div>
           <span class="stat-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
@@ -76,32 +77,32 @@
               <strong>Formations pharma &amp; biotech</strong>
               <small>Parcoursup 2025 · repérage par intitulé</small>
             </span>
-            <span id="visible-course-count" class="filter-count">331</span>
+            <span id="visible-course-count" class="filter-count">—</span>
           </label>
           <label class="filter-option">
             <input id="show-companies" type="checkbox">
             <span class="filter-swatch swatch-api" aria-hidden="true"></span>
             <span class="filter-copy">
-              <strong>Entreprises pharmaceutiques</strong>
+              <strong>Sièges sociaux affichés</strong>
               <small>NAF 21.10Z et 21.20Z</small>
             </span>
-            <span id="company-count" class="filter-count">450</span>
+            <span id="company-count" class="filter-count">—</span>
           </label>
           <label class="filter-option">
             <input id="show-sites" type="checkbox">
             <span class="filter-swatch swatch-sites" aria-hidden="true"></span>
             <span class="filter-copy">
-              <strong>Sites industriels</strong>
+              <strong>Sites industriels affichés</strong>
               <small>Établissements actifs géolocalisés</small>
             </span>
-            <span id="site-count" class="filter-count">600</span>
+            <span id="site-count" class="filter-count">—</span>
           </label>
         </section>
 
         <section class="company-section" aria-labelledby="course-title">
           <div class="section-title-row">
             <h2 id="course-title">Formations repérées</h2>
-            <span id="visible-count" class="result-count">331</span>
+            <span id="visible-count" class="result-count">—</span>
           </div>
           <div id="course-list" class="company-list" aria-live="polite">
             <div class="list-state">Données disponibles hors ligne.</div>
@@ -130,7 +131,7 @@
         <div class="map-heading">
           <span class="map-heading-label">France métropolitaine</span>
           <span class="map-heading-divider" aria-hidden="true"></span>
-          <span id="map-result-count">331 points affichés</span>
+          <span id="map-result-count">Chargement des données…</span>
         </div>
         <div class="map-controls">
           <button id="zoom-france" class="map-control map-control-wide" type="button">
