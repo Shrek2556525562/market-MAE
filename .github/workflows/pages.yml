@@ -31,7 +31,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p _site/data _site/assets/leaflet
-          cp index.html app.js static-map.js styles.css dataset.html dataset.css _site/
+          cp index.html app.js static-map.js styles.css landing.css landing.js dataset.html dataset.css _site/
           cp formations.html formations.js formations.css _site/
           cp panorama.html panorama.js panorama.css _site/
           cp repartition.html repartition.js repartition.css _site/
