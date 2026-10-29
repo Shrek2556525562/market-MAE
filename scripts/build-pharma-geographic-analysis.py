@@ -4,6 +4,8 @@
 import csv
 import json
 import math
+import re
+import unicodedata
 from collections import Counter
 from pathlib import Path
 
@@ -37,6 +39,41 @@ DEPARTMENT_REGIONS = {
     for department in departments
 }
 COUNT_FIELDS = ("formations", "entreprises", "sites")
+TRAINING_DOMAINS = (
+    ("Microbiologie et infectiologie", r"microbiolog|virolog|bacteriolog|mycolog|parasitolog"),
+    ("Biologie moléculaire et cellulaire", r"biochim|biologie moleculaire|biologie cellulaire|genet|immunolog|physiologie cellulaire"),
+    ("Biologie médicale et analyses biologiques", r"biologie medicale|bioanalys|analyse[s]? biologique|diagnostic biologique|hematolog|cytolog"),
+    ("Chimie, analyses et formulation", r"chim|analytique|chromatograph|spectrom|formulation|materiaux"),
+    ("Biotechnologies et bioprocédés", r"biotechn|genie biologique|bioproced|culture cellulaire"),
+    ("Pharmacie et médicament", r"pharm|medicament|pharmacolog|galenique|sciences pharmaceutiques"),
+    ("Qualité, contrôle et réglementation", r"qualite|reglement|metrologie|bpf|gmp|validation|controle"),
+    ("Production et procédés industriels", r"production|procede|automatis|maintenance|conditionnement|industrialisation"),
+    ("Sciences du vivant, environnement et alimentation", r"sciences de la vie|sciences du vivant|environnement|ecolog|nutrition|agronom|aliment|biologie"),
+)
+FALLBACK_DOMAINS = {
+    "Chimie et sciences analytiques": "Chimie, analyses et formulation",
+    "Biotechnologies et analyses biologiques": "Biotechnologies et bioprocédés",
+    "Pharmacie et produits de santé": "Pharmacie et médicament",
+    "Sciences de la vie et du vivant": "Sciences du vivant, environnement et alimentation",
+    "Accès aux études de pharmacie et de santé": "Accès aux études de santé",
+    "Procédés, production et automatisme industriels": "Production et procédés industriels",
+    "Qualité, métrologie, maintenance et conditionnement": "Qualité, contrôle et réglementation",
+}
+
+
+def normalize_text(value):
+    normalized = unicodedata.normalize("NFD", value.casefold())
+    return "".join(character for character in normalized if unicodedata.category(character) != "Mn")
+
+
+def classify_training_domain(offer):
+    fields = ("formation", "intitule_admission", "parcours", "filiere")
+    searchable = normalize_text(" ".join(offer.get(field, "") or "" for field in fields))
+    for domain, pattern in TRAINING_DOMAINS:
+        if re.search(pattern, searchable):
+            return domain
+    category = offer.get("categorie", "")
+    return FALLBACK_DOMAINS.get(category, "Autres parcours des sciences du vivant")
 
 
 def load_bundle():
@@ -187,10 +224,15 @@ def main():
         located_training_offers += 1
         training_map_records.append({
             "title": offer.get("intitule_admission") or offer.get("formation") or "",
+            "formation": offer.get("formation") or "",
+            "pathway": offer.get("parcours") or "",
             "institution": offer.get("etablissement") or "",
             "city": offer.get("ville") or "",
             "region": offer.get("region") or department["region"],
             "coordinates": coordinates,
+            "domain": classify_training_domain(offer),
+            "category": offer.get("categorie") or "",
+            "modality": offer.get("modalite_formation") or "",
             "source": offer.get("source") or offer.get("type_offre") or "",
             "url": offer.get("url_formation") or "",
         })
@@ -282,6 +324,7 @@ def main():
     )
     training_map = {
         "generatedAt": analysis["trainingGeneratedAt"],
+        "totalRecords": len(training_offers),
         "records": training_map_records,
     }
     TRAINING_MAP_OUTPUT.write_text(
