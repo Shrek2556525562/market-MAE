@@ -55,15 +55,15 @@ a {
 
 .brand-mark {
   display: grid;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   place-items: center;
   color: var(--green);
 }
 
 .brand-mark svg {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 }
 
 .brand-name {
@@ -821,8 +821,8 @@ td:first-child {
 
   .brand-mark,
   .brand-mark svg {
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
   }
 
   .topbar-nav a,
