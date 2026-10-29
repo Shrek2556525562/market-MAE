@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Comparez la répartition géographique des formations pharma et des entreprises ou sites industriels en France."
+    >
+    <meta name="theme-color" content="#f4f7f5">
+    <title>Formations et pharma : où sont les pôles ? — Pharma France</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="repartition.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="panorama.html" aria-label="Pharma France, panorama">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 3.5v25M3.5 16h25" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="12.5" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </span>
+        <span class="brand-name">pharma<span>france</span></span>
+      </a>
+      <nav class="topbar-links repartition-navigation" aria-label="Navigation principale">
+        <a class="topbar-note" href="panorama.html">Panorama</a>
+        <a class="topbar-note repartition-current" href="repartition.html" aria-current="page">Répartition</a>
+        <a class="topbar-note" href="carte-repartition.html">Carte comparative</a>
+      </nav>
+    </header>
+
+    <main class="repartition-page">
+      <section class="repartition-hero">
+        <p class="eyebrow">Analyse géographique · France métropolitaine</p>
+        <h1>Formations et pharma :<br>les mêmes pôles&nbsp;?</h1>
+        <p>
+          Comparez où se concentrent les formations recensées et les
+          établissements pharmaceutiques, des régions jusqu’aux départements.
+        </p>
+      </section>
+
+      <section class="repartition-controls" aria-label="Paramètres de comparaison">
+        <label>
+          <span>Découpage</span>
+          <select id="zone-level">
+            <option value="regions">Régions</option>
+            <option value="departments">Départements</option>
+          </select>
+        </label>
+        <label>
+          <span>Indicateur pharma</span>
+          <select id="pharma-metric">
+            <option value="sites">Sites industriels</option>
+            <option value="entreprises">Sièges d’entreprise</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="repartition-highlights" aria-label="Principaux constats">
+        <article class="repartition-highlight">
+          <span id="pharma-leading-label" class="repartition-highlight-label">Pôle industriel principal</span>
+          <strong id="pharma-leading">—</strong>
+          <small id="pharma-leading-count">—</small>
+        </article>
+        <article class="repartition-highlight">
+          <span class="repartition-highlight-label">Pôle formation principal</span>
+          <strong id="training-leading">—</strong>
+          <small id="training-leading-count">—</small>
+        </article>
+        <article class="repartition-highlight repartition-similarity">
+          <span class="repartition-highlight-label">Top 3 des zones</span>
+          <strong id="shared-zones">—</strong>
+          <small id="shared-zones-description">—</small>
+        </article>
+      </section>
+
+      <section class="repartition-chart" aria-labelledby="comparison-title">
+        <div class="repartition-chart-heading">
+          <div>
+            <p class="eyebrow">Comparaison des concentrations</p>
+            <h2 id="comparison-title">Part des données géolocalisées par zone</h2>
+          </div>
+          <div class="repartition-legend" aria-label="Légende">
+            <span><i class="training-swatch" aria-hidden="true"></i>Formations</span>
+            <span><i class="pharma-swatch" aria-hidden="true"></i><span id="pharma-legend">Sites industriels</span></span>
+          </div>
+        </div>
+        <p id="repartition-chart-note" class="repartition-chart-note"></p>
+        <div class="repartition-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Zone</th>
+                <th scope="col">Formations</th>
+                <th id="pharma-column-heading" scope="col">Sites industriels</th>
+              </tr>
+            </thead>
+            <tbody id="repartition-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="repartition-method">
+        <strong>Comment lire cette comparaison&nbsp;?</strong>
+        <p id="repartition-source-note">—</p>
+        <p>
+          Les formations comptent les fiches Parcoursup retenues, pas les
+          établissements uniques. Les sites industriels et les sièges sont
+          comptés séparément parmi les structures classées en NAF 21.10Z ou
+          21.20Z ; les adresses sans coordonnées exploitables sont exclues.
+          Ces volumes décrivent l’instantané disponible et ne mesurent ni les
+          effectifs étudiants, ni les capacités de production.
+        </p>
+      </footer>
+    </main>
+
+    <script src="data/pharma-geographic-analysis.js" defer></script>
+    <script src="repartition.js" defer></script>
+  </body>
+</html>

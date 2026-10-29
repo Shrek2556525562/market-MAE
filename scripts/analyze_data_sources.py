@@ -1008,9 +1008,6 @@ def render_static_page(analysis: dict[str, Any]) -> str:
     <meta name="description" content="Analyse statique des sources de données pharmaceutiques : provenance, types de variables et statistiques descriptives.">
     <meta name="theme-color" content="#f4f7f5">
     <title>Sources et données — Pharma France</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dataset.css">
   </head>
   <body>
@@ -1021,6 +1018,7 @@ def render_static_page(analysis: dict[str, Any]) -> str:
       </a>
       <nav class="topbar-nav" aria-label="Navigation principale">
         <a href="index.html">Carte des entreprises</a>
+        <a href="formations.html">Formations &amp; forums</a>
         <span aria-current="page">Sources &amp; données</span>
       </nav>
     </header>
