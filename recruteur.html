@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Repérez les formations et viviers de compétences pharmaceutiques par métier, niveau et zone géographique.">
+    <meta name="theme-color" content="#f4f7f5">
+    <title>Recruteur — Pharma France</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/leaflet/leaflet.css">
+    <link rel="stylesheet" href="assets/leaflet/MarkerCluster.css">
+    <link rel="stylesheet" href="assets/leaflet/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="recruteur.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Pharma France, accueil">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none"><path d="M47.5 30.9 51.2 24.3 53.7 23.8 53.7 20.5 56.5 15.4 50.2 14.2 48.2 12.1 44.9 12.1 42.3 10.4 42.4 8.2 39.6 9.4 39.6 7.4 37.6 7.3 35.2 4.3 33.8 4.7 32.7 2.5 28.7 3.8 29.1 8.0 22.8 10.9 22.3 12.1 23.5 12.5 22.0 13.2 17.4 13.0 16.7 10.9 13.9 10.8 16.0 17.4 10.8 18.2 8.6 16.0 2.3 17.9 2.1 19.2 4.4 19.4 3.0 19.2 4.1 20.6 2.3 20.9 3.8 22.5 9.0 23.0 9.0 24.4 10.5 23.4 13.0 25.7 14.5 30.4 17.3 31.5 16.9 35.2 19.6 39.2 17.3 36.4 16.8 41.7 17.8 41.6 14.6 49.5 19.7 53.0 24.8 53.5 25.0 52.4 30.5 55.5 35.3 55.0 35.0 51.2 38.8 48.2 47.8 51.4 53.5 46.8 54.2 44.5 51.3 44.1 51.6 41.2 49.7 38.8 52.1 37.0 50.5 35.1 50.7 31.7 49.3 30.9 46.9 32.6Z" fill="currentColor" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M61.4 58.8 61.4 51.6 60.9 53.6 58.3 54.6 58.2 56.9 60.0 61.3Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><g transform="rotate(-35 31 30)" stroke="#105b48" stroke-width="2.2" stroke-linejoin="round"><path d="M21 23H31V37H21A7 7 0 0 1 21 23Z" fill="#fff"/><path d="M31 23H41A7 7 0 0 1 41 37H31Z" fill="#bfe6d3"/><path d="M23 26.5v7M19.5 30h7" stroke="#16745c" stroke-width="2.6" stroke-linecap="round"/></g></svg>
+        </span>
+        <span class="brand-name">pharma<span>france</span></span>
+      </a>
+      <nav class="site-navigation" aria-label="Navigation principale">
+        <a href="panorama.html">Panorama</a>
+        <a href="index.html">Entreprises</a>
+        <a href="formations.html">Formations</a>
+        <a href="recruteur.html" aria-current="page">Recruteur</a>
+        <details class="nav-menu">
+          <summary>Cartes <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="nav-menu-panel">
+            <a href="carte-formations.html">Carte complète</a>
+            <a href="domaines-sciences-vivant.html">Domaines scientifiques</a>
+            <a href="repartition.html">Répartition</a>
+            <a href="carte-repartition.html">Carte comparative</a>
+          </div>
+        </details>
+        <a href="dataset.html">Sources &amp; données</a>
+      </nav>
+    </header>
+
+    <main class="recruiter-page">
+      <section class="recruiter-hero">
+        <p class="eyebrow">Outil de sourcing territorial</p>
+        <h1>Repérez les viviers de compétences pharma</h1>
+        <p>Partez d’un métier, choisissez une zone et identifiez les établissements de formation à contacter.</p>
+        <ol class="recruiter-steps" aria-label="Parcours recruteur">
+          <li><span>1</span>Profil recherché</li>
+          <li><span>2</span>Zone de recrutement</li>
+          <li><span>3</span>Formations repérées</li>
+          <li><span>4</span>Contacts établissement</li>
+        </ol>
+      </section>
+
+      <section class="recruiter-workspace" aria-label="Recherche géographique de formations">
+        <aside class="recruiter-filters">
+          <div class="recruiter-filter-heading">
+            <div>
+              <p class="eyebrow">1 · Profil recherché</p>
+              <h2>Quel profil cherchez-vous&nbsp;?</h2>
+            </div>
+          </div>
+          <label for="job-filter">Métier ou famille de compétences</label>
+          <select id="job-filter">
+            <option value="">Tous les métiers</option>
+            <option value="production">Production &amp; procédés</option>
+            <option value="qualite">Qualité &amp; réglementation</option>
+            <option value="laboratoire">Laboratoire &amp; analyses</option>
+            <option value="biotech">Biotechnologies &amp; R&amp;D</option>
+            <option value="pharmacie">Pharmacie &amp; médicament</option>
+            <option value="maintenance">Maintenance &amp; ingénierie</option>
+            <option value="data">Données &amp; informatique santé</option>
+          </select>
+
+          <div class="recruiter-filter-row">
+            <div>
+              <label for="level-filter">Niveau visé</label>
+              <select id="level-filter">
+                <option value="">Tous les niveaux</option>
+                <option value="Bac+2">Bac+2</option>
+                <option value="Bac+3">Bac+3</option>
+                <option value="Bac+5">Bac+5</option>
+                <option value="PhD">PhD / doctorat</option>
+              </select>
+            </div>
+            <div>
+              <label for="type-filter">Type de formation</label>
+              <select id="type-filter">
+                <option value="">Tous les types</option>
+                <option value="initiale">Formation diplômante</option>
+                <option value="apprentissage">Apprentissage</option>
+                <option value="continue">Formation continue / CPF</option>
+              </select>
+            </div>
+          </div>
+          <label class="recruiter-check">
+            <input id="alternance-filter" type="checkbox">
+            <span>Afficher uniquement les formations en alternance / apprentissage</span>
+          </label>
+
+          <div class="recruiter-filter-heading area-heading">
+            <div>
+              <p class="eyebrow">2 · Zone de recrutement</p>
+              <h2>Où chercher&nbsp;?</h2>
+            </div>
+          </div>
+          <label for="area-mode">Type de zone</label>
+          <select id="area-mode">
+            <option value="department">Région ou département</option>
+            <option value="radius">Rayon autour d’un site pharma</option>
+          </select>
+
+          <div id="department-area" class="area-fields">
+            <label for="region-filter">Région</label>
+            <select id="region-filter"><option value="">Toute la France</option></select>
+            <label for="department-filter">Département</label>
+            <select id="department-filter" disabled><option value="">Tous les départements</option></select>
+          </div>
+          <div id="radius-area" class="area-fields" hidden>
+            <label for="site-filter">Site pharmaceutique de référence</label>
+            <select id="site-filter"><option value="">Choisir un site industriel</option></select>
+            <div class="radius-row">
+              <label for="radius-filter">Rayon</label>
+              <select id="radius-filter">
+                <option value="10">10 km</option>
+                <option value="25" selected>25 km</option>
+                <option value="50">50 km</option>
+                <option value="100">100 km</option>
+                <option value="200">200 km</option>
+              </select>
+            </div>
+            <p id="site-note" class="filter-hint">Rayon calculé à vol d’oiseau autour d’un établissement industriel géolocalisé.</p>
+          </div>
+
+          <div class="recruiter-filter-row recruiter-filter-last">
+            <div>
+              <label for="category-filter">Domaine de formation</label>
+              <select id="category-filter"><option value="">Tous les domaines</option></select>
+            </div>
+            <div>
+              <label for="source-filter">Source des offres</label>
+              <select id="source-filter"><option value="">Toutes les sources</option></select>
+            </div>
+          </div>
+          <button id="reset-filters" class="reset-button" type="button">Réinitialiser les filtres</button>
+        </aside>
+
+        <div class="recruiter-results">
+          <section class="recruiter-map-card" aria-label="Carte des formations correspondantes">
+            <div class="map-card-heading">
+              <div>
+                <p class="eyebrow">3 · Formations repérées</p>
+                <h2><strong id="results-count">—</strong> pistes à explorer</h2>
+              </div>
+              <button id="export-results" class="export-button" type="button" disabled>Exporter en CSV</button>
+            </div>
+            <div id="recruiter-map" role="application" aria-label="Carte des établissements de formation pertinents"></div>
+            <p id="map-count" class="map-caption">Chargement du catalogue de formations…</p>
+          </section>
+
+          <section class="recruiter-list-section" aria-labelledby="contacts-title">
+            <div class="results-heading">
+              <div>
+                <p class="eyebrow">4 · Contacts établissement</p>
+                <h2 id="contacts-title">Pistes de recrutement</h2>
+              </div>
+              <label class="results-search" for="results-search">
+                <span class="visually-hidden">Rechercher parmi les résultats</span>
+                <input id="results-search" type="search" placeholder="Établissement, compétence…" autocomplete="off">
+              </label>
+            </div>
+            <div id="recruiter-list" class="recruiter-list" aria-live="polite">
+              <p class="list-message">Chargement des formations…</p>
+            </div>
+            <button id="show-more" class="show-more-button" type="button" hidden>Afficher plus de résultats</button>
+          </section>
+        </div>
+      </section>
+
+      <aside class="method-note" aria-labelledby="method-title">
+        <div class="method-note-icon" aria-hidden="true">i</div>
+        <div>
+          <h2 id="method-title">Méthode et limites</h2>
+          <p>Les pistes proviennent du catalogue local agrégé (Parcoursup, Campus France, InterCarif-Oref, Mon Compte Formation et La bonne alternance). Les métiers et niveaux sont des rapprochements par intitulé et contenu, pas des certifications garanties. Les coordonnées, modalités, compétences, liens et dates peuvent manquer ou être anciennes ; vérifiez chaque fiche auprès de l’établissement. Le rayon est calculé à vol d’oiseau. Aucun contact personnel n’est inventé.</p>
+          <p id="catalogue-date" class="method-source">Source du catalogue et date de collecte : chargement…</p>
+        </div>
+      </aside>
+      <p id="recruiter-error" class="recruiter-error" role="alert" hidden></p>
+      <p id="recruiter-status" class="visually-hidden" aria-live="polite"></p>
+    </main>
+
+    <script src="assets/leaflet/leaflet.js" defer></script>
+    <script src="assets/leaflet/leaflet.markercluster.js" defer></script>
+    <script src="data/pharma-static-data.js" defer></script>
+    <script src="recruteur.js" defer></script>
+  </body>
+</html>
