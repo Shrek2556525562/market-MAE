@@ -470,6 +470,7 @@ function renderMaps() {
     layerReferences[category].clear();
 
     const geoJson = L.geoJSON(analysis.mapDepartments, {
+      renderer: hatchPatterns[category].renderer,
       style: (feature) => {
         const key = zoneCode(feature.properties);
         const zone = zonesByKey.get(key);
