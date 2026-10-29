@@ -34,8 +34,9 @@ input {
 }
 
 .topbar {
-  position: relative;
-  z-index: 500;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
   display: flex;
   height: 68px;
   align-items: center;
@@ -75,6 +76,95 @@ input {
 
 .brand-name span {
   color: var(--green);
+}
+
+.site-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  color: #677670;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.site-navigation > a,
+.site-navigation .nav-menu > summary {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  border-radius: 7px;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-navigation > a:hover,
+.site-navigation .nav-menu > summary:hover {
+  background: #f2f6f3;
+  color: var(--green-dark);
+}
+
+.site-navigation > a:focus-visible,
+.site-navigation .nav-menu > summary:focus-visible,
+.nav-menu-panel a:focus-visible {
+  outline: 2px solid var(--green-dark);
+  outline-offset: 2px;
+}
+
+.site-navigation > a[aria-current="page"],
+.site-navigation .nav-menu-current > summary {
+  background: #eaf3ed;
+  color: var(--green-dark);
+}
+
+.nav-menu {
+  position: relative;
+}
+
+.nav-menu > summary {
+  cursor: pointer;
+  gap: 7px;
+  list-style: none;
+}
+
+.nav-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.nav-menu-chevron {
+  color: #839087;
+  font-size: 10px;
+}
+
+.nav-menu-panel {
+  position: absolute;
+  z-index: 1100;
+  top: calc(100% + 5px);
+  right: 0;
+  display: grid;
+  min-width: 190px;
+  padding: 5px;
+  border: 1px solid #e3e9e5;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgb(26 49 37 / 14%);
+}
+
+.nav-menu-panel a {
+  padding: 10px 11px;
+  border-radius: 6px;
+  color: #52635a;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-menu-panel a:hover,
+.nav-menu-panel a[aria-current="page"] {
+  background: #f0f5f1;
+  color: var(--green-dark);
 }
 
 .live-dot {
@@ -900,12 +990,34 @@ kbd {
   }
 
   .topbar {
-    height: 58px;
+    height: auto;
+    min-height: 88px;
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 4px 12px;
     padding: 0 16px;
   }
 
+  .site-navigation {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2px;
+    font-size: 9px;
+  }
+
+  .site-navigation > a,
+  .site-navigation .nav-menu > summary {
+    min-height: 29px;
+    padding: 0 5px;
+  }
+
+  .nav-menu-panel {
+    right: 0;
+  }
+
   .workspace {
-    height: calc(100dvh - 58px);
+    height: calc(100dvh - 96px);
     min-height: 620px;
     grid-template: minmax(0, 1fr) 270px / minmax(0, 1fr);
     padding: 9px;

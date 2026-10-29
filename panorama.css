@@ -644,7 +644,7 @@
 
 @media (max-width: 640px) {
   .panorama-workspace {
-    height: calc(100dvh - 58px);
+    height: calc(100dvh - 96px);
     min-height: 620px;
     grid-template: minmax(300px, 1fr) 290px / minmax(0, 1fr);
     padding: 8px;
