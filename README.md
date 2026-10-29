@@ -52,10 +52,14 @@ chargement. Après régénération du bundle statique, actualisez les résultats
 avec `python scripts/build-pharma-geographic-analysis.py`.
 
 La page `carte-repartition.html` met cette comparaison en carte : deux cartes
-choroplèthes côte à côte, avec zoom synchronisé, survol croisé et regroupement
-par département ou région. Les contours et les comptages sont inclus dans le
-bundle statique de répartition ; aucun fond IGN ni téléchargement n’est
-nécessaire sur cette page.
+choroplèthes côte à côte, avec zoom synchronisé, survol croisé et découpage
+par département ou région. Les formations proviennent du catalogue
+multi-sources `data/formations-pharma-fr.csv` (offres Parcoursup, Campus France,
+CPF, InterCarif-Oref et La bonne alternance). Le générateur
+`python scripts/build-pharma-geographic-analysis.py` produit les comptages
+géographiques et le bundle de points `data/pharma-training-map.js`, pour un
+affichage statique sans téléchargement des données au chargement. Seul le fond
+de carte IGN nécessite une connexion réseau.
 
 ## Mettre à jour l’instantané
 
@@ -65,8 +69,9 @@ la racine du dépôt. Cette tâche de maintenance interroge l’API publique et
 remplace l’instantané local. Après toute mise à jour, reconstruisez les fichiers
 de formation puis le bundle statique avec `python scripts/build-pharma-training-data.py`
 et `python scripts/build-browser-data.py`, puis la répartition avec
-`python scripts/build-pharma-geographic-analysis.py`. Le site publié n’exécute
-aucun de ces scripts.
+`python scripts/build-pharma-geographic-analysis.py`. Cette dernière commande
+lit également le catalogue `data/formations-pharma-fr.csv`. Le site publié
+n’exécute aucun de ces scripts.
 
 ## Analyser les sources
 

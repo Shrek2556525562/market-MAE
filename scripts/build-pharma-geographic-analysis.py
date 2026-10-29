@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build static pharmaceutical and training counts by department and region."""
 
+import csv
 import json
 import math
 from collections import Counter
@@ -10,8 +11,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 INPUT_BUNDLE = DATA / "pharma-static-data.js"
+TRAINING_CSV = DATA / "formations-pharma-fr.csv"
 DEPARTMENTS = DATA / "france-departements-simplifie.geojson"
 OUTPUT = DATA / "pharma-geographic-analysis.js"
+TRAINING_MAP_OUTPUT = DATA / "pharma-training-map.js"
 
 REGIONS = {
     "Auvergne-Rhône-Alpes": ("01", "03", "07", "15", "26", "38", "42", "43", "63", "69", "73", "74"),
@@ -137,6 +140,20 @@ def company_coordinate(company):
         return None
 
 
+def training_coordinate(offer):
+    try:
+        latitude = float(offer.get("latitude", "").replace(",", "."))
+        longitude = float(offer.get("longitude", "").replace(",", "."))
+    except (AttributeError, TypeError, ValueError):
+        return None
+    return [latitude, longitude]
+
+
+def load_training_offers():
+    with TRAINING_CSV.open(encoding="utf-8-sig", newline="") as file:
+        return list(csv.DictReader(file, delimiter=";"))
+
+
 def count_records(records, coordinate_for, departments, counters):
     located = 0
     for record in records:
@@ -150,6 +167,7 @@ def count_records(records, coordinate_for, departments, counters):
 
 def main():
     snapshot = load_bundle()
+    training_offers = load_training_offers()
     collection = json.loads(DEPARTMENTS.read_text(encoding="utf-8"))
     departments = build_department_index(collection)
     if set(department["code"] for department in departments) != set(DEPARTMENT_REGIONS):
@@ -158,15 +176,29 @@ def main():
     department_counters = {
         field: Counter() for field in COUNT_FIELDS
     }
+    training_map_records = []
+    located_training_offers = 0
+    for offer in training_offers:
+        coordinates = training_coordinate(offer)
+        department = find_department(coordinates, departments)
+        if department is None:
+            continue
+        department_counters["formations"][department["code"]] += 1
+        located_training_offers += 1
+        training_map_records.append({
+            "title": offer.get("intitule_admission") or offer.get("formation") or "",
+            "institution": offer.get("etablissement") or "",
+            "city": offer.get("ville") or "",
+            "region": offer.get("region") or department["region"],
+            "coordinates": coordinates,
+            "source": offer.get("source") or offer.get("type_offre") or "",
+            "url": offer.get("url_formation") or "",
+        })
+
     totals = {
         "formations": {
-            "records": len(snapshot["courses"]),
-            "located": count_records(
-                snapshot["courses"],
-                lambda course: course.get("coordinates"),
-                departments,
-                department_counters["formations"],
-            ),
+            "records": len(training_offers),
+            "located": located_training_offers,
         },
         "entreprises": {
             "records": len(snapshot["companies"]),
@@ -232,7 +264,10 @@ def main():
 
     analysis = {
         "generatedAt": snapshot.get("generatedAt"),
-        "trainingGeneratedAt": snapshot.get("trainingGeneratedAt"),
+        "trainingGeneratedAt": max(
+            (offer.get("date_collecte", "") for offer in training_offers),
+            default=snapshot.get("trainingGeneratedAt"),
+        ),
         "totals": totals,
         "regions": region_rows,
         "departments": department_rows,
@@ -245,9 +280,18 @@ def main():
         f"window.PHARMA_GEO_ANALYSIS = {json.dumps(analysis, ensure_ascii=False, separators=(',', ':'))};\n",
         encoding="utf-8",
     )
+    training_map = {
+        "generatedAt": analysis["trainingGeneratedAt"],
+        "records": training_map_records,
+    }
+    TRAINING_MAP_OUTPUT.write_text(
+        f"window.PHARMA_TRAINING_MAP = {json.dumps(training_map, ensure_ascii=False, separators=(',', ':'))};\n",
+        encoding="utf-8",
+    )
     print(
         "Répartition écrite : "
-        f"{totals['formations']['located']} formations, "
+        f"{totals['formations']['located']} formations sur "
+        f"{totals['formations']['records']}, "
         f"{totals['entreprises']['located']} sièges et "
         f"{totals['sites']['located']} sites géolocalisés."
     )

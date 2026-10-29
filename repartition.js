@@ -180,7 +180,7 @@ function render() {
     `${formatCount(analysis.totals[metric].located)} ${labels.total} ` +
     `sur ${formatCount(analysis.totals[metric].records)} enregistrements ` +
     `au total. Instantané pharma du ${formatSnapshotDate(analysis.generatedAt)} ; ` +
-    `Parcoursup du ${formatSnapshotDate(analysis.trainingGeneratedAt)}.`;
+    `catalogue de formations multi-sources du ${formatSnapshotDate(analysis.trainingGeneratedAt)}.`;
 }
 
 zoneLevel.addEventListener("change", render);

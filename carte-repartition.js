@@ -1,5 +1,6 @@
 const analysis = window.PHARMA_GEO_ANALYSIS;
 const staticData = window.PHARMA_STATIC_DATA;
+const trainingMap = window.PHARMA_TRAINING_MAP;
 const FRANCE_BOUNDS = [
   [41.2, -5.3],
   [51.3, 9.8],
@@ -89,13 +90,15 @@ function addPoint(layer, coordinates, color, title, detail, radius = 5.5) {
 
 function makePointLayers() {
   pointLayers.formations = L.layerGroup();
-  for (const course of staticData.courses) {
+  for (const course of trainingMap.records) {
     addPoint(
       pointLayers.formations,
       course.coordinates,
       "#7554a8",
       course.title,
-      [course.institution, course.city].filter(Boolean).join(" · "),
+      [course.institution, course.city, course.source]
+        .filter(Boolean)
+        .join(" · "),
     );
   }
 
@@ -198,7 +201,7 @@ function getTopZones(features, metric, level) {
       .sort((a, b) => b.formations - a.formations || a.name.localeCompare(b.name, "fr"))
       .slice(0, 3),
     pharma: [...zones]
-      .sort((a, b) => b.pharma - a.pharma || a.name.localeCompare(b.name, "fr"))
+      .sort((a, b) => (b.pharma + b.sites) - (a.pharma + a.sites) || a.name.localeCompare(b.name, "fr"))
       .slice(0, 3),
   };
 }
@@ -221,8 +224,9 @@ function updateInsight(features, metric) {
   insight.textContent =
     `En ${scaleName}, le premier pôle de formation est ${trainingTop?.name} ` +
     `(${formatCount(trainingTop?.formations || 0)} fiches) ; ` +
-    `celui des ${labels.plural} est ${pharmaTop?.name} ` +
-    `(${formatCount(pharmaTop?.pharma || 0)} sièges, ${formatCount(pharmaTop?.sites || 0)} sites). ${overlap} ` +
+    `celui des implantations pharma est ${pharmaTop?.name} ` +
+    `(${formatCount((pharmaTop?.pharma || 0) + (pharmaTop?.sites || 0))} au total : ` +
+    `${formatCount(pharmaTop?.pharma || 0)} sièges et ${formatCount(pharmaTop?.sites || 0)} sites). ${overlap} ` +
     "Survolez une zone pour la comparer sur les deux cartes.";
 }
 
@@ -398,7 +402,7 @@ function renderMaps() {
   };
 
   trainingSummary.textContent =
-    `${level === "regions" ? "Répartition régionale" : "Par département"} · Parcoursup`;
+    `${formatCount(analysis.totals.formations.records)} offres · ${formatCount(totals.formations)} géolocalisées`;
   pharmaSummary.textContent =
     `${formatCount(totals.pharma)} sièges · ${formatCount(totals.sites)} sites ; vert = sièges et/ou sites`;
   trainingTotal.textContent = formatCount(totals.formations);
@@ -482,8 +486,9 @@ function initialize() {
     !analysis ||
     !analysis.mapDepartments ||
     !Array.isArray(analysis.mapDepartments.features) ||
+    !trainingMap ||
+    !Array.isArray(trainingMap.records) ||
     !staticData ||
-    !Array.isArray(staticData.courses) ||
     !Array.isArray(staticData.companies) ||
     !Array.isArray(staticData.sites) ||
     typeof L === "undefined"
