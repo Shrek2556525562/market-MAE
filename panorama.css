@@ -1,7 +1,3 @@
-.panorama-current {
-  color: var(--green-dark);
-}
-
 .panorama-workspace {
   grid-template-columns: 348px minmax(0, 1fr);
   padding: 14px;
@@ -550,7 +546,7 @@
 }
 
 .panorama-cluster {
-  border: 3px solid #fff;
+  border: 3px solid #000;
   border-radius: 50%;
   box-shadow: 0 2px 9px rgb(25 44 35 / 22%);
   color: #fff;
@@ -647,13 +643,6 @@
 }
 
 @media (max-width: 640px) {
-  .panorama-navigation a:nth-child(2),
-  .panorama-navigation a:nth-child(3),
-  .panorama-navigation a:nth-child(5),
-  .panorama-navigation a:nth-child(6) {
-    display: none;
-  }
-
   .panorama-workspace {
     height: calc(100dvh - 58px);
     min-height: 620px;

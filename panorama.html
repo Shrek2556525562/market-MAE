@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="assets/leaflet/MarkerCluster.css">
     <link rel="stylesheet" href="assets/leaflet/MarkerCluster.Default.css">
     <link rel="stylesheet" href="panorama.css">
+    <link rel="stylesheet" href="navigation.css">
   </head>
   <body>
     <header class="topbar">
@@ -26,13 +27,19 @@
         </span>
         <span class="brand-name">pharma<span>france</span></span>
       </a>
-      <nav class="topbar-links panorama-navigation" aria-label="Navigation principale">
-        <a class="topbar-note panorama-current" href="panorama.html" aria-current="page">Panorama</a>
-        <a class="topbar-note" href="index.html">Entreprises</a>
-        <a class="topbar-note" href="formations.html">Formations &amp; forums</a>
-        <a class="topbar-note" href="repartition.html">Répartition</a>
-        <a class="topbar-note" href="carte-repartition.html">Carte comparative</a>
-        <a class="topbar-note" href="dataset.html">Données</a>
+      <nav class="site-navigation panorama-navigation" aria-label="Navigation principale">
+        <a href="panorama.html" aria-current="page">Panorama</a>
+        <a href="index.html">Entreprises</a>
+        <a href="formations.html">Formations</a>
+        <details class="nav-menu">
+          <summary>Cartes <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="nav-menu-panel">
+            <a href="carte-formations.html">Carte complète</a>
+            <a href="repartition.html">Répartition</a>
+            <a href="carte-repartition.html">Carte comparative</a>
+          </div>
+        </details>
+        <a href="dataset.html">Sources &amp; données</a>
       </nav>
     </header>
 

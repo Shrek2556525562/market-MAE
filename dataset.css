@@ -711,12 +711,6 @@ td:first-child {
     font-size: 10px;
   }
 
-  .topbar-nav a[href="index.html"],
-  .topbar-nav a[href="formations.html"],
-  .topbar-nav a[href="panorama.html"] {
-    display: none;
-  }
-
   .brand {
     gap: 7px;
   }

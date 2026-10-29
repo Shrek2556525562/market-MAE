@@ -1,7 +1,3 @@
-.carte-repartition-current {
-  color: var(--green-dark);
-}
-
 .map-comparison-page {
   position: relative;
   width: min(1440px, calc(100% - 36px));
@@ -353,14 +349,6 @@
 }
 
 @media (max-width: 400px) {
-  .carte-repartition-navigation .topbar-note {
-    font-size: 8px;
-  }
-
-  .carte-repartition-navigation a[href="panorama.html"] {
-    display: none;
-  }
-
   .map-comparison-controls {
     gap: 7px;
   }
