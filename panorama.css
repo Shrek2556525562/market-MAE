@@ -1,7 +1,3 @@
-.panorama-current {
-  color: var(--green-dark);
-}
-
 .panorama-workspace {
   grid-template-columns: 348px minmax(0, 1fr);
   padding: 14px;
@@ -647,13 +643,6 @@
 }
 
 @media (max-width: 640px) {
-  .panorama-navigation a:nth-child(2),
-  .panorama-navigation a:nth-child(3),
-  .panorama-navigation a:nth-child(5),
-  .panorama-navigation a:nth-child(6) {
-    display: none;
-  }
-
   .panorama-workspace {
     height: calc(100dvh - 58px);
     min-height: 620px;

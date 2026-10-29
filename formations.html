@@ -11,6 +11,7 @@
     <title>Formations &amp; forums pharma — Pharma France</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="formations.css">
+    <link rel="stylesheet" href="navigation.css">
   </head>
   <body>
     <header class="topbar">
@@ -23,12 +24,18 @@
         </span>
         <span class="brand-name">pharma<span>france</span></span>
       </a>
-      <nav class="ecosystem-nav" aria-label="Navigation principale">
+      <nav class="site-navigation ecosystem-nav" aria-label="Navigation principale">
         <a href="panorama.html">Panorama</a>
-        <a href="repartition.html">Répartition</a>
-        <a href="carte-repartition.html">Carte comparative</a>
         <a href="index.html">Entreprises</a>
-        <a href="carte-formations.html">Carte complète</a>
+        <a href="formations.html" aria-current="page">Formations</a>
+        <details class="nav-menu">
+          <summary>Cartes <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="nav-menu-panel">
+            <a href="carte-formations.html">Carte complète</a>
+            <a href="repartition.html">Répartition</a>
+            <a href="carte-repartition.html">Carte comparative</a>
+          </div>
+        </details>
         <a href="dataset.html">Sources &amp; données</a>
       </nav>
     </header>

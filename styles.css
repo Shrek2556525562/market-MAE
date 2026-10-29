@@ -77,34 +77,6 @@ input {
   color: var(--green);
 }
 
-.topbar-note {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #677670;
-  font-size: 12px;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.topbar-note a {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  color: inherit;
-  text-decoration: none;
-}
-
-.topbar-note:hover {
-  color: var(--green-dark);
-}
-
-.topbar-links {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
 .live-dot {
   width: 7px;
   height: 7px;
@@ -930,19 +902,6 @@ kbd {
   .topbar {
     height: 58px;
     padding: 0 16px;
-  }
-
-  .topbar-links {
-    gap: 8px;
-  }
-
-  .topbar-links .topbar-note {
-    gap: 5px;
-    font-size: 9px;
-  }
-
-  .index-sources-link {
-    display: none;
   }
 
   .workspace {

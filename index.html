@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#f4f7f5">
     <title>Pharma France — Carte des entreprises</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="navigation.css">
   </head>
   <body>
     <header class="topbar">
@@ -22,13 +23,19 @@
         </span>
         <span class="brand-name">pharma<span>france</span></span>
       </a>
-      <nav class="topbar-links" aria-label="Navigation principale">
-        <a class="topbar-note" href="panorama.html">Panorama</a>
-        <a class="topbar-note" href="formations.html">Formations &amp; forums</a>
-        <a class="topbar-note" href="carte-formations.html">Carte complète</a>
-        <a class="topbar-note" href="repartition.html">Répartition</a>
-        <a class="topbar-note index-sources-link" href="carte-repartition.html">Carte comparative</a>
-        <a class="topbar-note index-sources-link" href="dataset.html">
+      <nav class="site-navigation" aria-label="Navigation principale">
+        <a href="panorama.html">Panorama</a>
+        <a href="index.html" aria-current="page">Entreprises</a>
+        <a href="formations.html">Formations</a>
+        <details class="nav-menu">
+          <summary>Cartes <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="nav-menu-panel">
+            <a href="carte-formations.html">Carte complète</a>
+            <a href="repartition.html">Répartition</a>
+            <a href="carte-repartition.html">Carte comparative</a>
+          </div>
+        </details>
+        <a href="dataset.html">
           <span class="live-dot" aria-hidden="true"></span>
           Sources &amp; données
         </a>
