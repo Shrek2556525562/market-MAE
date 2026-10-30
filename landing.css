@@ -550,7 +550,40 @@ html {
   }
 }
 
-@media (max-height: 760px) and (min-width: 641px) {
+@media (max-height: 820px) and (min-width: 641px) {
+  .landing {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 78px 24px 92px;
+  }
+
+  .landing-eyebrow {
+    margin-bottom: 14px;
+  }
+
+  .landing-title {
+    font-size: clamp(42px, 6vw, 78px);
+  }
+
+  .landing-lead {
+    margin: 14px auto 16px;
+  }
+
+  .landing-pathways {
+    gap: 10px;
+  }
+
+  .landing-pathway {
+    min-height: 124px;
+    gap: 7px;
+    padding: 14px 18px;
+  }
+
+  .landing-data-note {
+    margin-top: 10px;
+  }
+
   .landing-footnote {
     display: none;
   }
