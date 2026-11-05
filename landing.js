@@ -90,9 +90,6 @@
     });
   });
 
-  if (location.hash === "#carte") {
-    window.scrollTo(0, mapTop());
-  } else {
-    window.scrollTo(0, 0);
-  }
+  setHash("#accueil");
+  window.scrollTo(0, 0);
 })();
