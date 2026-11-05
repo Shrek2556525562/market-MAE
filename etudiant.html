@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Étudiants : explorez les entreprises pharmaceutiques, leurs sites et les formations en France selon le métier et le secteur qui vous intéressent.">
+    <meta name="theme-color" content="#f4f7f5">
+    <title>Étudiant — Pharma France</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/leaflet/leaflet.css">
+    <link rel="stylesheet" href="assets/leaflet/MarkerCluster.css">
+    <link rel="stylesheet" href="assets/leaflet/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="navigation.css">
+    <link rel="stylesheet" href="etudiant.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Pharma France, accueil">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none"><path d="M47.5 30.9 51.2 24.3 53.7 23.8 53.7 20.5 56.5 15.4 50.2 14.2 48.2 12.1 44.9 12.1 42.3 10.4 42.4 8.2 39.6 9.4 39.6 7.4 37.6 7.3 35.2 4.3 33.8 4.7 32.7 2.5 28.7 3.8 29.1 8.0 22.8 10.9 22.3 12.1 23.5 12.5 22.0 13.2 17.4 13.0 16.7 10.9 13.9 10.8 16.0 17.4 10.8 18.2 8.6 16.0 2.3 17.9 2.1 19.2 4.4 19.4 3.0 19.2 4.1 20.6 2.3 20.9 3.8 22.5 9.0 23.0 9.0 24.4 10.5 23.4 13.0 25.7 14.5 30.4 17.3 31.5 16.9 35.2 19.6 39.2 17.3 36.4 16.8 41.7 17.8 41.6 14.6 49.5 19.7 53.0 24.8 53.5 25.0 52.4 30.5 55.5 35.3 55.0 35.0 51.2 38.8 48.2 47.8 51.4 53.5 46.8 54.2 44.5 51.3 44.1 51.6 41.2 49.7 38.8 52.1 37.0 50.5 35.1 50.7 31.7 49.3 30.9 46.9 32.6Z" fill="currentColor" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M61.4 58.8 61.4 51.6 60.9 53.6 58.3 54.6 58.2 56.9 60.0 61.3Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><g transform="rotate(-35 31 30)" stroke="#105b48" stroke-width="2.2" stroke-linejoin="round"><path d="M21 23H31V37H21A7 7 0 0 1 21 23Z" fill="#fff"/><path d="M31 23H41A7 7 0 0 1 41 37H31Z" fill="#bfe6d3"/><path d="M23 26.5v7M19.5 30h7" stroke="#16745c" stroke-width="2.6" stroke-linecap="round"/></g></svg>
+        </span>
+        <span class="brand-name">pharma<span>france</span></span>
+      </a>
+      <nav class="site-navigation" aria-label="Navigation principale">
+        <a href="panorama.html">Panorama</a>
+        <a href="domaines-sciences-vivant.html">Domaines scientifiques</a>
+        <a href="recruteur.html">Espace recruteur</a>
+        <details class="nav-menu nav-menu-current">
+          <summary>Espace étudiant <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="nav-menu-panel">
+            <a href="#entreprises" data-student-mode-link="companies">Trouver une entreprise</a>
+            <a href="#formations" data-student-mode-link="training">Trouver une formation</a>
+          </div>
+        </details>
+        <details class="nav-menu">
+          <summary>Cartes <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <div class="nav-menu-panel">
+            <a href="carte-formations.html">Carte complète</a>
+            <a href="index.html">Entreprises</a>
+            <a href="formations.html">Formations</a>
+            <a href="repartition.html">Répartition</a>
+            <a href="carte-repartition.html">Carte comparative</a>
+          </div>
+        </details>
+        <a href="dataset.html">Sources &amp; données</a>
+      </nav>
+    </header>
+
+    <main class="student-page">
+      <section class="student-hero">
+        <p class="eyebrow">Votre parcours dans la pharma</p>
+        <h1>Explorez les entreprises et les formations</h1>
+        <p>Choisissez un métier, puis un secteur. Repérez des lieux d’activité et des cursus à explorer — sans prétendre indiquer qui recrute.</p>
+        <div class="student-mode-switch" role="tablist" aria-label="Choisir une recherche">
+          <button id="entreprises" class="student-mode-button is-active" type="button" role="tab" aria-selected="true" aria-controls="student-results" data-mode="companies">Trouver une entreprise</button>
+          <button id="formations" class="student-mode-button" type="button" role="tab" aria-selected="false" aria-controls="student-results" data-mode="training">Trouver une formation</button>
+        </div>
+      </section>
+
+      <section class="student-search-panel" aria-label="Critères de recherche">
+        <div class="student-step">
+          <label for="student-job">1 · Quel métier vous intéresse&nbsp;?</label>
+          <input id="student-job" type="search" placeholder="Ex. technicien de laboratoire, qualité, production…" autocomplete="off">
+          <small>Recherche par mots présents dans les noms, activités et fiches de formation. Les entreprises ne publient pas leurs métiers dans ces données.</small>
+        </div>
+        <div class="student-step">
+          <label for="student-sector">2 · Quel secteur vous intéresse&nbsp;?</label>
+          <select id="student-sector">
+            <option value="">Tous les secteurs</option>
+          </select>
+          <small id="sector-hint">Secteurs fondés sur les codes d’activité disponibles dans les données.</small>
+        </div>
+        <div class="student-location-heading">
+          <p>3 · Où souhaitez-vous chercher&nbsp;?</p>
+          <label for="student-zone-mode" class="visually-hidden">Type de zone géographique</label>
+          <select id="student-zone-mode">
+            <option value="region">Région ou département</option>
+            <option value="radius">Rayon autour d’un site / campus</option>
+          </select>
+        </div>
+        <div id="student-region-fields" class="student-location-fields">
+          <div>
+            <label for="student-region">Région</label>
+            <select id="student-region"><option value="">Toute la France</option></select>
+          </div>
+          <div>
+            <label for="student-department">Département</label>
+            <select id="student-department" disabled><option value="">Tous les départements</option></select>
+          </div>
+        </div>
+        <div id="student-radius-fields" class="student-location-fields student-radius-fields" hidden>
+          <div>
+            <label for="student-origin">Point de départ</label>
+            <input id="student-origin" type="search" list="student-origin-list" placeholder="Saisir une ville, un site ou un campus" autocomplete="off">
+            <datalist id="student-origin-list"></datalist>
+          </div>
+          <div>
+            <label for="student-radius">Rayon à vol d’oiseau</label>
+            <select id="student-radius">
+              <option value="10">10 km</option>
+              <option value="25" selected>25 km</option>
+              <option value="50">50 km</option>
+              <option value="100">100 km</option>
+              <option value="200">200 km</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section id="student-results" class="student-results-layout" aria-label="Résultats de recherche">
+        <aside class="student-side">
+          <div class="student-result-heading">
+            <div>
+              <p class="eyebrow" id="student-result-step">4 · Entreprises et sites</p>
+              <h2 id="student-result-title">Pistes à explorer</h2>
+            </div>
+            <strong id="student-result-count" aria-live="polite">—</strong>
+          </div>
+          <div id="student-legend" class="student-legend" aria-label="Légende des résultats"></div>
+          <div id="saved-actions" class="saved-actions">
+            <strong><span id="saved-count">0</span> entreprise(s) enregistrée(s)</strong>
+            <div>
+              <button id="export-saved" type="button" disabled>Exporter ma liste CSV</button>
+              <button id="share-saved" type="button" disabled>Partager</button>
+            </div>
+          </div>
+          <div id="student-list" class="student-list" aria-live="polite">
+            <p class="student-list-message">Chargement des données locales…</p>
+          </div>
+          <button id="student-show-more" class="student-show-more" type="button" hidden>Afficher plus</button>
+        </aside>
+        <section class="student-map-panel" aria-label="Carte interactive des résultats">
+          <div id="student-map" role="application" aria-label="Carte des entreprises, sites industriels et formations"></div>
+          <div class="student-map-label">
+            <strong id="student-map-title">Entreprises et sites industriels</strong>
+            <span id="student-map-count">Chargement de la carte…</span>
+          </div>
+          <button id="student-map-reset" class="student-map-reset" type="button">Recentrer la carte</button>
+          <div id="student-map-error" class="map-error" role="alert" hidden></div>
+        </section>
+      </section>
+
+      <aside class="student-limits">
+        <span aria-hidden="true">i</span>
+        <div>
+          <h2>À savoir avant de candidater</h2>
+          <p>Le catalogue recense des entreprises par codes d’activité pharmaceutique ; il ne contient pas d’offres d’emploi ni de métiers par entreprise. Un site industriel est un établissement repéré dans les données, pas la preuve qu’il recrute. Le siège social peut être différent du lieu de travail. L’espace étudiant retient les lieux situés en France d’après les adresses ou coordonnées disponibles (outre-mer compris). Les sites web/carrières ne sont pas fournis dans l’instantané : la fiche officielle de l’Annuaire des Entreprises est proposée à la place. Le périmètre NAF 21.10Z et 21.20Z ne couvre pas toute la chaîne pharmaceutique.</p>
+          <p id="student-data-date">Données et dates de mise à jour : chargement…</p>
+        </div>
+      </aside>
+      <p id="student-status" class="visually-hidden" aria-live="polite"></p>
+    </main>
+
+    <script src="assets/leaflet/leaflet.js" defer></script>
+    <script src="assets/leaflet/leaflet.markercluster.js" defer></script>
+    <script src="data/pharma-static-data.js" defer></script>
+    <script src="etudiant.js?v=4" defer></script>
+  </body>
+</html>
