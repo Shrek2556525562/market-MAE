@@ -26,7 +26,7 @@
         <a href="domaines-sciences-vivant.html">Domaines scientifiques</a>
         <a href="recruteur.html" aria-current="page">Espace recruteur</a>
         <details class="nav-menu">
-          <summary>Espace étudiant <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <summary>Espace étudiant / diplômé <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
           <div class="nav-menu-panel">
             <a href="etudiant.html#entreprises">Trouver une entreprise</a>
             <a href="etudiant.html#formations">Trouver une formation</a>
@@ -53,6 +53,7 @@
             <div>
               <p class="eyebrow">1 · Profil recherché</p>
               <h1>Quel profil cherchez-vous&nbsp;?</h1>
+              <p class="recruiter-scope-note">Cet espace repère des formations et des viviers de compétences par métier et territoire. Il ne propose ni candidatures ni contacts garantis.</p>
             </div>
           </div>
           <label for="job-filter">Métier ou famille de compétences</label>
@@ -133,7 +134,7 @@
               <select id="category-filter"><option value="">Tous les domaines</option></select>
             </div>
             <div>
-              <label for="source-filter">Source des offres</label>
+              <label for="source-filter">Source des formations</label>
               <select id="source-filter"><option value="">Toutes les sources</option></select>
             </div>
           </div>
@@ -143,12 +144,12 @@
           <section class="recruiter-list-section" aria-labelledby="contacts-title">
             <div class="results-heading">
               <div>
-                <p class="eyebrow">4 · Contacts établissement</p>
-                <h2 id="contacts-title">Pistes de recrutement</h2>
+                <p class="eyebrow">4 · Formations et établissements</p>
+                <h2 id="contacts-title">Formations à explorer</h2>
               </div>
               <label class="results-search" for="results-search">
                 <span class="visually-hidden">Rechercher parmi les résultats</span>
-                <input id="results-search" type="search" placeholder="Établissement, compétence…" autocomplete="off">
+                <input id="results-search" type="search" placeholder="Formation, établissement, compétence…" autocomplete="off">
               </label>
             </div>
             <div id="recruiter-list" class="recruiter-list" aria-live="polite">
@@ -168,15 +169,15 @@
           <p id="recruiter-status" class="visually-hidden" aria-live="polite"></p>
         </aside>
 
-        <section class="recruiter-map-card" aria-label="Carte des formations correspondantes">
+        <section class="recruiter-map-card" aria-label="Carte des cursus et lieux de formation correspondants">
             <div class="map-card-heading">
               <div>
-                <p class="eyebrow">3 · Formations repérées</p>
-                <h2><strong id="results-count">—</strong> pistes à explorer</h2>
+                <p class="eyebrow">3 · Formations correspondantes</p>
+                <h2><strong id="results-count">—</strong> formations à explorer</h2>
               </div>
               <button id="export-results" class="export-button" type="button" disabled>Exporter en CSV</button>
             </div>
-            <div id="recruiter-map" role="application" aria-label="Carte des établissements de formation pertinents"></div>
+            <div id="recruiter-map" role="application" aria-label="Carte des lieux de formation correspondants"></div>
             <p id="map-count" class="map-caption">Chargement du catalogue de formations…</p>
           </section>
     </main>

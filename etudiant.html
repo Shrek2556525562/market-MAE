@@ -26,7 +26,7 @@
         <a href="domaines-sciences-vivant.html">Domaines scientifiques</a>
         <a href="recruteur.html">Espace recruteur</a>
         <details class="nav-menu nav-menu-current">
-          <summary>Espace étudiant <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
+          <summary>Espace étudiant / diplômé <span class="nav-menu-chevron" aria-hidden="true">⌄</span></summary>
           <div class="nav-menu-panel">
             <a href="#entreprises" data-student-mode-link="companies">Trouver une entreprise</a>
             <a href="#formations" data-student-mode-link="training">Trouver une formation</a>
@@ -47,12 +47,13 @@
     </header>
 
     <main class="workspace student-page">
-      <h1 class="visually-hidden">Espace étudiant : trouver une entreprise ou une formation</h1>
+      <h1 class="visually-hidden">Espace étudiant et diplômé : trouver une entreprise ou une formation</h1>
       <aside class="student-sidebar">
         <div class="student-mode-switch" role="tablist" aria-label="Choisir une recherche">
           <button id="entreprises" class="student-mode-button is-active" type="button" role="tab" aria-selected="true" aria-controls="student-results" data-mode="companies">Trouver une entreprise</button>
           <button id="formations" class="student-mode-button" type="button" role="tab" aria-selected="false" aria-controls="student-results" data-mode="training">Trouver une formation</button>
         </div>
+        <p id="student-company-note" class="student-company-note">Le site ne recense pas les offres d’emploi et n’indique pas qui recrute. Il vous aide à repérer des entreprises et à accéder à leurs fiches officielles pour préparer vos prises de contact.</p>
 
         <section class="student-search-panel" aria-label="Critères de recherche">
         <div class="student-step">
@@ -70,6 +71,15 @@
             <div id="student-sector-options" class="student-combobox-options" role="listbox" aria-label="Secteurs disponibles" hidden></div>
           </div>
           <small id="sector-hint">Secteurs fondés sur les codes d’activité disponibles dans les données.</small>
+        </div>
+        <div id="student-training-search" class="student-training-search" hidden>
+          <label for="student-training-target">Rechercher un cursus ou un établissement</label>
+          <select id="student-training-target">
+            <option value="course">Intitulé du cursus</option>
+            <option value="institution">Nom de l’établissement ou du campus</option>
+          </select>
+          <input id="student-training-query" type="search" placeholder="Rechercher un cursus…" autocomplete="off">
+          <small id="student-training-hint">Les résultats distinguent le cursus de l’établissement et du lieu de formation.</small>
         </div>
         <div class="student-location-heading">
           <p>3 · Où souhaitez-vous chercher&nbsp;?</p>
@@ -133,7 +143,7 @@
         <details class="student-limits">
           <summary><span aria-hidden="true">i</span>À savoir avant de candidater</summary>
           <div>
-            <p>Le catalogue recense des entreprises par codes d’activité pharmaceutique ; il ne contient pas d’offres d’emploi ni de métiers par entreprise. Un site industriel est un établissement repéré dans les données, pas la preuve qu’il recrute. Le siège social peut être différent du lieu de travail. L’espace étudiant retient les lieux situés en France d’après les adresses ou coordonnées disponibles (outre-mer compris). Les sites web/carrières ne sont pas fournis dans l’instantané : la fiche officielle de l’Annuaire des Entreprises est proposée à la place. Le périmètre NAF 21.10Z et 21.20Z ne couvre pas toute la chaîne pharmaceutique.</p>
+            <p>Le catalogue recense des entreprises par codes d’activité pharmaceutique ; il ne contient pas d’offres d’emploi ni de métiers par entreprise. Un site industriel est un établissement repéré dans les données, pas la preuve qu’il recrute. Le siège social peut être différent du lieu de travail. Les sites web/carrières ne sont pas fournis dans l’instantané : la fiche officielle de l’Annuaire des Entreprises est proposée à la place. Le périmètre NAF 21.10Z et 21.20Z ne couvre pas toute la chaîne pharmaceutique.</p>
             <p id="student-data-date">Données et dates de mise à jour : chargement…</p>
           </div>
         </details>
@@ -153,6 +163,6 @@
     <script src="assets/leaflet/leaflet.js" defer></script>
     <script src="assets/leaflet/leaflet.markercluster.js" defer></script>
     <script src="data/pharma-static-data.js" defer></script>
-    <script src="etudiant.js?v=4" defer></script>
+    <script src="etudiant.js?v=5" defer></script>
   </body>
 </html>

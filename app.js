@@ -206,6 +206,7 @@ function loadSnapshot() {
       coordinates: company.siege?.coordonnees,
       title: company.nom_complet,
       details: [
+        "Siège social",
         [company.siege?.libelle_commune, company.siege?.code_postal]
           .filter(Boolean)
           .join(" · "),
@@ -233,7 +234,7 @@ function loadSnapshot() {
       coordinates: site.coordinates,
       title: site.companyName,
       details: [
-        "Établissement industriel",
+        "Site industriel",
         [site.etablissement.adresse, site.etablissement.libelle_commune]
           .filter(Boolean)
           .join(" · "),

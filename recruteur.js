@@ -316,22 +316,23 @@ function makePopup(offer) {
   const card = document.createElement("article");
   card.className = "recruiter-popup";
   const title = document.createElement("strong");
-  title.textContent = offer.formation || offer.intitule_admission || "Formation sans intitulé";
+  title.textContent = `Cursus · ${offer.formation || offer.intitule_admission || "Intitulé non renseigné"}`;
   card.append(title);
   const institution = document.createElement("p");
   institution.textContent = [
-    offer.etablissement,
-    offer.adresse,
-    offer.ville,
+    `Établissement / campus · ${offer.etablissement || "non renseigné"}`,
+    `Lieu de formation · ${[offer.adresse, offer.ville].filter(Boolean).join(", ") || "non renseigné"}`,
     offer.departmentName,
   ]
     .filter(Boolean)
+    .slice(0, 4)
     .join(" · ");
   card.append(institution);
   const metadata = document.createElement("p");
   metadata.textContent = [
     offer.level || "Niveau non identifié",
     offer.modalite_formation,
+    `Source · mise à jour : ${offer.source || offer.type_offre || "non renseignée"} · ${offer.date_collecte || "date non renseignée"}`,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -342,7 +343,7 @@ function makePopup(offer) {
     link.href = href;
     link.target = "_blank";
     link.rel = "noreferrer";
-    link.textContent = offer.url_formation ? "Voir la formation ↗" : "Voir la source ↗";
+    link.textContent = offer.url_formation ? "Voir le cursus ↗" : "Voir la source ↗";
     card.append(link);
   }
   return card;
@@ -429,7 +430,7 @@ function createOfferCard(offer) {
   const institution = document.createElement("p");
   institution.className = "prospect-institution";
   institution.textContent = [
-    offer.etablissement,
+    `Établissement / campus · ${offer.etablissement || "non renseigné"}`,
     offer.adresse,
     offer.ville,
     offer.departmentName,
@@ -450,7 +451,7 @@ function createOfferCard(offer) {
       [offer.modalite_formation, offer.type_offre].filter(Boolean).join(" · "),
     ),
     createField(
-      "Source · collecte",
+      "Source · date de mise à jour",
       `${offer.source || offer.type_offre || "Source non renseignée"} · ${offer.date_collecte || "date non renseignée"}`,
     ),
   );
@@ -479,8 +480,8 @@ function createOfferCard(offer) {
     link.target = "_blank";
     link.rel = "noreferrer";
     link.textContent = offer.url_formation
-      ? "Fiche formation ↗"
-      : "Source de l’offre ↗";
+      ? "Fiche du cursus ↗"
+      : "Voir la source ↗";
     actions.append(link);
   } else {
     const unavailable = document.createElement("span");
@@ -514,7 +515,7 @@ function renderList() {
   if (!filteredOffers.length) {
     const empty = document.createElement("p");
     empty.className = "list-message";
-    empty.textContent = "Aucune piste ne correspond à ces critères. Élargissez la zone ou retirez un filtre.";
+    empty.textContent = "Aucune formation ne correspond à ces critères. Élargissez la zone ou retirez un filtre.";
     elements["recruiter-list"].append(empty);
   } else {
     const fragment = document.createDocumentFragment();
@@ -554,9 +555,9 @@ function updateView() {
   elements["results-count"].textContent = filteredOffers.length.toLocaleString("fr-FR");
   const mappedCount = filteredOffers.filter((offer) => offer.coordinates).length;
   elements["map-count"].textContent =
-    `${mappedCount.toLocaleString("fr-FR")} formations géolocalisées sur ${filteredOffers.length.toLocaleString("fr-FR")} pistes ; les offres sans coordonnées restent consultables dans la liste et le CSV.`;
+    `${mappedCount.toLocaleString("fr-FR")} lieux de formation cartographiés sur ${filteredOffers.length.toLocaleString("fr-FR")} cursus ; ceux sans coordonnées restent consultables dans la liste et le CSV.`;
   elements["export-results"].disabled = filteredOffers.length === 0;
-  elements["recruiter-status"].textContent = `${filteredOffers.length} pistes de recrutement trouvées.`;
+  elements["recruiter-status"].textContent = `${filteredOffers.length} cursus correspondants trouvés.`;
   renderList();
 }
 
@@ -655,7 +656,7 @@ function exportCsv() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "pistes-recrutement-pharma.csv";
+  link.download = "formations-viviers-competences-pharma.csv";
   link.click();
   URL.revokeObjectURL(url);
 }

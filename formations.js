@@ -139,8 +139,10 @@ function loadSnapshot() {
       coordinates: course.coordinates,
       title: course.title,
       details: [
-        course.institution,
+        "Cursus",
+        `Lieu de formation · ${course.institution || "établissement non renseigné"}`,
         [course.city, course.region].filter(Boolean).join(" · "),
+        `Source · mise à jour : Parcoursup 2025 · ${snapshot.trainingGeneratedAt ? new Date(snapshot.trainingGeneratedAt).toLocaleDateString("fr-FR") : "date non renseignée"}`,
       ],
       href: course.url,
       linkLabel: "Voir la formation sur Parcoursup ↗",
@@ -157,6 +159,7 @@ function loadSnapshot() {
       coordinates: company.siege?.coordonnees,
       title: company.nom_complet,
       details: [
+        "Siège social",
         [company.siege?.libelle_commune, company.siege?.code_postal]
           .filter(Boolean)
           .join(" · "),
@@ -182,7 +185,7 @@ function loadSnapshot() {
       coordinates: site.coordinates,
       title: site.companyName,
       details: [
-        "Établissement industriel",
+        "Site industriel",
         [site.etablissement.adresse, site.etablissement.libelle_commune]
           .filter(Boolean)
           .join(" · "),
@@ -201,7 +204,7 @@ function loadSnapshot() {
   }
 
   courseCount.textContent = courses.size.toLocaleString("fr-FR");
-  courseCaption.textContent = "Parcoursup 2025 · sélection par intitulés";
+  courseCaption.textContent = `Parcoursup 2025 · instantané local du ${snapshot.trainingGeneratedAt ? new Date(snapshot.trainingGeneratedAt).toLocaleDateString("fr-FR") : "date non renseignée"}`;
   companyCount.textContent = companyMarkers.size.toLocaleString("fr-FR");
   siteCount.textContent = siteMarkers.size.toLocaleString("fr-FR");
   updateView();
