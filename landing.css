@@ -37,7 +37,7 @@ html {
 .landing-content {
   position: relative;
   z-index: 2;
-  max-width: 920px;
+  max-width: 1040px;
   text-align: center;
   animation: landing-rise 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
@@ -107,35 +107,41 @@ html {
 
 .landing-pathways {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  max-width: 1080px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1120px;
   margin: 0 auto;
   text-align: left;
 }
 
 .landing-pathway {
-  display: grid;
-  min-height: 150px;
-  gap: 9px;
-  padding: 18px 20px;
+  display: flex;
+  min-height: clamp(240px, 34vh, 330px);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  padding: clamp(26px, 4vw, 42px);
   border: 1px solid #cfe5da;
-  border-radius: 14px;
+  border-radius: 18px;
   background: rgb(255 255 255 / 84%);
-  box-shadow: 0 8px 24px rgb(22 116 92 / 7%);
+  box-shadow: 0 12px 30px rgb(22 116 92 / 8%);
   color: #50625b;
   text-decoration: none;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    background-color 160ms ease;
 }
 
 .landing-pathway:hover {
   border-color: var(--pill-green);
-  box-shadow: 0 12px 30px rgb(22 116 92 / 14%);
+  background: #fff;
+  box-shadow: 0 16px 36px rgb(22 116 92 / 14%);
   transform: translateY(-2px);
 }
 
-.landing-pathway:focus-visible,
-.landing-scroll:focus-visible {
+.landing-pathway:focus-visible {
   outline: 3px solid var(--green-dark);
   outline-offset: 4px;
 }
@@ -143,18 +149,23 @@ html {
 .landing-pathway strong {
   color: var(--ink);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 19px;
+  font-size: clamp(28px, 3.2vw, 38px);
 }
 
 .landing-pathway > span:not(.landing-pathway-action) {
-  font-size: 13px;
-  line-height: 1.5;
+  max-width: 440px;
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.6;
 }
 
 .landing-pathway-action {
-  align-self: end;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 16px;
   color: var(--green-dark);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -217,7 +228,7 @@ html {
   animation: landing-wheel 1.6s ease-in-out infinite;
 }
 
-/* Décor : gélules, comprimés et croix qui flottent. */
+/* Quelques halos verts gardent la palette sans surcharger l’accueil. */
 
 .landing-decor {
   position: absolute;
@@ -246,142 +257,6 @@ html {
   width: 460px;
   height: 460px;
   background: radial-gradient(circle, rgb(191 230 211 / 60%), transparent 70%);
-}
-
-.landing-pill {
-  position: absolute;
-  width: 92px;
-  height: 36px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow:
-    inset 0 -4px 0 rgb(0 0 0 / 5%),
-    0 12px 26px rgb(22 116 92 / 16%);
-  animation: landing-float 7s ease-in-out infinite;
-}
-
-.landing-pill::before {
-  position: absolute;
-  inset: 0 50% 0 0;
-  background: var(--pill-green);
-  content: "";
-}
-
-.landing-pill::after {
-  position: absolute;
-  top: 7px;
-  left: 12px;
-  width: 26px;
-  height: 6px;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 45%);
-  content: "";
-}
-
-.landing-pill-a {
-  --r: -28deg;
-  top: 17%;
-  left: 9%;
-}
-
-.landing-pill-b {
-  --r: 34deg;
-  top: 22%;
-  right: 11%;
-  width: 70px;
-  height: 28px;
-  animation-delay: -2s;
-}
-
-.landing-pill-b::before {
-  background: var(--pill-light);
-}
-
-.landing-pill-c {
-  --r: 12deg;
-  right: 16%;
-  bottom: 16%;
-  animation-delay: -4.5s;
-}
-
-.landing-tablet {
-  position: absolute;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #ffffff, #e5f3ec);
-  box-shadow: 0 10px 22px rgb(22 116 92 / 14%);
-  animation: landing-float 9s ease-in-out infinite;
-}
-
-.landing-tablet::after {
-  position: absolute;
-  top: 50%;
-  right: 9px;
-  left: 9px;
-  height: 2px;
-  background: #cfe3d8;
-  content: "";
-}
-
-.landing-tablet-a {
-  --r: 20deg;
-  bottom: 24%;
-  left: 15%;
-  animation-delay: -3s;
-}
-
-.landing-tablet-b {
-  --r: -40deg;
-  top: 12%;
-  left: 52%;
-  width: 30px;
-  height: 30px;
-  animation-delay: -6s;
-}
-
-.landing-cross {
-  position: absolute;
-  width: 34px;
-  height: 34px;
-  opacity: 0.85;
-  animation: landing-pulse 3.2s ease-in-out infinite;
-}
-
-.landing-cross::before,
-.landing-cross::after {
-  position: absolute;
-  border-radius: 3px;
-  background: var(--pill-green);
-  content: "";
-}
-
-.landing-cross::before {
-  top: 0;
-  bottom: 0;
-  left: 35%;
-  width: 30%;
-}
-
-.landing-cross::after {
-  top: 35%;
-  right: 0;
-  left: 0;
-  height: 30%;
-}
-
-.landing-cross-a {
-  bottom: 30%;
-  right: 7%;
-}
-
-.landing-cross-b {
-  top: 40%;
-  left: 5%;
-  width: 22px;
-  height: 22px;
-  animation-delay: -1.6s;
 }
 
 /* Écran carte : apparition après le balayage. */
@@ -449,26 +324,6 @@ html {
   }
 }
 
-@keyframes landing-float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(var(--r, 0deg));
-  }
-  50% {
-    transform: translateY(-16px) rotate(calc(var(--r, 0deg) + 8deg));
-  }
-}
-
-@keyframes landing-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.18);
-  }
-}
-
 @keyframes landing-wheel {
   0% {
     opacity: 0;
@@ -511,16 +366,20 @@ html {
 
   .landing-pathway {
     min-height: 0;
-    gap: 6px;
-    padding: 13px 15px;
+    gap: 10px;
+    padding: 20px;
   }
 
   .landing-pathway strong {
-    font-size: 17px;
+    font-size: 27px;
   }
 
   .landing-pathway > span:not(.landing-pathway-action) {
-    font-size: 12px;
+    font-size: 14px;
+  }
+
+  .landing-pathway-action {
+    font-size: 13px;
   }
 
   .landing-data-note {
