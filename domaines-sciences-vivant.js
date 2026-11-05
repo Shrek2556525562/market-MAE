@@ -43,21 +43,25 @@ function addText(parent, tag, text, className) {
 function createPopup(offer) {
   const card = document.createElement("article");
   card.className = "domain-popup";
-  addText(card, "h3", offer.formation || offer.title || "Formation");
+  addText(card, "h3", `Cursus · ${offer.formation || offer.title || "Intitulé non renseigné"}`);
 
   if (offer.title && offer.title !== offer.formation) {
-    addText(card, "p", `Diplôme / admission : ${offer.title}`);
+    addText(card, "p", `Diplôme / admission · ${offer.title}`);
   }
   if (offer.pathway) addText(card, "p", `Parcours : ${offer.pathway}`);
 
-  const location = [offer.institution, offer.city, offer.region]
+  addText(card, "p", `Établissement / campus · ${offer.institution || "non renseigné"}`);
+  const location = [offer.city, offer.region]
     .filter(Boolean)
     .join(" · ");
-  if (location) addText(card, "p", location);
+  addText(card, "p", `Lieu de formation · ${location || "non renseigné"}`);
   addText(card, "p", offer.domain, "domain-popup-tag");
   if (offer.category) addText(card, "p", `Domaine du catalogue : ${offer.category}`);
   if (offer.modality) addText(card, "p", offer.modality);
-  if (offer.source) addText(card, "p", `Source : ${offer.source}`);
+  const updatedAt = trainingMap.generatedAt
+    ? new Date(trainingMap.generatedAt).toLocaleDateString("fr-FR")
+    : "date non renseignée";
+  addText(card, "p", `Source · mise à jour du catalogue : ${offer.source || "non renseignée"} · ${updatedAt}`);
 
   if (offer.url) {
     try {
@@ -186,9 +190,13 @@ function initialize() {
   catalogCount.textContent = trainingMap.totalRecords.toLocaleString("fr-FR");
   locatedCount.textContent = trainingMap.records.length.toLocaleString("fr-FR");
   const missing = trainingMap.totalRecords - trainingMap.records.length;
-  dataNote.textContent = missing > 0
+  const updatedAt = trainingMap.generatedAt
+    ? new Date(trainingMap.generatedAt).toLocaleDateString("fr-FR")
+    : "date non renseignée";
+  const coverage = missing > 0
     ? `${missing.toLocaleString("fr-FR")} offres du catalogue n’ont pas de coordonnées fiables ; elles restent dans le CSV téléchargeable.`
     : "Toutes les offres du catalogue sont géolocalisées.";
+  dataNote.textContent = `Catalogue multi-sources · données collectées au plus tard le ${updatedAt}. ${coverage}`;
 
   map = L.map("domain-map", {
     zoomControl: true,

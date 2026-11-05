@@ -15,9 +15,17 @@ panorama conserve le fond de carte IGN, qui nécessite une connexion Internet ;
 le SVG local reste visible si les tuiles ne peuvent pas être chargées.
 
 La page `recruteur.html` aide à repérer des formations correspondant à un profil
-métier et à un territoire. Elle ne publie pas d’offres d’emploi et ses
-rapprochements de métiers et de niveaux sont indicatifs ; vérifiez les modalités
-auprès des établissements.
+métier et à un territoire. Elle présente des formations et des viviers de
+compétences, sans fournir de candidatures ni garantir des contacts. Elle ne
+publie pas d’offres d’emploi et ses rapprochements de métiers et de niveaux sont
+indicatifs ; vérifiez les modalités auprès des établissements.
+
+La page `etudiant.html` distingue la recherche d’un cursus de celle d’un
+établissement ou campus. Sa carte sépare les sièges sociaux, les sites
+industriels et les lieux de formation. Le catalogue d’entreprises ne recense pas
+les offres d’emploi et ne permet pas de savoir qui recrute ; les fiches
+officielles facilitent la prise de contact. Les formations affichent leurs
+sources et dates de mise à jour lorsqu’elles sont disponibles.
 
 Le workflow `.github/workflows/pages.yml` publie automatiquement le site sur
 GitHub Pages après chaque mise à jour de `main` et peut aussi être lancé

@@ -141,12 +141,22 @@ function addMapMarker(record) {
 }
 
 function addTrainingRecords() {
+  const trainingDate = data.trainingGeneratedAt
+    ? new Date(data.trainingGeneratedAt).toLocaleDateString("fr-FR")
+    : "date non renseignée";
   for (const course of data.courses) {
     makeRecord({
       id: `formation:${course.id}`,
       type: "formation",
       title: course.title,
-      subtitle: [course.institution, course.city, course.region]
+      subtitle: [
+        "Cursus",
+        "Lieu de formation",
+        course.institution,
+        course.city,
+        course.region,
+        `Source · mise à jour : Parcoursup 2025 · ${trainingDate}`,
+      ]
         .filter(Boolean)
         .join(" · "),
       coordinates: course.coordinates,
@@ -164,6 +174,7 @@ function addCompanyRecords() {
       type: "entreprise",
       title: company.nom_complet,
       subtitle: [
+        "Siège social",
         company.siege?.libelle_commune,
         company.siege?.code_postal,
         company.activityCodes?.join(" · "),
@@ -193,6 +204,7 @@ function addSiteRecords() {
       type: "site",
       title: site.companyName,
       subtitle: [
+        "Site industriel",
         site.etablissement?.libelle_commune,
         site.etablissement?.adresse,
         site.etablissement?.activite_principale,

@@ -131,14 +131,13 @@ function addText(parent, tag, text, className) {
 function createPopup(offer) {
   const card = document.createElement("div");
   card.className = "training-popup";
-  addText(card, "h3", offer.formation || "Formation");
-  if (offer.etablissement) addText(card, "p", offer.etablissement);
+  addText(card, "h3", `Cursus · ${offer.formation || "Intitulé non renseigné"}`);
+  addText(card, "p", `Établissement / campus · ${offer.etablissement || "non renseigné"}`);
 
   const location = [offer.ville, offer.departement, offer.region]
     .filter(Boolean)
     .join(" · ");
-  if (location) addText(card, "p", location);
-  if (offer.adresse) addText(card, "p", offer.adresse);
+  addText(card, "p", `Lieu de formation · ${[offer.adresse, location].filter(Boolean).join(", ") || "non renseigné"}`);
 
   addText(
     card,
@@ -151,7 +150,10 @@ function createPopup(offer) {
     "p",
     [offer.modalite_formation, offer.type_offre].filter(Boolean).join(" · "),
   );
-  if (offer.source) addText(card, "p", `Source : ${offer.source}`);
+  const date = offer.date_collecte
+    ? new Date(offer.date_collecte).toLocaleDateString("fr-FR")
+    : "date non renseignée";
+  addText(card, "p", `Source · mise à jour : ${offer.source || "non renseignée"} · ${date}`);
 
   const trainingUrls = offerLinks(offer.url_formation);
   for (const [index, url] of trainingUrls.entries()) {

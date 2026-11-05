@@ -68,6 +68,17 @@
   font-size: 17px;
 }
 
+.recruiter-scope-note {
+  max-width: 290px;
+  margin: 8px 0 0;
+  color: #64736c;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+  text-transform: none;
+}
+
 .recruiter-filters > label:not(.recruiter-check),
 .recruiter-filter-row label,
 .radius-row label {

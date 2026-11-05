@@ -61,6 +61,8 @@ const jobInput = document.querySelector("#student-job");
 const jobOptions = document.querySelector("#student-job-options");
 const sectorInput = document.querySelector("#student-sector");
 const sectorOptions = document.querySelector("#student-sector-options");
+const trainingSearchTarget = document.querySelector("#student-training-target");
+const trainingSearchInput = document.querySelector("#student-training-query");
 const regionSelect = document.querySelector("#student-region");
 const departmentSelect = document.querySelector("#student-department");
 const zoneModeSelect = document.querySelector("#student-zone-mode");
@@ -281,6 +283,13 @@ function trainingSearchText(record) {
   );
 }
 
+function trainingTargetText(record) {
+  const fields = trainingSearchTarget.value === "institution"
+    ? [record.etablissement, record.adresse, record.ville, record.departement, record.region]
+    : [record.formation, record.intitule_admission, record.parcours, record.categorie];
+  return normalize(fields.filter(Boolean).join(" "));
+}
+
 function companyLocationsFor(company, sites) {
   const locationsForCompany = [];
   const headquarters = company.siege || {};
@@ -396,12 +405,17 @@ function setMode(nextMode) {
   companyModeButton.setAttribute("aria-selected", String(mode === "companies"));
   trainingModeButton.classList.toggle("is-active", mode === "training");
   trainingModeButton.setAttribute("aria-selected", String(mode === "training"));
+  document.querySelector("#student-company-note").hidden = mode !== "companies";
+  document.querySelector("#student-training-search").hidden = mode !== "training";
+  trainingSearchInput.placeholder = trainingSearchTarget.value === "institution"
+    ? "Rechercher un établissement ou un campus…"
+    : "Rechercher un cursus…";
   document.querySelector("#student-result-step").textContent =
     mode === "companies" ? "4 · Entreprises et sites" : "4 · Formations";
   document.querySelector("#student-result-title").textContent =
-    mode === "companies" ? "Pistes à explorer" : "Formations à découvrir";
+    mode === "companies" ? "Entreprises et sites à explorer" : "Cursus et lieux de formation";
   document.querySelector("#student-map-title").textContent =
-    mode === "companies" ? "Entreprises et sites industriels" : "Campus et lieux de formation";
+    mode === "companies" ? "Sièges sociaux et sites industriels" : "Lieux de formation";
   document.querySelector("#job-hint").textContent =
     mode === "companies"
       ? "Choisissez une famille pour votre projet. Les métiers associés aux entreprises ne sont pas renseignés dans la source."
@@ -653,6 +667,7 @@ function filteredCompanies() {
 
 function filteredTraining() {
   const query = jobSelection ? "" : normalize(jobInput.value);
+  const targetQuery = normalize(trainingSearchInput.value);
   const selectedProfile = JOB_PROFILES.find((profile) => profile.value === jobSelection);
   const sector = sectorSelection;
   const center = zoneModeSelect.value === "radius" ? activeOrigin() : null;
@@ -662,6 +677,7 @@ function filteredTraining() {
     const searchable = trainingSearchText(record);
     if (selectedProfile && !selectedProfile.terms.test(searchable)) return false;
     if (query && !searchable.includes(query)) return false;
+    if (targetQuery && !trainingTargetText(record).includes(targetQuery)) return false;
     if (zoneModeSelect.value === "radius") {
       return Boolean(location && locationMatchesFilters(location, center));
     }
@@ -724,11 +740,11 @@ function companyCard(record) {
 function trainingCard(record) {
   const card = element("article", "student-card");
   const header = element("div", "student-card-header");
-  header.append(element("h3", "", record.formation || record.intitule_admission || "Formation sans intitulé"));
+  header.append(element("h3", "", `Cursus · ${record.formation || record.intitule_admission || "Intitulé non renseigné"}`));
   if (record.categorie) header.append(element("span", "student-type-tag training-tag", record.categorie));
   card.append(header);
-  card.append(element("p", "student-card-activity", record.etablissement || "Établissement non renseigné"));
-  card.append(element("p", "", [record.ville, record.departement, record.region].filter(Boolean).join(" · ") || "Lieu non renseigné"));
+  card.append(element("p", "student-card-activity", `Établissement / campus · ${record.etablissement || "non renseigné"}`));
+  card.append(element("p", "", `Lieu de formation · ${[record.ville, record.departement, record.region].filter(Boolean).join(" · ") || "non renseigné"}`));
   card.append(element("p", "", [record.modalite_formation, record.type_offre].filter(Boolean).join(" · ") || "Modalités non renseignées"));
   card.append(element("p", "", `Source : ${record.source || "non renseignée"} · mise à jour : ${formatDate(record.date_collecte)}.`));
   const actions = element("div", "student-card-actions");
@@ -798,9 +814,12 @@ function popupContent(location) {
   wrapper.append(element("strong", "", location.title));
   wrapper.append(element("span", "", location.type === "site" ? "Site industriel" : location.type === "headquarters" ? "Siège social" : "Lieu de formation"));
   const description = location.type === "training"
-    ? [location.institution, location.address || location.city, location.record.categorie].filter(Boolean).join(" · ")
+    ? [`Cursus · ${location.title}`, `Établissement / campus · ${location.institution}`, location.address || location.city, location.record.categorie].filter(Boolean).join(" · ")
     : [location.address || location.city, ...(location.activityCodes || []).map((code) => `${code} · ${ACTIVITY_LABELS[code] || code}`)].filter(Boolean).join(" · ");
   wrapper.append(element("p", "", description || "Détails non renseignés"));
+  if (location.type === "training") {
+    wrapper.append(element("p", "", `Source : ${location.record.source || "non renseignée"} · mise à jour : ${formatDate(location.record.date_collecte)}.`));
+  }
   const href = location.type === "training"
     ? text(location.record.url_formation)
     : location.type === "site"
@@ -1002,6 +1021,18 @@ radiusSelect.addEventListener("change", render);
 document.querySelector("#student-show-more").addEventListener("click", () => {
   visibleLimit += PAGE_SIZE;
   renderList();
+});
+trainingSearchInput.addEventListener("input", () => {
+  visibleLimit = PAGE_SIZE;
+  render();
+});
+trainingSearchTarget.addEventListener("change", () => {
+  trainingSearchInput.value = "";
+  trainingSearchInput.placeholder = trainingSearchTarget.value === "institution"
+    ? "Rechercher un établissement ou un campus…"
+    : "Rechercher un cursus…";
+  visibleLimit = PAGE_SIZE;
+  render();
 });
 document.querySelector("#student-map-reset").addEventListener("click", () => {
   fitCurrentResults();
