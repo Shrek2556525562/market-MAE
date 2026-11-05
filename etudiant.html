@@ -46,18 +46,15 @@
       </nav>
     </header>
 
-    <main class="student-page">
-      <section class="student-hero">
-        <p class="eyebrow">Votre parcours dans la pharma</p>
-        <h1>Explorez les entreprises et les formations</h1>
-        <p>Choisissez un métier, puis un secteur. Repérez des lieux d’activité et des cursus à explorer — sans prétendre indiquer qui recrute.</p>
+    <main class="workspace student-page">
+      <h1 class="visually-hidden">Espace étudiant : trouver une entreprise ou une formation</h1>
+      <aside class="student-sidebar">
         <div class="student-mode-switch" role="tablist" aria-label="Choisir une recherche">
           <button id="entreprises" class="student-mode-button is-active" type="button" role="tab" aria-selected="true" aria-controls="student-results" data-mode="companies">Trouver une entreprise</button>
           <button id="formations" class="student-mode-button" type="button" role="tab" aria-selected="false" aria-controls="student-results" data-mode="training">Trouver une formation</button>
         </div>
-      </section>
 
-      <section class="student-search-panel" aria-label="Critères de recherche">
+        <section class="student-search-panel" aria-label="Critères de recherche">
         <div class="student-step">
           <label for="student-job">1 · Quel métier vous intéresse&nbsp;?</label>
           <div class="student-combobox">
@@ -109,10 +106,9 @@
             </select>
           </div>
         </div>
-      </section>
+        </section>
 
-      <section id="student-results" class="student-results-layout" aria-label="Résultats de recherche">
-        <aside class="student-side">
+        <section id="student-results" class="student-side" aria-label="Résultats de recherche">
           <div class="student-result-heading">
             <div>
               <p class="eyebrow" id="student-result-step">4 · Entreprises et sites</p>
@@ -132,26 +128,25 @@
             <p class="student-list-message">Chargement des données locales…</p>
           </div>
           <button id="student-show-more" class="student-show-more" type="button" hidden>Afficher plus</button>
-        </aside>
-        <section class="student-map-panel" aria-label="Carte interactive des résultats">
-          <div id="student-map" role="application" aria-label="Carte des entreprises, sites industriels et formations"></div>
-          <div class="student-map-label">
-            <strong id="student-map-title">Entreprises et sites industriels</strong>
-            <span id="student-map-count">Chargement de la carte…</span>
-          </div>
-          <button id="student-map-reset" class="student-map-reset" type="button">Recentrer la carte</button>
-          <div id="student-map-error" class="map-error" role="alert" hidden></div>
         </section>
-      </section>
 
-      <aside class="student-limits">
-        <span aria-hidden="true">i</span>
-        <div>
-          <h2>À savoir avant de candidater</h2>
-          <p>Le catalogue recense des entreprises par codes d’activité pharmaceutique ; il ne contient pas d’offres d’emploi ni de métiers par entreprise. Un site industriel est un établissement repéré dans les données, pas la preuve qu’il recrute. Le siège social peut être différent du lieu de travail. L’espace étudiant retient les lieux situés en France d’après les adresses ou coordonnées disponibles (outre-mer compris). Les sites web/carrières ne sont pas fournis dans l’instantané : la fiche officielle de l’Annuaire des Entreprises est proposée à la place. Le périmètre NAF 21.10Z et 21.20Z ne couvre pas toute la chaîne pharmaceutique.</p>
-          <p id="student-data-date">Données et dates de mise à jour : chargement…</p>
-        </div>
+        <details class="student-limits">
+          <summary><span aria-hidden="true">i</span>À savoir avant de candidater</summary>
+          <div>
+            <p>Le catalogue recense des entreprises par codes d’activité pharmaceutique ; il ne contient pas d’offres d’emploi ni de métiers par entreprise. Un site industriel est un établissement repéré dans les données, pas la preuve qu’il recrute. Le siège social peut être différent du lieu de travail. L’espace étudiant retient les lieux situés en France d’après les adresses ou coordonnées disponibles (outre-mer compris). Les sites web/carrières ne sont pas fournis dans l’instantané : la fiche officielle de l’Annuaire des Entreprises est proposée à la place. Le périmètre NAF 21.10Z et 21.20Z ne couvre pas toute la chaîne pharmaceutique.</p>
+            <p id="student-data-date">Données et dates de mise à jour : chargement…</p>
+          </div>
+        </details>
       </aside>
+      <section class="student-map-panel" aria-label="Carte interactive des résultats">
+        <div id="student-map" role="application" aria-label="Carte des entreprises, sites industriels et formations"></div>
+        <div class="student-map-label">
+          <strong id="student-map-title">Entreprises et sites industriels</strong>
+          <span id="student-map-count">Chargement de la carte…</span>
+        </div>
+        <button id="student-map-reset" class="student-map-reset" type="button">Recentrer la carte</button>
+        <div id="student-map-error" class="map-error" role="alert" hidden></div>
+      </section>
       <p id="student-status" class="visually-hidden" aria-live="polite"></p>
     </main>
 

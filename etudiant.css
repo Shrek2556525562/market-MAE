@@ -1,15 +1,13 @@
 .student-page {
-  width: min(1540px, calc(100% - 44px));
-  margin: 0 auto;
-  padding: 28px 0 48px;
+  width: auto;
+  min-height: 0;
+  grid-template-columns: 370px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: stretch;
+  margin: 0;
+  padding: 14px;
 }
 
-.student-hero {
-  margin: 0 auto 18px;
-  text-align: center;
-}
-
-.student-hero .eyebrow,
 .student-result-heading .eyebrow {
   margin: 0 0 6px;
   color: var(--green);
@@ -19,32 +17,30 @@
   text-transform: uppercase;
 }
 
-.student-hero h1 {
-  margin: 0;
-  color: #173a2e;
-  font-family: Manrope, Arial, sans-serif;
-  font-size: clamp(26px, 3vw, 38px);
-  letter-spacing: -0.04em;
-}
-
-.student-hero > p:not(.eyebrow) {
-  margin: 8px 0 16px;
-  color: #687970;
-  font-size: 13px;
+.student-sidebar {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  scrollbar-color: #cfdad3 transparent;
+  scrollbar-width: thin;
 }
 
 .student-mode-switch {
-  display: inline-flex;
+  display: flex;
+  flex: 0 0 auto;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 5px;
   padding: 4px;
   border: 1px solid #dce8e1;
   border-radius: 10px;
   background: #edf4ef;
+  box-shadow: 0 4px 18px rgb(26 49 37 / 5%);
 }
 
 .student-mode-button {
+  flex: 1 1 0;
   min-height: 38px;
   padding: 0 18px;
   border: 0;
@@ -80,10 +76,11 @@
 
 .student-search-panel {
   display: grid;
-  grid-template-columns: minmax(210px, 1fr) minmax(210px, 1fr);
-  gap: 16px 22px;
-  margin-bottom: 16px;
-  padding: 18px 20px;
+  grid-template-columns: minmax(0, 1fr);
+  flex: 0 0 auto;
+  gap: 11px 12px;
+  margin: 0;
+  padding: 14px;
 }
 
 .student-step {
@@ -242,17 +239,10 @@
   display: none;
 }
 
-.student-results-layout {
-  display: grid;
-  grid-template-columns: minmax(340px, 440px) minmax(0, 1fr);
-  align-items: stretch;
-  gap: 16px;
-}
-
 .student-side {
   display: flex;
-  min-height: 560px;
-  max-height: 720px;
+  min-height: 220px;
+  flex: 1 1 auto;
   flex-direction: column;
   overflow: hidden;
 }
@@ -361,22 +351,26 @@
 
 .student-card-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
 }
 
 .student-card h3 {
+  flex: 1 1 150px;
+  min-width: 0;
   margin: 0;
   color: #263d32;
   font-family: Manrope, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .student-type-tag,
 .student-level-tag {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   padding: 3px 7px;
   border-radius: 999px;
   background: #edf3fa;
@@ -456,7 +450,7 @@
 
 .student-map-panel {
   position: relative;
-  min-height: 560px;
+  min-height: 0;
   overflow: hidden;
   background: #edf1ee;
 }
@@ -536,28 +530,52 @@
 
 .student-limits {
   display: flex;
-  gap: 10px;
-  margin-top: 16px;
-  padding: 14px 16px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  padding: 9px 12px;
 }
 
-.student-limits > span {
+.student-limits summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #33493e;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  list-style: none;
+}
+
+.student-limits summary::-webkit-details-marker {
+  display: none;
+}
+
+.student-limits summary::after {
+  margin-left: auto;
+  color: #72817c;
+  content: "+";
+  font-size: 14px;
+}
+
+.student-limits[open] summary::after {
+  content: "−";
+}
+
+.student-limits summary > span {
   display: grid;
-  width: 22px;
-  height: 22px;
+  width: 19px;
+  height: 19px;
   flex: 0 0 auto;
   place-items: center;
   border-radius: 50%;
   background: #e9f4ef;
   color: var(--green-dark);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
 }
 
-.student-limits h2 {
-  margin: 0;
-  color: #33493e;
-  font-size: 12px;
+.student-limits > div {
+  padding: 7px 0 0 27px;
 }
 
 .student-limits p {
@@ -616,20 +634,41 @@
 }
 
 @media (max-width: 950px) {
-  .student-results-layout {
-    grid-template-columns: minmax(300px, 390px) minmax(0, 1fr);
+  .student-page {
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+
+  .student-location-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .student-location-heading select {
+    width: 100%;
+    min-width: 0;
   }
 }
 
 @media (max-width: 720px) {
   .student-page {
-    width: calc(100% - 22px);
-    padding-top: 20px;
+    height: calc(100dvh - 96px);
+    min-height: 620px;
+    grid-template: minmax(300px, 1fr) minmax(0, 330px) / minmax(0, 1fr);
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .student-map-panel {
+    grid-row: 1;
+  }
+
+  .student-sidebar {
+    grid-row: 2;
   }
 
   .student-search-panel {
     grid-template-columns: 1fr;
-    gap: 13px;
+    gap: 10px;
     padding: 14px;
   }
 
@@ -646,17 +685,8 @@
     grid-template-columns: 1fr;
   }
 
-  .student-results-layout {
-    grid-template-columns: 1fr;
-  }
-
   .student-side {
-    min-height: 460px;
-    max-height: 620px;
-  }
-
-  .student-map-panel {
-    min-height: 390px;
+    min-height: 180px;
   }
 }
 

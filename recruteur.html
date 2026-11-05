@@ -46,25 +46,13 @@
       </nav>
     </header>
 
-    <main class="recruiter-page">
-      <section class="recruiter-hero">
-        <p class="eyebrow">Outil de sourcing territorial</p>
-        <h1>Repérez les viviers de compétences pharma</h1>
-        <p>Partez d’un métier, choisissez une zone et identifiez les établissements de formation à contacter.</p>
-        <ol class="recruiter-steps" aria-label="Parcours recruteur">
-          <li><span>1</span>Profil recherché</li>
-          <li><span>2</span>Zone de recrutement</li>
-          <li><span>3</span>Formations repérées</li>
-          <li><span>4</span>Contacts établissement</li>
-        </ol>
-      </section>
-
-      <section class="recruiter-workspace" aria-label="Recherche géographique de formations">
-        <aside class="recruiter-filters">
+    <main class="workspace recruiter-page recruiter-workspace" aria-label="Recherche géographique de formations">
+        <aside class="recruiter-sidebar">
+          <section class="recruiter-filters">
           <div class="recruiter-filter-heading">
             <div>
               <p class="eyebrow">1 · Profil recherché</p>
-              <h2>Quel profil cherchez-vous&nbsp;?</h2>
+              <h1>Quel profil cherchez-vous&nbsp;?</h1>
             </div>
           </div>
           <label for="job-filter">Métier ou famille de compétences</label>
@@ -149,20 +137,7 @@
               <select id="source-filter"><option value="">Toutes les sources</option></select>
             </div>
           </div>
-          <button id="reset-filters" class="reset-button" type="button">Réinitialiser les filtres</button>
-        </aside>
-
-        <div class="recruiter-results">
-          <section class="recruiter-map-card" aria-label="Carte des formations correspondantes">
-            <div class="map-card-heading">
-              <div>
-                <p class="eyebrow">3 · Formations repérées</p>
-                <h2><strong id="results-count">—</strong> pistes à explorer</h2>
-              </div>
-              <button id="export-results" class="export-button" type="button" disabled>Exporter en CSV</button>
-            </div>
-            <div id="recruiter-map" role="application" aria-label="Carte des établissements de formation pertinents"></div>
-            <p id="map-count" class="map-caption">Chargement du catalogue de formations…</p>
+            <button id="reset-filters" class="reset-button" type="button">Réinitialiser les filtres</button>
           </section>
 
           <section class="recruiter-list-section" aria-labelledby="contacts-title">
@@ -181,19 +156,29 @@
             </div>
             <button id="show-more" class="show-more-button" type="button" hidden>Afficher plus de résultats</button>
           </section>
-        </div>
-      </section>
 
-      <aside class="method-note" aria-labelledby="method-title">
-        <div class="method-note-icon" aria-hidden="true">i</div>
-        <div>
-          <h2 id="method-title">Méthode et limites</h2>
-          <p>Les pistes proviennent du catalogue local agrégé (Parcoursup, Campus France, InterCarif-Oref, Mon Compte Formation et La bonne alternance). Les métiers et niveaux sont des rapprochements par intitulé et contenu, pas des certifications garanties. Les coordonnées, modalités, compétences, liens et dates peuvent manquer ou être anciennes ; vérifiez chaque fiche auprès de l’établissement. Le rayon est calculé à vol d’oiseau. Aucun contact personnel n’est inventé.</p>
-          <p id="catalogue-date" class="method-source">Source du catalogue et date de collecte : chargement…</p>
-        </div>
-      </aside>
-      <p id="recruiter-error" class="recruiter-error" role="alert" hidden></p>
-      <p id="recruiter-status" class="visually-hidden" aria-live="polite"></p>
+          <details class="method-note">
+            <summary><span class="method-note-icon" aria-hidden="true">i</span>Méthode et limites</summary>
+            <div class="method-note-content">
+              <p>Les pistes proviennent du catalogue local agrégé (Parcoursup, Campus France, InterCarif-Oref, Mon Compte Formation et La bonne alternance). Les métiers et niveaux sont des rapprochements par intitulé et contenu, pas des certifications garanties. Les coordonnées, modalités, compétences, liens et dates peuvent manquer ou être anciennes ; vérifiez chaque fiche auprès de l’établissement. Le rayon est calculé à vol d’oiseau. Aucun contact personnel n’est inventé.</p>
+              <p id="catalogue-date" class="method-source">Source du catalogue et date de collecte : chargement…</p>
+            </div>
+          </details>
+          <p id="recruiter-error" class="recruiter-error" role="alert" hidden></p>
+          <p id="recruiter-status" class="visually-hidden" aria-live="polite"></p>
+        </aside>
+
+        <section class="recruiter-map-card" aria-label="Carte des formations correspondantes">
+            <div class="map-card-heading">
+              <div>
+                <p class="eyebrow">3 · Formations repérées</p>
+                <h2><strong id="results-count">—</strong> pistes à explorer</h2>
+              </div>
+              <button id="export-results" class="export-button" type="button" disabled>Exporter en CSV</button>
+            </div>
+            <div id="recruiter-map" role="application" aria-label="Carte des établissements de formation pertinents"></div>
+            <p id="map-count" class="map-caption">Chargement du catalogue de formations…</p>
+          </section>
     </main>
 
     <script src="assets/leaflet/leaflet.js" defer></script>
