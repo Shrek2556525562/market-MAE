@@ -60,14 +60,18 @@
       <section class="student-search-panel" aria-label="Critères de recherche">
         <div class="student-step">
           <label for="student-job">1 · Quel métier vous intéresse&nbsp;?</label>
-          <input id="student-job" type="search" placeholder="Ex. technicien de laboratoire, qualité, production…" autocomplete="off">
-          <small>Recherche par mots présents dans les noms, activités et fiches de formation. Les entreprises ne publient pas leurs métiers dans ces données.</small>
+          <div class="student-combobox">
+            <input id="student-job" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="student-job-options" placeholder="Rechercher ou choisir un métier…" autocomplete="off">
+            <div id="student-job-options" class="student-combobox-options" role="listbox" aria-label="Métiers disponibles" hidden></div>
+          </div>
+          <small id="job-hint">Choisissez une famille de métiers. Les métiers associés aux entreprises ne sont pas renseignés dans la source.</small>
         </div>
         <div class="student-step">
           <label for="student-sector">2 · Quel secteur vous intéresse&nbsp;?</label>
-          <select id="student-sector">
-            <option value="">Tous les secteurs</option>
-          </select>
+          <div class="student-combobox">
+            <input id="student-sector" type="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="student-sector-options" placeholder="Rechercher ou choisir un secteur…" autocomplete="off">
+            <div id="student-sector-options" class="student-combobox-options" role="listbox" aria-label="Secteurs disponibles" hidden></div>
+          </div>
           <small id="sector-hint">Secteurs fondés sur les codes d’activité disponibles dans les données.</small>
         </div>
         <div class="student-location-heading">

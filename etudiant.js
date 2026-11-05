@@ -5,6 +5,15 @@ const ACTIVITY_LABELS = {
   "21.10Z": "Fabrication de produits pharmaceutiques de base",
   "21.20Z": "Fabrication de préparations pharmaceutiques",
 };
+const JOB_PROFILES = [
+  { value: "production", label: "Production & procédés", terms: /production|proc[eé]d[eé]|fabrication|conditionnement|op[eé]rateur|formulation/i },
+  { value: "qualite", label: "Qualité & réglementation", terms: /qualit[eé]|qse|r[eé]glement|m[eé]trologie|contr[oô]le|validation|assurance qualit[eé]/i },
+  { value: "laboratoire", label: "Laboratoire & analyses", terms: /laboratoire|analyse|bioanal|chimie|microbiolog|biologie|contr[oô]le/i },
+  { value: "biotech", label: "Biotechnologies & R&D", terms: /biotech|bioproc[eé]d[eé]|sciences du vivant|g[eé]nie biologique|recherche|mol[eé]culaire/i },
+  { value: "pharmacie", label: "Pharmacie & médicament", terms: /pharmacie|m[eé]dicament|pharmaceutique|sant[eé]|pharmacologie/i },
+  { value: "maintenance", label: "Maintenance & ingénierie", terms: /maintenance|ing[eé]nierie|automatisme|instrumentation|syst[eè]me de production/i },
+  { value: "data", label: "Données & informatique santé", terms: /donn[eé]es|informatique|num[eé]rique|bioinformatique|statistique|data|clinique/i },
+];
 const REGIONS = [
   { name: "Auvergne-Rhône-Alpes", departments: "01,03,07,15,26,38,42,43,69,73,74" },
   { name: "Bourgogne-Franche-Comté", departments: "21,25,39,58,70,71,89,90" },
@@ -49,7 +58,9 @@ const companyModeButton = document.querySelector('[data-mode="companies"]');
 const trainingModeButton = document.querySelector('[data-mode="training"]');
 const modeLinks = [...document.querySelectorAll("[data-student-mode-link]")];
 const jobInput = document.querySelector("#student-job");
-const sectorSelect = document.querySelector("#student-sector");
+const jobOptions = document.querySelector("#student-job-options");
+const sectorInput = document.querySelector("#student-sector");
+const sectorOptions = document.querySelector("#student-sector-options");
 const regionSelect = document.querySelector("#student-region");
 const departmentSelect = document.querySelector("#student-department");
 const zoneModeSelect = document.querySelector("#student-zone-mode");
@@ -70,6 +81,10 @@ let visibleLimit = PAGE_SIZE;
 let markerCluster;
 let map;
 let lastGeographicState = null;
+let jobSelection = "";
+let sectorSelection = "";
+let visibleJobOptions = [];
+let visibleSectorOptions = [];
 
 function readSavedCompanies() {
   try {
@@ -387,6 +402,10 @@ function setMode(nextMode) {
     mode === "companies" ? "Pistes à explorer" : "Formations à découvrir";
   document.querySelector("#student-map-title").textContent =
     mode === "companies" ? "Entreprises et sites industriels" : "Campus et lieux de formation";
+  document.querySelector("#job-hint").textContent =
+    mode === "companies"
+      ? "Choisissez une famille pour votre projet. Les métiers associés aux entreprises ne sont pas renseignés dans la source."
+      : "Les familles filtrent les formations selon leur intitulé, leur parcours et leur domaine.";
   document.querySelector("#sector-hint").textContent =
     mode === "companies"
       ? "Secteurs issus des codes NAF déclarés dans l’instantané local."
@@ -397,20 +416,140 @@ function setMode(nextMode) {
 }
 
 function populateSectorOptions() {
-  const previous = sectorSelect.value;
-  sectorSelect.replaceChildren(new Option("Tous les secteurs", ""));
+  const previous = sectorSelection;
+  const options = [];
   if (mode === "companies") {
     for (const [code, label] of Object.entries(ACTIVITY_LABELS)) {
-      sectorSelect.add(new Option(label, code));
+      options.push({ value: code, label });
     }
   } else {
     const categories = [...new Set(trainingRecords.map((record) => text(record.categorie)).filter(Boolean))]
       .sort((a, b) => a.localeCompare(b, "fr"));
-    for (const category of categories) sectorSelect.add(new Option(category, category));
+    for (const category of categories) options.push({ value: category, label: category });
   }
-  if ([...sectorSelect.options].some((option) => option.value === previous)) {
-    sectorSelect.value = previous;
+  if (!options.some((option) => option.value === previous)) {
+    sectorSelection = "";
+    sectorInput.value = "";
   }
+  renderSearchableOptions("job", "");
+  renderSearchableOptions("sector", "");
+}
+
+function optionsFor(kind) {
+  const allOption = kind === "job"
+    ? { value: "", label: "Tous les métiers" }
+    : { value: "", label: "Tous les secteurs" };
+  const choices = kind === "job"
+    ? JOB_PROFILES.map(({ value, label }) => ({ value, label }))
+    : Object.entries(ACTIVITY_LABELS).map(([value, label]) => ({ value, label }));
+  if (kind === "sector" && mode === "training") {
+    choices.splice(0, choices.length, ...[...new Set(trainingRecords.map((record) => text(record.categorie)).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "fr"))
+      .map((category) => ({ value: category, label: category })));
+  }
+  return [allOption, ...choices];
+}
+
+function renderSearchableOptions(kind, query) {
+  const isJob = kind === "job";
+  const input = isJob ? jobInput : sectorInput;
+  const listbox = isJob ? jobOptions : sectorOptions;
+  const selected = isJob ? jobSelection : sectorSelection;
+  const options = optionsFor(kind);
+  const normalizedQuery = normalize(query);
+  const visible = options.filter((option) =>
+    !normalizedQuery || normalize(option.label).includes(normalizedQuery),
+  );
+  if (isJob) visibleJobOptions = visible;
+  else visibleSectorOptions = visible;
+
+  listbox.replaceChildren();
+  if (!visible.length) {
+    listbox.append(element("p", "student-combobox-empty", "Aucun choix ne correspond à cette recherche."));
+    return;
+  }
+  visible.forEach((option, index) => {
+    const button = element("button", "student-combobox-option", option.label);
+    button.type = "button";
+    button.id = `${kind}-option-${index}`;
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", String(option.value === selected));
+    button.dataset.value = option.value;
+    button.dataset.index = String(index);
+    button.addEventListener("mousedown", (event) => event.preventDefault());
+    button.addEventListener("click", () => {
+      if (isJob) {
+        jobSelection = option.value;
+        input.value = option.label === "Tous les métiers" ? "" : option.label;
+      } else {
+        sectorSelection = option.value;
+        input.value = option.label === "Tous les secteurs" ? "" : option.label;
+      }
+      closeSearchableOptions(kind);
+      render();
+    });
+    listbox.append(button);
+  });
+}
+
+function openSearchableOptions(kind) {
+  const isJob = kind === "job";
+  const input = isJob ? jobInput : sectorInput;
+  const listbox = isJob ? jobOptions : sectorOptions;
+  renderSearchableOptions(kind, input.value);
+  listbox.hidden = false;
+  input.setAttribute("aria-expanded", "true");
+}
+
+function closeSearchableOptions(kind) {
+  const input = kind === "job" ? jobInput : sectorInput;
+  const listbox = kind === "job" ? jobOptions : sectorOptions;
+  listbox.hidden = true;
+  input.setAttribute("aria-expanded", "false");
+  input.removeAttribute("aria-activedescendant");
+}
+
+function connectSearchableCombobox(kind) {
+  const isJob = kind === "job";
+  const input = isJob ? jobInput : sectorInput;
+  const listbox = isJob ? jobOptions : sectorOptions;
+  input.addEventListener("focus", () => openSearchableOptions(kind));
+  input.addEventListener("input", () => {
+    if (isJob) jobSelection = "";
+    else sectorSelection = "";
+    openSearchableOptions(kind);
+    render();
+  });
+  input.addEventListener("keydown", (event) => {
+    const visible = isJob ? visibleJobOptions : visibleSectorOptions;
+    const activeIndex = visible.findIndex((option, index) =>
+      listbox.querySelector(`[data-index="${index}"]`)?.classList.contains("is-active"),
+    );
+    if (event.key === "Escape") {
+      closeSearchableOptions(kind);
+      return;
+    }
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      openSearchableOptions(kind);
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      const nextIndex = Math.max(0, Math.min(visible.length - 1, activeIndex + step));
+      const next = listbox.querySelector(`[data-index="${nextIndex}"]`);
+      listbox.querySelector(".is-active")?.classList.remove("is-active");
+      next?.classList.add("is-active");
+      input.setAttribute("aria-activedescendant", next?.id || "");
+      next?.scrollIntoView({ block: "nearest" });
+      return;
+    }
+    if (event.key === "Enter" && !listbox.hidden) {
+      event.preventDefault();
+      const active = listbox.querySelector(".is-active") || listbox.querySelector('[role="option"]');
+      active?.click();
+    }
+  });
+  input.addEventListener("blur", () => {
+    window.setTimeout(() => closeSearchableOptions(kind), 100);
+  });
 }
 
 function populateGeography() {
@@ -493,8 +632,8 @@ function activeOrigin() {
 }
 
 function filteredCompanies() {
-  const query = normalize(jobInput.value);
-  const sector = sectorSelect.value;
+  const query = jobSelection ? "" : normalize(jobInput.value);
+  const sector = sectorSelection;
   const center = zoneModeSelect.value === "radius" ? activeOrigin() : null;
   return companyRecords
     .map((record) => ({
@@ -513,13 +652,16 @@ function filteredCompanies() {
 }
 
 function filteredTraining() {
-  const query = normalize(jobInput.value);
-  const sector = sectorSelect.value;
+  const query = jobSelection ? "" : normalize(jobInput.value);
+  const selectedProfile = JOB_PROFILES.find((profile) => profile.value === jobSelection);
+  const sector = sectorSelection;
   const center = zoneModeSelect.value === "radius" ? activeOrigin() : null;
   return trainingRecords.filter((record) => {
     const location = trainingLocation(record);
     if (sector && record.categorie !== sector) return false;
-    if (query && !trainingSearchText(record).includes(query)) return false;
+    const searchable = trainingSearchText(record);
+    if (selectedProfile && !selectedProfile.terms.test(searchable)) return false;
+    if (query && !searchable.includes(query)) return false;
     if (zoneModeSelect.value === "radius") {
       return Boolean(location && locationMatchesFilters(location, center));
     }
@@ -689,6 +831,7 @@ function renderMap() {
     departmentSelect.value,
     originInput.value,
     radiusSelect.value,
+    sectorSelection,
   ].join("|");
   if (lastGeographicState !== geographicState) {
     lastGeographicState = geographicState;
@@ -845,8 +988,8 @@ for (const link of modeLinks) {
     document.querySelector(".nav-menu-current")?.removeAttribute("open");
   });
 }
-jobInput.addEventListener("input", () => { visibleLimit = PAGE_SIZE; render(); });
-sectorSelect.addEventListener("change", () => { visibleLimit = PAGE_SIZE; render(); });
+connectSearchableCombobox("job");
+connectSearchableCombobox("sector");
 regionSelect.addEventListener("change", () => {
   refreshDepartmentOptions();
   visibleLimit = PAGE_SIZE;
